@@ -1,0 +1,36 @@
+## Specific
+thesis.pdf
+
+## For Mac OS
+.DS_Store
+
+## For Latex Projects
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
+
+*.run.xml
+*.bcf
+
+## For Auctex
+auto

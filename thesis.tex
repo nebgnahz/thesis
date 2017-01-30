@@ -1,0 +1,67 @@
+\documentclass{ucbthesis}
+
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{biblatex}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{times}
+
+\lstset{
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  escapeinside={(*@}{@*)},
+  basicstyle=\scriptsize\ttfamily,
+  columns=fullflexible,
+  morekeywords={maybe_downsample, maybe_skip}
+}
+
+%% \def\dsp{\def\baselinestretch{2.0}\large\normalsize}
+%% \dsp
+
+\bibliography{thesis}
+
+\begin{document}
+
+\title{ A Proposal for Adaptive Wide-area Streaming Analytics }
+
+\author{ Ben Zhang }
+\degreesemester{XX}
+\degreeyear{XXXX}
+\degree{Doctor of Philosophy}
+\chair{Professor John Wawrzynek}
+\othermembers{Professor Edward A. Lee \\
+  Professor Sylvia Ratnasamy \\
+  Professor John Chuang}
+\field{Computer Science}
+\campus{Berkeley}
+\numberofmembers{3}
+
+\maketitle
+%% \approvalpage
+%% \copyrightpage
+
+\include{macros}
+
+\include{abstract}
+
+\pagestyle{headings}
+\include{chap1-intro}
+\include{chap2-design}
+\include{chap3-impl}
+
+\printbibliography
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
