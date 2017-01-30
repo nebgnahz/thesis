@@ -1,9 +1,9 @@
 \chapter{\sysname{} Design}
 \label{sec:system-design}
 
-In this section, we present an overview of \sysname{}. The primary goal of
+In this chapter, I present the design of \sysname{}. The primary goal of
 \sysname{} is to enable applications with the ability to adapt its communication
-in a guided manner.
+while maximizing its utility.
 
 \section{Challenges}
 \label{sec:challenges}
@@ -13,13 +13,13 @@ in a guided manner.
 \para{C1: Diverse application and data:} As discussed in~\autoref{sec:bat}, the
 best adaptation scheme is often application- and context-specific
 optimizations. It becomes important to separate individual application logic
-from specific degradation strategy as well as adaptation mechanism.
+from specific degradation strategy as well as the concrete mechanisms.
 
 \para{C2: No analytical solutions:} Unlike SQL queries whose demand and accuracy
 can typically be estimated using analytical models~\cite{cormode2012synopses},
 many of our streaming applications are dealing with unstructure data using
 either use blackbox operations (such as H.264 encoding) or non-linear operators
-(such as thresholding). The impact of these degradations is not immediately
+(such as thresholding). The effect of these degradations is not immediately
 available.
 
 \para{C3: Multi-dimensional exploration:} Real-world applications typically have
@@ -41,155 +41,155 @@ require special hardware or software upgrade.
 \begin{figure*}
   \centering
   \includegraphics[width=\linewidth]{figures/arch.pdf}
-  \caption{\sysname{} Overview.}
+  \caption{The three-stage architecture of \sysname{}.}
   \label{fig:overview}
 \end{figure*}
 
 To address the aforementioned challenges, \sysname{}'s solution is split into
-four parts (\autoref{fig:overview}).
+three parts (\autoref{fig:overview} illustrates them).
 
-\para{Programming abstraction:} Applications are modelled as a directed acyclic
-graph (DAG) of computation and we propose a novel set of \texttt{maybe}
-operators to express the specification of degradation. Our propose APIs do not
-require developers to be exact on the quantity; integrating this into existing
-applications requires minimal effort (\autoref{sec:prog-abs}).
+\para{Programming abstraction~(\autoref{sec:prog-abs}):} Applications are
+modelled as a directed acyclic graph (DAG) of computations. In addition to the
+normal operators from existing systems, I propose a novel set of \texttt{maybe}
+operators to express the specification of degradations. The proposed APIs do not
+require developers to be exact on the quantity, making effort to integrate with
+existing applications minimal.
 
-\para{Automatic multi-dimensional profiling:} Our system automatically explores
-the parameter space to generate a Pareto-optimal degradation strategy with a
-multi-dimensional exploration. We also report our experience and findings about
-degradation operations (\autoref{sec:profiling}).
+\para{Automatic multi-dimensional profiling~(\autoref{sec:profiling}):} The
+system automatically explores the parameter space to learn a Pareto-optimal
+degradation strategy in a application-specific manner. This process frees
+application developers from a tedious and repetitive process.
 
-\para{Runtime Adaptation:} Finally the streaming application is deployed with a
-wide-area orchestration manager. At runtime, our system generates additional
-modules that acts as the control plane to adapt the application execution. The
-control plane performs bandwidth estimation, congestion monitoring and
-adaptation. It uses the profile generated from the second stage and adjust the
-level of degradation (\autoref{sec:adaptation}).
+\para{Runtime Adaptation~(\autoref{sec:adaptation}):} Finally the streaming
+application is deployed with a wide-area orchestration manager. At runtime,
+\sysname{} provides all the necessary modules that act as the control plane and
+adapt the application execution. At a high level, it performs bandwidth
+estimation, congestion monitoring and adaptation. It uses the profile learned
+from the second stage to guide the level of degradation.
 
-\section{System Design}
-\label{sec:system-design}
-
-In this section, we dive into each component of \sysname{}; we focus on
-degradation and adaptation, rather than being verbose on every component.
+\section{Programming Abstraction}
+\label{sec:prog-abs}
 
 Applications in \sysname{} are composed by connecting a set of operators to form
-a dataflow processing graph. Our system provides basic set of APIs such as
-\texttt{map}, \texttt{filter}, \texttt{window} (\autoref{tab:operators}). The
-normal operators are similar to existing stream processing systems; our
-contribution is the set of APIs to allow the specification of degradation
-operations for bandwidth-accuracy trade-off.
+a dataflow graph. The system provides a basic set of APIs such as \texttt{map},
+\texttt{filter}, \texttt{window} (\autoref{tab:operators}). The normal operators
+are similar to existing stream processing systems; the core contribution of this
+thesis is the set of \texttt{maybe} APIs that allows the specification of
+degradation operations for bandwidth-accuracy trade-off.
 
 \begin{table*}
+  \small
   \centering
   \begin{tabular}{ c r l }
     \toprule
-    \multirow{7}{*}{Normal Operators}
+    \multirow{7}{*}{\begin{tabular}{@{}c@{}}Normal \\ Operators\end{tabular}}
     & \textit{map}(f: I $\Rightarrow$ O) & Stream<I> $\Rightarrow$ Stream<O> \\
     & \textit{filter}(f: I $\Rightarrow$ bool) & Stream<I> $\Rightarrow$
                                                  Stream<I> \\
-    & \textit{skip}(i: Integer) & Stream<I> $\Rightarrow$ Stream<I> \\
-    & \textit{sliding\_window}(count: Integer, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
+    & \textit{skip}(i: Int) & Stream<I> $\Rightarrow$ Stream<I> \\
+    & \textit{sliding\_window}(count: Int, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
                                                                             Stream<O> \\
-    & \textit{tumbling\_window}(count: Integer, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
+    & \textit{tumbling\_window}(count: Int, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
                                                                              Stream<O> \\
     & \textit{timed\_window}(time: Duration, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
                                                                           Stream<O> \\
     & ... & ... \\
     \midrule
-    \multirow{4}{*}{Degradation Operators}
+    \multirow{4}{*}{\begin{tabular}{@{}c@{}}Degradation \\ Operators\end{tabular}}
     & \textit{maybe}(knobs: Vec<T>, f: (T, I) $\Rightarrow$ I) & Stream<I> $\Rightarrow$
                                                                  Stream<I> \\
     & \textit{maybe\_skip}(knobs: Vec<T>) & Stream<I> $\Rightarrow$ Stream<I> \\
-    & \textit{maybe\_downsample}(knobs: Vec<(Integer, Interger)>) & Stream<Image> $\Rightarrow$ Stream<Image> \\
+    & \textit{maybe\_downsample}(knobs: Vec<(Int, Int)>) & Stream<Image> $\Rightarrow$ Stream<Image> \\
     & ... & ... \\
     \bottomrule
   \end{tabular}
   \caption{A comparison between normal stream processing operators and our
     degradation operators. Vec<T> represents a list of elements of type
-    T. Option<T> indicates an element of type T can be absent. Notice the type
-    constrain on the \texttt{maybe} function while \texttt{maybe\_map} relaxes
-    it.}
+    T. Notice the type constrain on the second argument passed to
+    \texttt{maybe}.}
   \label{tab:operators}
 \end{table*}
 
 \subsection{Degradation Operators}
 \label{sec:prog-abs}
 
-We first consider a strawman solution: manual policies for
-degradation. JetStream~\cite{rabkin2014aggregation} offers an example: ``if
-bandwidth is insufficient, switch to sending images at 75\% fidelity, then 50\%
-if there still isn't enough bandwidth. Beyond that point, reduce the frame rate,
-but keep the images at 50\% fidelity.'' We identify the following issues with
-this approach.
+To design the degradation operator, let's first consider a strawman solution:
+manual policies for degradation. JetStream~\cite{rabkin2014aggregation} offers
+an example: ``if bandwidth is insufficient, switch to sending images at 75\%
+fidelity, then 50\% if there still isn't enough bandwidth. Beyond that point,
+reduce the frame rate, but keep the images at 50\% fidelity.'' This manual
+policy specification has the following issues:
 
 \para{Lack of precision:} These policies are often developer heuristics and
 rarely backed up by measurements. First, there is no direct association of the
-application accuracy with the 75\% fidelity configuration. Besides, their impact
-on the data size is also not trivial.  While it seems intuitive that the level
-of degradation will affect the data size, the precise impact is not always
-straightforward. For example, one might think that reducing the frame rate by
-50\% will half the data rate. When video encoding is employed, the inter-frame
-difference will increased (P-frame size) when the frame rate is reduced. This
-leads to a larger data size for each frame. \autoref{fig:h264} illustrates this
-complex relationship with an example of H.264 encoding under four different
-frame rates.
+application accuracy with the 75\% fidelity configuration. Besides, the effect
+of each rule on the data size is not trivially available.  While it seems
+intuitive that the level of degradation will change the data size, the precise
+effect is not always straightforward. For example, one might think that reducing
+the frame rate by 50\% will half the data rate. When video encoding is employed,
+the inter-frame difference will increased (P-frame size) when the frame rate is
+reduced. This leads to a larger data size for each frame. \autoref{fig:h264}
+illustrates this complex relationship with an example of H.264 encoding under
+four different frame rates.
 
 \para{Not scalable:} The strawman solution quickly leads to too many policies
 when multiple degradation operations are involved or a fine-grained control is
 desired. This manual process becomes tedious and error-prone. When too few rules
 are provided, the application may oscillate between two rules: one that's too
-aggressive (always faces insufficient bandwidth) and one that's too
-conservative.
+aggressive (always faces insufficient bandwidth) and one that's too conservative
+(a suboptimal strategy).
 
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{figures/h264.pdf}
   \caption{H.264 requires more information per frame when the frame rate is
-    reduced.}
+    reduced. All measurements are for videos with 1920x1080 resolution and the
+    same H.264 configurations. 1/1, 3/1, 10/1 and 30/1 in the legend mean that
+    the frame rates are 1 FPS, 3 FPS, 10 FPS and 30 FPS.}
   \label{fig:h264}
 \end{figure}
 
 \vspace{0.5em}
 
-When using the above strawman solution, developers are forced to manually study
-and measure the impact of individual degradation policy, prohibiting its wide
-adoption in practice.
+I argue that when using the above strawman solution, developers are forced to
+manually study and measure the effect of individual degradation policy,
+prohibiting its wide adoption in practice.
 
-On the other extreme of the design spectrum, a completely developer-free
-solution is not practical. While static analysis has been shown to optimize
-application execution adaptively in a certain context~\cite{chun2011clonecloud},
-they do not work well in our dataflow programming model. Static analysis is
-prone to false positives: exploring wrong or unnecessary parameters. For
-example, when the application is configured to generates statistics with a
-\texttt{timed\_window} operation, static analysis may falsely detect the
-duration parameter and alter the behavior of the application in an unexpected
-way. Also, as we will illustrate in~\autoref{sec:profiling}, with each
-introduced parameter, the profiling time increases drastically as all parameters
-pose a combinatorial space.
+On the other extreme of the design spectrum lies a completely developer-free
+solution. It is not practical, either. While static analysis has been shown to
+optimize application execution adaptively in a mobile-cloud
+context~\cite{chun2011clonecloud}, it only concerns with computation placement
+(on the mobile or in the cloud) rather than tuning application parameters.  For
+our dataflow programming model, static analysis is prone to false positives:
+exploring wrong or unnecessary parameters. For example, when the application is
+configured to generates statistics with a \texttt{timed\_window} operation,
+static analysis may falsely detect the duration parameter and alter the behavior
+of the application in an unexpected way. Also, as we will illustrate
+in~\autoref{sec:profiling}, with each introduced parameter, the profiling time
+increases drastically as all parameters pose a combinatorial space. The
+explosion of search space prohibits explorations of unnecessary parameters.
 
-Our system take a middle ground between these two extremes: developers use a
+\sysname{} takes a middle ground between these two extremes: developers use a
 novel \texttt{maybe} API to annotate degradation operations without being exact
 on the values. Think of these APIs as hints from developers: this operation,
 when in use, will likely reduce the data size and affect the data fidelity;
-however the exact impact is not clear.
+however the exact quantity is not clear.
 
 The basic form of \texttt{maybe} operator takes two arguments: a knob and a
 degradation function (see \autoref{tab:operators}). The knob indicates different
 degradation levels; the function performs the actual degradation operation with
-a configurable level. We restrict the type signature of the function that this
-API can accept: $f(T, I) \Rightarrow I$. That is, the degradation function
-should not alter the type of the stream. While this might seem a strong
-restriction, when combined with \texttt{map} operator, the system is still
-expressive enough. We describe our implementation and usage
+a configurable level. There is one restriction on the type signature of the
+function argument: $f(T, I) \Rightarrow I$. That is, the degradation function
+should not alter the type of the stream. While this seems a strong restriction,
+when combined with the \texttt{map} operator, the API set is still expressive
+enough. I describe the implementation and usage of the APIs
 in~\autoref{sec:implementation}.
 
-\begin{sloppypar}
-  Based on the \texttt{maybe} primitive, one can implement wrappers for common
-  degradation operations. For example, \texttt{maybe\_skip} will optionally
-  subsample a stream; and \texttt{maybe\_downsample} can adjust the image
-  resolution to a configured target. With this API, the example mentioned
-  earlier can now be implemented as follows:
-\end{sloppypar}
+Based on the \texttt{maybe} primitive, one can implement wrappers for common
+degradation operations. For example, \texttt{maybe\_skip} will optionally
+subsample a stream; \texttt{maybe\_downsample} can adjust the image resolution
+to a configured target. Using the \texttt{maybe} API, the example mentioned
+earlier can now be implemented as follows:
 
 \begin{lstlisting}
    let app = Camera::new((1920, 1080, 30))
@@ -199,33 +199,34 @@ in~\autoref{sec:implementation}.
       .compose();
 \end{lstlisting}
 
-This snippet first instantiate a \texttt{Camera} source, which is a
-\texttt{Stream<Image>} with 1920x1080 resolution and 30 FPS. Two degradation
-operations are chained after the source: one that downsample the resolution to
-either 1600x900 or 1280x720; the other skip the frame with a parameter of 2 or
-5, resulting in 30/(2+1)=10 FPS or 30/(5+1)= 6 FPS. After the degradation,
-images are shown on the display. In practice, further processing operators can
-be chained.
+This snippet first instantiates a \texttt{Camera} source, which has the type
+\texttt{Stream<Image>}. It's configured to produce images with 1920x1080
+resolution and 30 FPS. Two degradation operations are chained after the source:
+one that downsamples the resolution to either 1600x900 or 1280x720; the other
+skips frames with a parameter of 2 or 5, resulting in $30 / (2+1) = 10$ FPS or
+$30/(5+1) = 5$ FPS. After the degradation, images are shown on the display; in
+practice, further processing operators can be chained after the degradation.
 
 While the API itself has simplified the specification of degradation, the exact
 amount has to be known for precise rate adjustment at runtime. We then turn to
-the second stage of our system that performs automatic profiling.
+the second stage of our system that performs the automatic profiling.
 
 \section{Multi-dimensional Profiling}
 \label{sec:profiling}
 
-The goal of our profiling stage is to explore the bandwidth-accuracy trade-off
-and generate a \textit{profile} that is Pareto-optimal.
+The goal of this profiling stage is to explore the bandwidth-accuracy trade-off
+and learn a Pareto-optimal \textit{profile} for a specific application and its
+target scenario.
 
-We first define terms and notations we will use. Each \texttt{maybe} operator
-within an application corresponds to a knob $k$. Suppose the application has $n$
-knobs, their combination forms a configuration $c = [k_{1}, k_{2},
-... k_{n}]$. The set of all configurations $\mathbb{C}$ is the space that our
-profiling system need to explore.
+First, we define the terms and notations. Each \texttt{maybe} operator within an
+application corresponds to a knob $k$. Suppose the application has $n$ knobs,
+their combination forms a configuration $c = [k_{1}, k_{2}, ... k_{n}]$. The set
+of all configurations $\mathbb{C}$ is the space that our profiling system need
+to explore.
 
-There are two mappings that we are particularly interested: a mapping from a
-particular configuration to its bandwidth requirement $B(c)$ and the accuracy
-measure $A(c)$. The Pareto-optimal set $\mathbb{P}$ can then be defined
+There are two mappings that we are interested: a mapping from a particular
+configuration to its bandwidth requirement $B(c)$ and the accuracy measure
+$A(c)$. The Pareto-optimal set $\mathbb{P}$ can then be defined
 (\autoref{eq:pareto}): for all $c \in \mathbb{P}$, there is no alternative
 configuration $c'$ that requires less bandwidth while giving a higher accuracy.
 
@@ -257,59 +258,69 @@ configuration $c'$ that requires less bandwidth while giving a higher accuracy.
   \label{tab:notations}
 \end{table}
 
-Since there is often no closed form relation for $B(c)$ and $A(c)$, our system
-takes a data-driven approach: with a representative dataset and an
-application-specific utility function, our system evaluates each configuration
-for their bandwidth demand and accuracy degradation. The degradation could
-either be measured against the groundtruth; or in the case when labelled dataset
-is not available, the system uses the reference results when all degradations
-are turned off.
+Since there is often no closed form relation for $B(c)$ and $A(c)$, for
+arbitrary degradation operations, \sysname{} takes a data-driven approach: with
+a representative dataset and an application-specific utility function, the
+system evaluates each configuration for their bandwidth demand and the
+application utility. The utility could either be measured against the
+groundtruth; or in the case when labelled dataset is not available, the system
+uses the reference results when all degradations are turned off.
 
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\columnwidth]{figures/degrade.pdf}
-%   \caption{Illustration on the behavior of different degradation operations.}
-% \end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{figures/degrade.pdf}
+  \caption{Illustration on the behavior of different degradation operations.}
+  \label{fig:bat}
+\end{figure}
 
 When only one knob is involved, we can represent its impact using
-bandwidth-accuracy curve (\autoref{fig:bat} left) and quantify the effect with
-the area under the curve (AUC). Each curve consists of the point with coordinate
-$(B(c), A(c))$ when configuration $c$ is used. The straight line from (0, 0) to
-(1, 1) splits the space into two parts. If a degradation's profile lies above
-this line, it indicates that this operation can be effective for the goal of
-saving bandwidth while minimizing accuracy drop. For degradation operations
-that's below the straight line, much of the data information is gone even at
-minor bandwidth drop. The Pareto-optimal strategy is the profile that has a
-maximal AUC.
+bandwidth-accuracy curve (\autoref{fig:bat} left). The point on the curve has a
+coordinate $(B(c), A(c))$ when configuration $c$ is used. The straight line from
+(0, 0) to (1, 1) splits the space into two parts. Along this line, the amount of
+bandwidth saving leads to an equal amount of accuracy drop (when both quantity
+normalized to 1). If a degradation's profile lies above this line, it indicates
+an effective degradation that should be employed as it offers little accuracy
+drop with more bandwidth savings. For degradation operations below the straight
+line, data information loss is more severe than the savings when the degradation
+is in effect. One quantity to capture the relative power of different
+degradation strategy is to use the area under the curve (AUC). With this setup,
+the Pareto-optimal strategy can be define as the curve that has a maximal AUC.
+We will show a few concrete profile curves in~\autoref{sec:evaluation}.
 
-While $B(c)$ and $A(c)$ can be monotonic along individual dimension. When
-combined, it poses complex behavior. The right half illustrates
-\autoref{fig:bat} illustrates it.
+While $B(c)$ and $A(c)$ are usually monotonic along individual dimension $k_i$,
+when multiple degradations combined, each curve may have a distinct shape. The
+right side of \autoref{fig:bat} illustrates this complex
+relationship. \todo{write more}.
 
-While the complexity prohibits further analytical analysis of the degradation
-behavior, in practice, several techniques can make the problem tractable. First,
-Exploring these configurations is an embarrassingly parallel task. The profiling
-can be made trivially parallel. Besides, when the degradation level increases or
-when multiple degradation operations are in effect, the amount of data as well
-as the computational complexity are also dramatically reduced.  Moreover,
-developers can specify a lower bound on the accuracy and the profiling can stop
-searching the space that is worst than a known configuration (such as the gray
-area in \autoref{fig:bat}).
+Although the complexity of degradation operations prohibits further
+optimizations to reduce the profiling time, there are several techniques in
+practice that can make the problem tractable: (i) Exploring these configurations
+is an offline task; there is no direct dependencies among configurations,
+resulting in an embarrassingly parallel task. Executed in a cluster, it scales
+out perfectly with provided compute resources. (ii) When the degradation level
+increases or when multiple degradation operations are in effect, the amount of
+data to be analyzed becomes smaller; also the computational complexity for each
+data item can also be dramatically reduced. (iii) Developers can specify a lower
+bound on the accuracy and the profiling can stop exploring worse configurations.
+Once there is a known configuration that is worse than the configured threshold,
+configurations with a larger level of degradation do not need to be profiled
+(such as the gray area in \autoref{fig:bat}).
 
-\subsection{Runtime Adaptation}
+\section{Runtime Adaptation}
 \label{sec:adaptation}
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/runtime.pdf}
-  \caption{Runtime adaptation system architecture. The grey components are what
-    \sysname{} provides.}
+  \caption{Runtime adaptation system architecture. \sysname{}'s provided
+    components are grey: they form the control plane to compensate the
+    application's data plane.}
   \label{fig:runtime}
 \end{figure}
 
-At runtime, the user program is automatically converted to a client half and
-server half; and \sysname{} abstracts the communication as well as rate
-adaptation. \autoref{fig:runtime} shows our runtime architecture.
+\todo{stop here.} At runtime, the user program is automatically converted to a
+client half and server half; and \sysname{} abstracts the communication as well
+as rate adaptation. \autoref{fig:runtime} shows our runtime architecture.
 
 \para{Object-level queue:} The queue bridges data generation and
 the network capacity. It transmits data as fast as the network can handle and
