@@ -3,16 +3,16 @@
   The growing number of Internet-connected devices (sensors and actuators) over
   the wide-area are challenging how we construct analytical
   applications. Traditional approaches separate data collection, transportation
-  and distillation as individual one-shot tasks. They are poor matches to the
-  need of acting on data in real time. Recently, the recognition of timely
-  decision-making has spawned many stream processing systems for ``big data.''
-  However, these systems are primarily tailored towards the infrastructure
-  within a single cluster. In a cluster, while resource allocation is
-  challenging, there are usually enough resources and the allocation is a
-  management problem for maximal utilization. In contrast, the wide-area faces
-  resource scarcity and variability that it's not possible to guarantee an
-  enough allocation for the applications. Instead, applications have to adapt
-  their behaviors to match the available resources.
+  and distillation as individual one-shot tasks, often performed offline. They
+  are a poor match to the need of acting on data in real time. Recently, the
+  recognition of timely decision-making has spawned many stream processing
+  systems for ``big data.''  However, these systems are primarily tailored
+  towards the infrastructure within a single cluster. In a cluster, while
+  resource allocation is challenging, there are usually enough resources and the
+  allocation is a management problem for maximal utilization. In contrast, the
+  wide-area faces resource scarcity and variability, making it not possible to
+  guarantee enough allocation for applications. Instead, applications have to
+  adapt their behaviors to match the available resources.
 
   While developers can design each individual application to match a specific
   resource configuration, the ad-hoc solution does not generalize across
@@ -37,18 +37,18 @@
   The resource and adaptation above are intentionally not specific as it
   provides a general framework applicable to computing resources, storage
   resources, as well as network resources. In this proposal, I focus on
-  adaptation with regards to network resources in the wide-area. Adapting to
-  computing resources is planned as future work that will be included in the
-  final thesis. There is an ongoing research effort (led by my colleagues and I
-  had participated) on storage resources; I will present some discussions and
-  preliminary results.
+  adaptation with regards to network resources in the wide-area. Adapting to the
+  heterogeneous computing infrastructures is planned as future work. It will be
+  another part of the final thesis. There is an ongoing research effort (led by
+  my colleagues and I had participated) on storage resources; the final thesis
+  will also briefly discuss the design and preliminary results.
 
-  The bulk body of this proposal focuses on the design and implementation of
-  \sysname{}, a stream processing system that adapts application execution to
-  cope with the scarce and variable wide-area network capacity. The key
-  observation is the explicit trade-off between application accuracy and data
-  freshness. Our system design follows the three-stage framework above:
-  degradation APIs, offline profiling and a runtime system.
+  The bulk body of this proposal focuses on network resources. Specifically, I
+  present \sysname{}, a stream processing system for the wide area where the
+  network capacity is scarce and variable. The key observation is the explicit
+  trade-off between application accuracy and bandwidth demand. The system design
+  follows the three-stage framework above: degradation APIs, offline profiling
+  and a runtime system.
 
   Using \sysname{}, I have built three real-world applications: a pedestrian
   detection surveillance application, augmented reality for mobile devices and a

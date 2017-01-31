@@ -1,4 +1,4 @@
-\chapter{Implementation}
+\chapter{Implementation and Evaluation}
 \label{sec:implementation}
 
 In this section we present details about our implementation, including a
@@ -93,19 +93,28 @@ function and dataset
 \begin{table*}
   \small
   \centering
-  \begin{tabular}{|c|c|c|c|}
-    \hline
+  \begin{tabular}{c c c c}
+    \toprule
     Application & Knobs & Utility & Dataset \\
-    \hline
+    \midrule
     Pedestrian Detection & resolution, framerate, quantizer
-                        & F1 score & MOT16-04 (training), MOT16-03 (testing) \\
-    \hline
-    Augmented Reality & resolution, framerate, quantizer
-                        & F1 score & Video clips of office (training), home (testing) \\
-    \hline
-    Top-K & head (N), local threshold (T) & Kendall's W & sec.gov access log
-                                                          (4 days training, 12 days testing)  \\
-    \hline
+                        & F1 score & \begin{tabular}{@{}c@{}}MOT16-04 (training) \\
+                                       MOT16-03 (testing)\end{tabular} \\
+    \midrule
+    Augmented Reality & resolution, framerate, quantizer & F1 score
+                                  & \begin{tabular}{@{}c@{}} Video clips with
+                                      iPhone \\
+                                      office (training) \\
+                                      home (testing)
+                                    \end{tabular} \\
+    \midrule
+    Top-K & head (N), local threshold (T) & Kendall's W
+                                  & \begin{tabular}{@{}@{}c@{}}
+                                      \url{https://sec.gov} access log \\
+                                      4 days (training) \\
+                                      12 days (testing)
+                                    \end{tabular} \\
+    \bottomrule
   \end{tabular}
   \caption{\sysname{} Applications}
   \label{tab:apps}
@@ -196,7 +205,6 @@ concordance between two ranked list. The function outputs a statistic measure
 ranging from 0 to 1, representing no agreement to complete aggrement,
 respectively~\cite{abdi2007kendall}.
 
-
 \section{Evaluation}
 \label{sec:evaluation}
 
@@ -232,7 +240,7 @@ data (TCP for about 100 seconds) or unusable accuracy (UDP).
 \end{figure}
 
 We describe the dataset we used for offline profiling and interpret the
-profiling results (\autoref{fig:all-profiles}) in turn.
+profiling results in turn.
 
 \para{Pedestrian Detection:} We use MOT16 dataset~\cite{milan2016mot16} to
 evaluate this application. Specifically we used MOT16-04 as the training
@@ -315,19 +323,19 @@ complex relationship between bandwidth, accuracy and configuration.
 \subsection{Runtime Performance}
 \label{sec:runtime-performance}
 
-\begin{figure*}
+\begin{figure}
   \centering
-  \includegraphics[width=0.95\textwidth]{figures/ped-runtime-horizontal.pdf}
+  \includegraphics[width=\textwidth]{figures/ped-runtime-horizontal.pdf}
   \caption{Runtime Adaptation of Pedestrian Detection}
   \label{fig:ped-runtime}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}
   \centering
-  \includegraphics[width=0.95\textwidth]{figures/cdn-runtime-horizontal.pdf}
+  \includegraphics[width=\textwidth]{figures/cdn-runtime-horizontal.pdf}
   \caption{Runtime Adaptation of Top-K}
   \label{fig:ped-runtime}
-\end{figure*}
+\end{figure}
 
 To evaluate the runtime behavior, we conduct controlled experiments using four
 geo-distributed worker nodes from Amazon EC2 (t2.large instances) and an
