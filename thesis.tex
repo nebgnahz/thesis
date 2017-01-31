@@ -6,7 +6,7 @@
 \usepackage{color}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage{listings}
+\usepackage{listings, lstautogobble}
 \usepackage{multirow}
 \usepackage{subcaption}
 \usepackage{times}
@@ -21,7 +21,10 @@
   escapeinside={(*@}{@*)},
   basicstyle=\small\ttfamily,
   columns=fullflexible,
-  morekeywords={maybe_downsample, maybe_skip}
+  autogobble=true,
+  morekeywords={maybe},
+  morekeywords={maybe_skip},
+  morekeywords={maybe_downsample},
 }
 
 %% \def\dsp{\def\baselinestretch{2.0}\large\normalsize}

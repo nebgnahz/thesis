@@ -3,7 +3,7 @@
 
 In this chapter, I present the design of \sysname{}. The primary goal of
 \sysname{} is to empower applications with the ability to adapt its
-communication while maximizing the utility.
+communication with a maximal utility.
 
 \section{Challenges}
 \label{sec:challenges}
@@ -12,13 +12,13 @@ communication while maximizing the utility.
 
 \para{C1: Diverse application and data:} As discussed in~\autoref{sec:bat}, the
 best adaptation scheme is often application- and context-specific
-optimizations. It becomes important to separate individual application logic
-from specific degradation strategy as well as the concrete mechanisms.
+optimization. It becomes important to separate individual application logic from
+specific degradation strategy as well as the concrete mechanisms.
 
 \para{C2: No analytical solutions:} Unlike SQL queries whose demand and accuracy
 can typically be estimated using analytical models~\cite{cormode2012synopses},
 many of our streaming applications are dealing with unstructure data using
-either use blackbox operations (such as H.264 encoding) or non-linear operators
+either blackbox operations (such as H.264 encoding) or non-linear operators
 (such as thresholding). The effect of these degradations is not immediately
 available.
 
@@ -46,7 +46,7 @@ require special hardware or software upgrade.
 \end{figure*}
 
 To address the aforementioned challenges, \sysname{}'s solution is split into
-three parts (\autoref{fig:overview} illustrates them).
+three parts (\autoref{fig:overview} illustrates them):
 
 \para{Programming abstraction~(\autoref{sec:prog-abs}):} Applications are
 modelled as a directed acyclic graph (DAG) of computations. In addition to the
@@ -71,11 +71,11 @@ from the second stage to guide the level of degradation.
 \label{sec:prog-abs}
 
 Applications in \sysname{} are composed by connecting a set of operators to form
-a dataflow graph. The system provides a basic set of APIs such as \texttt{map},
-\texttt{filter}, \texttt{window} (\autoref{tab:operators}). The normal operators
-are similar to existing stream processing systems; the core contribution of this
-thesis is the set of \texttt{maybe} APIs that allows the specification of
-degradation operations for bandwidth-accuracy trade-off.
+a dataflow graph. The system provides basic APIs such as \texttt{map},
+\texttt{filter}, \texttt{window} (\autoref{tab:operators}) that are similar to
+existing stream processing systems. The core contribution of this thesis is the
+\texttt{maybe} APIs that allow the specification of degradation operations for
+bandwidth-accuracy trade-off.
 
 \begin{table*}
   \small
@@ -103,7 +103,7 @@ degradation operations for bandwidth-accuracy trade-off.
     & ... & ... \\
     \bottomrule
   \end{tabular}
-  \caption{A comparison between normal stream processing operators and our
+  \caption{comparison between normal stream processing operators and our
     degradation operators. Vec<T> represents a list of elements of type
     T. Notice the type constrain on the second argument passed to
     \texttt{maybe}.}
@@ -120,8 +120,8 @@ fidelity, then 50\% if there still isn't enough bandwidth. Beyond that point,
 reduce the frame rate, but keep the images at 50\% fidelity.'' This manual
 policy specification has the following issues:
 
-\para{Lack of precision:} These policies are often developer heuristics and
-rarely backed up by measurements. First, there is no direct association of the
+\para{Lack of precision:} These policies are developer heuristics and rarely
+backed up by measurements. First, there is no direct association of the
 application accuracy with the 75\% fidelity configuration. Besides, the effect
 of each rule on the data size is not trivially available.  While it seems
 intuitive that the level of degradation will change the data size, the precise
@@ -141,11 +141,15 @@ aggressive (always faces insufficient bandwidth) and one that's too conservative
 
 \begin{figure}
   \centering
-  \includegraphics[width=\columnwidth]{figures/h264.pdf}
+  \includegraphics[width=0.8\columnwidth]{figures/h264.pdf}
   \caption{H.264 requires more information per frame when the frame rate is
-    reduced. All measurements are for videos with 1920x1080 resolution and the
-    same H.264 configurations. 1/1, 3/1, 10/1 and 30/1 in the legend mean that
-    the frame rates are 1 FPS, 3 FPS, 10 FPS and 30 FPS.}
+    reduced. The horizontal axis is the frame number with a video clip; the
+    verticle axis is their size after H.264 encoding. All measurements are for
+    videos with 1920x1080 resolution and the same H.264 configuration. 1/1, 3/1,
+    10/1 and 30/1 in the legend mean that the frame rates are 1 FPS, 3 FPS, 10
+    FPS and 30 FPS. While 1 FPS will have one-third total points in comparison
+    to 3 FPS, the frame size is much larger because the frame difference
+    increases. }
   \label{fig:h264}
 \end{figure}
 
@@ -211,10 +215,10 @@ While the API itself has simplified the specification of degradation, the exact
 amount has to be known for precise rate adjustment at runtime. We then turn to
 the second stage of our system that performs the automatic profiling.
 
-\section{Multi-dimensional Profiling}
+\section{Offline Profiling}
 \label{sec:profiling}
 
-The goal of this profiling stage is to explore the bandwidth-accuracy trade-off
+The goal of the profiling stage is to explore the bandwidth-accuracy trade-off
 and learn a Pareto-optimal \textit{profile} for a specific application and its
 target scenario. The profile consists a set of rules that determines how each
 degradation operations will configured; each rule is a \textit{(bandwidth,
@@ -271,7 +275,7 @@ results when all degradations are turned off.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\columnwidth]{figures/degrade.pdf}
+  \includegraphics[width=0.6\columnwidth]{figures/degrade.pdf}
   \caption{Illustration on the behavior of different degradation operations.}
   \label{fig:bat}
 \end{figure}
@@ -288,12 +292,9 @@ straight line, data information loss is more severe than the savings when the
 degradation is in effect. One way to capture the relative power of different
 degradation strategy is to use the area under the curve (AUC). With this setup,
 the Pareto-optimal strategy can be define as the curve that has a maximal AUC.
-We will show some concrete profile curves in~\autoref{sec:evaluation}.
-
-While $B(c)$ and $A(c)$ are usually monotonic along individual dimension $k_i$,
-when multiple degradations combined, each curve may have a distinct shape. The
-right side of \autoref{fig:bat} illustrates this complex
-relationship. \todo{write more}.
+We will show some concrete profile curves in~\autoref{sec:evaluation}. While
+$B(c)$ and $A(c)$ are usually monotonic along individual dimension $k_i$, when
+multiple degradations combined, each curve may have a distinct shape.
 
 Although the complexity of degradation operations prohibits further
 optimizations to reduce the profiling time, there are several techniques in
@@ -306,8 +307,7 @@ data to be analyzed becomes smaller; also the computational complexity for each
 data item can also be dramatically reduced. (iii) Developers can specify a lower
 bound on the accuracy and the profiling can stop exploring worse configurations.
 Once there is a known configuration that is worse than the configured threshold,
-configurations with a larger level of degradation do not need to be profiled
-(such as the gray area in \autoref{fig:bat}).
+configurations with a larger level of degradation do not need to be profiled.
 
 \section{Runtime Adaptation}
 \label{sec:adaptation}
@@ -341,9 +341,9 @@ status because some degradation operations (such as \texttt{maybe\_skip}) will
 change the rate of data generation. Using the data size alone also doesn't work
 because degradation operations such as \texttt{maybe\_downsamples} will alter
 the data size of individual object. In \sysname{} design, we've adopted an
-approach with an adaptive size for congestion signaling: developers configure an
+approach with an adaptive size for congestion signaling: developers configure a
 tolerance on the communication delay and the threshold is derived based on the
-current configuration.
+the tolerance and current configuration.
 
 \para{Bandwidth Measurement:} The receiver delivers the received data from the
 network to the application. In the meantime, it measures the effective
@@ -363,10 +363,10 @@ one to adjust the available bandwidth. On the other hand, when the congestion is
 resolved, the policy manager gradually reduce the degradation level. This is
 similar to the additive increase phase in TCP congestion control.
 
-\para{Degrade:} To achieve the actual degradation operation, it is in fact quite
+\para{Degrade:} Achieving the actual degradation operation is in fact quite
 simple. Operators based on the \texttt{maybe} APIs support a \texttt{set}
 function that would change the internals of the operator. The control plane will
-invoke the \texttt{set} function with appropriate parameter to adjust the
+invoke the \texttt{set} function with the appropriate parameter to adjust the
 degradation level.
 
 %%% Local Variables:

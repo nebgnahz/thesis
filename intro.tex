@@ -14,7 +14,7 @@ the data collected at the edge needs to be transported acoross the wide-area and
 analyzed in real-time.
 
 Existing stream processing for ``big data,'' such as
-Borealis~\cite{abadi2005design}, Storm~\cite{toshniwal2014storm}, or Spark
+Storm~\cite{toshniwal2014storm} or Spark
 Streaming~\cite{zaharia2012discretized}, only work in the context of a single
 cluster, where the bandwidth is sufficient (or at least easy to
 provision). While they are the perfect back end for analyzing streams once data
@@ -35,38 +35,38 @@ rate to ensure that important data are delivered in time.
 The idea of adapting data rate for data freshness is not new. Multimedia
 applications and their adaptations~\cite{michalos2012dynamic,
   schulzrinne1998real} have been extensively studied in the past because their
-high demands on the network are rarely met. However, because of the goal to
+high demands on the network are rarely met. However, since their goal is to
 improve \textbf{user experience}, their adaptation strategies are not
 necessarily optimal for streaming analytics. For example, humans can tolerate
-losses on video frame details but expect a smooth frame transition---at least 25
+loss on video frame details but expect a smooth frame transition---at least 25
 frames per second (FPS). But many vision analytics are based on algorithms that
-extract edge information from a frame---they will perform poorly after an
-aggressive quantization.
+extract edge information from a frame---they will perform poorly if frame
+details are lost after an aggressive quantization.
 
 The observation that different applications demand different strategies in order
 to achieve the optimal adaptation calls for a system-level approach. In this
 proposal, I present the design and implementation of \sysname{}, an adaptive
 stream processing system for the wide-area. Under normal operations, \sysname{}
 applications work with maximal data fidelity; when the network's capacity
-changes, applications will react by controlling the level of degradation:
-trading data fidelity for freshness.
+changes, applications will react by controlling the level of
+\textbf{degradation}: trading data fidelity for freshness.
 
 Although the basic idea behind degradation is intuitive, realizing them in
 practice is non-trivial. Firstly, as has been discussed earlier, different
 degradations have different impacts across applications and data
 distributions. Secondly, each degradation is often more than a binary decision;
-they are often parameterized with a wide range of tuning space. It's not always
+they can be parameterized with a wide range of tuning space. It's not always
 possible to derive a close-form analytical relationship between the degradation
 parameter and its impact on the bandwidth and accuracy. What's more, real-world
 applications often have multiple dimensions to tune---prohibiting a manual
 exploration of all the design space. Take video analytics as an example,
 reducing image resolution, frame rate or changing the video encoding quality are
-all possible degradation operations that affect data rate and application
-accuracy; and even the impact of each individual operation is not immediately
-obvious for developers. These challenges are elaborated
-in~\autoref{sec:challenges}.
+all possible degradation operations. Each operation will affect data rate and
+application accuracy but its impact to the video quality is not immediately
+obvious for developers. The situation is worse when multiple degradations are
+employed. These challenges are elaborated in~\autoref{sec:challenges}.
 
-To address these challenges, \sysname{} employs a data-driven empirical-analysis
+To address the challenges, \sysname{} employs a data-driven empirical-analysis
 approach that's analogous to machine learning.  First, \sysname{} separates
 application logic from adaptation strategies by providing a clean abstraction
 (\texttt{maybe} APIs) for developers: this allows expressibility without
@@ -78,30 +78,31 @@ conditions. The profile is then used to guide the runtime adaptation, for which
 application developers' effort. In \autoref{sec:architecture}, I will present a
 detailed description of \sysname{}'s architecture.
 
-To study and validate the effect of degradation, I've a prototype framework and
-three real-world applications using \sysname{}: a street surveillance
-application performing pedestrian detection, an augmented reality application
-recognizing everyday objects and a distributed top-k application analyzing web
-server access logs. The first two video streaming applications have three
-degradation operations: resolution, frame rate and video encoding quality. For
-the distributed top-k application, two degradation operations are envolved: N in
-a local top-N operation and T as a local threshold. \autoref{sec:build-appl}
-discusses the considerations and details about the prototype.
+To study and validate the effect of degradation, I've built a prototype
+framework and three real-world applications using \sysname{}: a street
+surveillance application performing pedestrian detection, an augmented reality
+application recognizing everyday objects and a distributed top-k application
+analyzing web server access logs. The first two video streaming applications
+have three degradation operations: reducing resolution, frame rate and video
+encoding quality. For the distributed top-k application, two degradation
+operations are envolved: N in a local top-N operation and T as a local
+threshold. \autoref{sec:build-appl} discusses the considerations and details
+about the prototype.
 
 The evaluation shows that the offline profiling is able to explore the design
-space for all three applications and generates the adaptation Pareto-optimal
-strategies that was not achievable with developer configurations or only a
-single degradation operation. These profiles offer a quantitative understanding
-of each application's behavior. During runtime, \sysname{} applications are
-compared against traditional transport protocols including TCP and UDP with a
-controlled experiment. When the network capacity drops, TCP creates a severe
-delay; and the delay increases linearly as time goes; for UDP, a severe packet
-loss makes the application unusable. Applications built with \sysname{} handles
-the network variation gracefully: video streaming analytics is able to keep the
-latency bounded with 2 seconds and the accuracy higher than 80\%. For the top-k
-application, although the feedback is less frequent and adaptation is not always
-immediate, the worst-case latency is 12 seconds at most and the accuracy is
-mostly above 75\%.
+space for all three applications and generate the Pareto-optimal adaptation
+strategies that was not achievable with manual developer configurations or with
+only a single degradation operation. These profiles offer a quantitative
+understanding of each application's behavior. During runtime, \sysname{}
+applications are compared against traditional transport protocols including TCP
+and UDP with a controlled experiment. When the network capacity drops, TCP
+creates a severe delay; and the delay increases linearly as time goes; for UDP,
+a severe packet loss makes the application unusable. Applications built with
+\sysname{} handles the network variation gracefully: video streaming analytics
+is able to keep the latency bounded with 2 seconds and the accuracy higher than
+80\%. For the top-k application, although the feedback is less frequent and
+adaptation is not always immediate, the worst-case latency is 12 seconds at most
+and the accuracy is mostly above 75\%.
 
 To this end, this thesis makes the following contributions:
 
@@ -119,7 +120,7 @@ To this end, this thesis makes the following contributions:
 \section{Motivating Applications}
 \label{sec:motiv-appl}
 
-While there is a variety of wide-area streaing applications, we discuss three
+There is a variety of wide-area streaing applications. We discuss three
 applications with their implications.
 
 \para{Video Surveillance:} We envisage a city-wide monitoring system that
@@ -199,29 +200,31 @@ their primary goal is to optimize end-user quality of experience (QoE).  When
 end users consume a video clip, a smooth video is often more enjoyable than
 videos with intermittent pauses, even though each pause has crisp images.
 
-Optimizing for a single goal doesn't work for our target applications. Each
-video streaming application have its own goal, entailing different adaptive
-strategies for different applications. For example, some computer vision
-detection algorithms rely on the edge information~\cite{canny1986computational,
-  lowe2004distinctive, viola2001rapid} while object tracking applications works
-best when the inter-frame difference is small~\cite{allen2004object}.
+Optimizing for QoE doesn't work for our target applications. Each video
+analytics has its own goal, entailing different adaptive strategies for
+different applications. For example, some computer vision detection algorithms
+rely on the edge information~\cite{canny1986computational, lowe2004distinctive,
+  viola2001rapid} while object tracking applications works best when the
+inter-frame difference is small~\cite{allen2004object}.
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/image-example.pdf}
   \caption{The frame difference between two images with one second difference.
     These are two different deployment scenarios: a stationary camera in a far
-    field (upper) and a mobile camera for nearby objects (lower).}
+    field (upper) and a mobile camera for nearby objects (lower). The solid
+    rectangle in each scene is the detection target; the dotted rectangle on the
+    right side mirrors the detection on the left side. }
   \label{fig:image-eg}
 \end{figure}
 
-Furthermore, even similar applications, when used in different context, requires
-different strategy. \autoref{fig:image-eg} offers an example. A pedestrian
-detection application is deployed on a ground stationary camera in a far-field
-view. When taking pedestrian walking speed into consideration, there is so
-little difference between frames that it's not necessary to guarantee a high
-frame rate. But because the camera is far from the targets, it's crucial to have
-a high-resolution and sharp image. On the other hand, object recognition on a
+Furthermore, even similar applications, when used in different context, require
+different strategies. \autoref{fig:image-eg} offers an example. The pedestrian
+detection is deployed on a ground stationary camera in a far-field view. When
+taking pedestrian walking speed into consideration, there is so little
+difference between frames that it's not necessary to guarantee a high frame
+rate. But because the camera is far from the targets, it's crucial to have a
+high-resolution and sharp image. On the other hand, object recognition on a
 mobile phone captures nearby objects. Due to the movement of the camera,
 reducing frame rate will introduce significant errors. \autoref{fig:motiv} shows
 the different rate in accuracy drop when image resolution or frame rate is
@@ -238,7 +241,7 @@ reduced for the two use cases.
   \label{fig:motiv}
 \end{figure}
 
-This motivates us to take a system-level approach that synthesize different
+This motivates us to take a system-level approach that synthesizes different
 adaptation strategies for different queries and contexts.
 
 \section{Related Work}
@@ -270,12 +273,13 @@ are often developer heuristics that are not backed up by measurements. This
 thesis extends the idea of degradation with an automatic policy synthesis.
 
 \para{Approximate analytics:} The idea of degrading computation fidelity for
-responsiveness has also ben explored in other context, primarily SQL
+responsiveness has also been explored in other contexts, primarily SQL
 queries. Online aggregation~\cite{hellerstein1997online},
 BlinkDB~\cite{agarwal2013blinkdb} and GRASS~\cite{ananthanarayanan2014grass}
-speed up queries with partial data based on statistical models of SQL
-operators. \sysname{} supports arbitrary data processing pipelines where no
-close-form solution exists to evalute the impact of a particular degradation.
+speed up queries with partial data based on a statistical model of SQL
+operators. \sysname{} is different from these approximatte analytics as it
+supports arbitrary data processing pipelines where no close-form solution exists
+to evalute the impact of a particular degradation.
 
 \para{Adaptive video streaming:} This is both an active research
 topic~\cite{sun2016cs2p, yin2015control} with many trending industrial efforts.
@@ -284,10 +288,11 @@ tune HTTP protocols for video adaptation, such as HLS~\cite{pantos2016http} by
 Apple and DASH~\cite{michalos2012dynamic} as the new standard. The main
 technique is to adjust the video resolution and encoding bitrate but they often
 guarantee a smooth video with high frame rate (at least 25 FPS). This thesis
-generalize the adaptation to the wider range of streaming analytics and allow
-more custom control over what parameter to be adjusted. \sysname{} applications
-can be built upon existing techniques (such as H.264~\cite{richardson2011h} and
-VP9~\cite{grange2016vp9}) instead of reinventing the wheel.
+generalizes the adaptation to a wider range of streaming analytics and allows
+more custom control over what parameters can be adjusted. \sysname{}
+applications utilize existing techniques from adaptive video streaming (such as
+H.264~\cite{richardson2011h} and VP9~\cite{grange2016vp9}) instead of
+reinventing the wheel.
 
 %%% Local Variables:
 %%% mode: latex
