@@ -355,18 +355,19 @@ way, we avoid unnecessary communication overhead. When the client detects
 congestion, it will query the latency with a remote procedure call (RPC).
 
 \para{Policy Manager:} Upon receiving signals from congestion controller, it
-performs an RPC request to the server for current bandwidth measurement. With
-the learned profile, it determines the degradation level and start the actual
-degradation strategy. The bandwidth specification in the learned profile is the
-required bandwidth, the policy manager usually takes a conservative approach:
-using a constant rate ALPHA to adjust the available bandwidth. When the
-congestion is resolved, the policy manager gradually reduce the degradation
-level (additive increase phase).
+performs an RPC request to the server for current bandwidth measurement. Using
+the measurement, together with the learned profile from the last stage, it
+determines the degradation level. In the case of congestion, the policy manager
+will take a conservative approach: using a constant modifier that's smaller than
+one to adjust the available bandwidth. On the other hand, when the congestion is
+resolved, the policy manager gradually reduce the degradation level. This is
+similar to the additive increase phase in TCP congestion control.
 
-\para{Degrade:} The actual degradation operation is rather simple. Operators
-based on the \texttt{maybe} API supports a \texttt{set} function that would
-change the internals of the operator. The \texttt{set} function is invoked when
-degradation is needed.
+\para{Degrade:} To achieve the actual degradation operation, it is in fact quite
+simple. Operators based on the \texttt{maybe} APIs support a \texttt{set}
+function that would change the internals of the operator. The control plane will
+invoke the \texttt{set} function with appropriate parameter to adjust the
+degradation level.
 
 %%% Local Variables:
 %%% mode: latex
