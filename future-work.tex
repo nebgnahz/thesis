@@ -1,7 +1,50 @@
-\chapter{Dissertation Plan}
-\label{cha:dissertation-plan}
+\chapter{Thesis Plan}
+\label{cha:thesis-plan}
 
-\todo{layout a concrete dissertation plan with date and milestones.}
+This thesis aims to make the following statement: a system-level design that
+empowers adaptation in an automatic way will enable the resilient execution of
+diverse streaming applications.
+
+The current research results presented in this manuscript, i.e.\,the proposal,
+demonstrate how such a design achieves a balance between delay and application
+utility in the presence of network resource variation.
+
+The complete thesis will extend the current work to a more holistic framework.
+Specifically, I plan to work on the following two directions (see
+\autoref{tab:plan} for the concrete timeline):
+
+\para{Multitask resource allocation:} Many streaming applications will co-exist
+and share the infrastructure. When uncoordinated, they will compete for
+resources such as the network bandwidth. While the adaptation strategy may be
+optimal for each application, take them collectively, the system may not be at
+an optimal state. This project will study the multitask resource allocation and
+how it can adapt the streaming applications for an overall maximal utility.
+
+\para{Adaptation to computing resources:} In addition to the network resource,
+the computing resources also have a large variation across the heterogeneous
+platforms. The available platforms range from embedded devices to powerful
+rack-level machines. The availability of the platforms is not always guaranteed:
+nodes join and leave; the connectivity may be completely cut off. This project
+will study how to adapt applications to different configurations of the
+computing resources.
+
+\vspace{1.5em}
+\begin{table}[h]
+  \normalsize
+  \centering
+  \begin{tabular}{r l}
+    \toprule
+    \textbf{Time} & \textbf{Research Topic} \\
+    \midrule
+    Spring 2017 & Resource allocation among multiple streaming applications \\
+    Summer 2017 & Preliminary study on adaptation to computing resources \\
+    Fall 2017 & Combine network and compute resources for a holistic control plane \\
+    Spring 2018 &  Finish the thesis \\
+    \bottomrule
+  \end{tabular}
+  \caption{Thesis Timeline}
+  \label{tab:plan}
+\end{table}
 
 %%% Local Variables:
 %%% mode: latex
