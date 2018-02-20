@@ -1,0 +1,47 @@
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{biblatex}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings, lstautogobble}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+
+\lstset{
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  escapeinside={(*@}{@*)},
+  basicstyle=\small\ttfamily,
+  columns=fullflexible,
+  autogobble=true,
+  morekeywords={maybe},
+  morekeywords={maybe_skip},
+  morekeywords={maybe_downsample},
+}
+
+\newcommand{\sysname}{AWStream}
+
+\newcommand{\boldhead}[1]{\vspace{0.5em}\noindent\textbf{#1}}
+
+\newcommand{\para}[1]{\vspace{0.6em}\noindent\textbf{#1}}
+\newcommand{\paraf}[1]{\vspace{0.1em}\noindent\textbf{#1}}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\renewcommand*\chapterautorefname{Chapter}
+\renewcommand*\sectionautorefname{Section}
+\renewcommand*\subsectionautorefname{Section}
+\renewcommand*{\equationautorefname}{Eq.}
+\renewcommand*{\figureautorefname}{Fig.}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:

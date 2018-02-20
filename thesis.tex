@@ -1,44 +1,15 @@
-\documentclass{ucbthesis}
+\documentclass[10pt, draft]{ucbthesis}
 
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{biblatex}
-\usepackage{color}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{listings, lstautogobble}
-\usepackage{multirow}
-\usepackage{subcaption}
-\usepackage{times}
-\usepackage[T1]{fontenc}
-
-\lstset{
-  showspaces=false,
-  showtabs=false,
-  breaklines=true,
-  showstringspaces=false,
-  breakatwhitespace=true,
-  escapeinside={(*@}{@*)},
-  basicstyle=\small\ttfamily,
-  columns=fullflexible,
-  autogobble=true,
-  morekeywords={maybe},
-  morekeywords={maybe_skip},
-  morekeywords={maybe_downsample},
-}
-
-%% \def\dsp{\def\baselinestretch{2.0}\large\normalsize}
-%% \dsp
-
+\input{meta}
 \bibliography{thesis}
 
 \begin{document}
 
-\title{ A Proposal for Adaptive Wide-area Streaming Analytics }
+\title{ Adaptive Wide-area Streaming Analytics }
 
 \author{ Ben Zhang }
-\degreesemester{XX}
-\degreeyear{XXXX}
+\degreesemester{Spring}
+\degreeyear{2018}
 \degree{Doctor of Philosophy}
 \chair{Professor John Wawrzynek}
 \othermembers{Professor Edward A. Lee \\
@@ -49,18 +20,17 @@
 \numberofmembers{3}
 
 \maketitle
-%% \approvalpage
-%% \copyrightpage
 
-\include{macros}
+\approvalpage
+\copyrightpage
 
-\include{abstract}
-
+\include{chapters/abstract}
 \pagestyle{headings}
-\include{intro}
-\include{design}
-\include{impl}
-\include{future-work}
+
+% \include{intro}
+% \include{design}
+% \include{impl}
+% \include{future-work}
 
 \printbibliography
 
