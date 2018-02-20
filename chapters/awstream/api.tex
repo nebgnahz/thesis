@@ -1,0 +1,110 @@
+\subsection{API for Structured Adaptation}
+\label{sec:structure-adapt}
+
+%% Introduce graphs of operators model
+Most stream processing systems construct applications as a directed graph of
+operators~\cite{toshniwal2014storm, zaharia2013discretized}. Each operator
+transforms input streams into new streams. \sysname{} borrows the same
+computation model.  \autoref{tab:operators} lists some example operators, such
+as \texttt{map} and \texttt{skip}.
+
+To integrate adaptation as a first-class abstraction, \sysname{} introduces
+\maybe{} operators that degrade data quality, yielding potential bandwidth
+savings.  Our API design has three considerations. $(i)$~To free developers from
+specifying exact rules, the API should allow specifications with
+options. $(ii)$~To allow combining multiple dimensions, the API should be
+modular. $(iii)$~To support flexible integration with arbitrary degradation
+functions, the API should take user-defined functions. Therefore, our API is,
+
+\vspace{-2pt}
+\begin{lstlisting}
+        maybe(knobs: Vec<T>, f: (T, I) => I)
+\end{lstlisting}
+
+We illustrate the use of the \texttt{maybe} operator with an example that
+quantizes a stream of integers in Rust:
+
+\begin{table*}
+  \small
+  \centering
+  \begin{tabular}{ c r l }
+    \toprule
+    \multirow{4}{*}{Normal Operators}
+    & \textit{map} (f: I $\Rightarrow$ O) & Stream<I> $\Rightarrow$ Stream<O> \\
+    & \textit{skip} (i: Integer) & Stream<I> $\Rightarrow$
+                                   Stream<I> \\
+    & \textit{sliding\_window} (count: Integer, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
+                                                                            Stream<O> \\
+    % & \textit{tumbling\_window} (count: Integer, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
+    %                                                                          Stream<O> \\
+    % & \textit{timed\_window} (time: Duration, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
+    %                                                                      Stream<O> \\
+    & ... & ... \\
+    \midrule
+    \multirow{5}{*}{Degradation Operators}
+    & \textit{maybe} (knobs: Vec<T>, f:  (T, I) $\Rightarrow$ I) & Stream<I> $\Rightarrow$
+                                                                 Stream<I> \\
+    & \textit{maybe\_skip} (knobs: Vec<Integer>) & Stream<I> $\Rightarrow$ Stream<I> \\
+    & \textit{maybe\_head} (knobs: Vec<Integer>) & Stream<Vec<I>{}> $\Rightarrow$
+                                                   Stream<Vec<I>{}> \\
+    & \textit{maybe\_downsample} (knobs: Vec<(Integer, Integer)>) & Stream<Image> $\Rightarrow$ Stream<Image> \\
+    & ... & ... \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.2em}
+  \caption{Stream processing operators in \sysname{}. \texttt{Vec<T>} represents
+    a list of elements with type \texttt{T}.}
+  \label{tab:operators}
+  \vspace{-1em}
+\end{table*}
+
+\vspace{-2pt}
+\begin{lstlisting}
+let quantized_stream = vec![1, 2, 3, 4].into_stream()
+    .maybe(vec![2, 4], |k, val| val.wrapping_div(k))
+    .collect();
+\end{lstlisting}
+
+The snippet creates a stream of integers, chains a degradation operation, and
+collects the execution result. In this example, the knob is [2, 4] and the
+degradation function performs a wrapping (modular) division where the divisor is
+the chosen knob. The knob value modifies the quantization level, affecting the
+output: [1, 2, 3, 4] (no degradation), [0, 1, 1, 2] (k=2), or [0, 0, 0, 1]
+(k=4). If the stream is then encoded---e.g. run-length encoding as in
+JPEG~\cite{wallace1992jpeg}---for transmission, the data size will depend on the
+level of degradation.
+
+Based on the \texttt{maybe} primitive, one can implement additional degradation
+operators for common data types. For instance, \texttt{maybe\_head} will
+optionally take the top values of a list; \texttt{maybe\_downsample} can resize
+the image to a configured resolution. \sysname{} provides a number of such
+operations as a library to simplify application development
+(\autoref{tab:operators}).
+
+With our API, the example mentioned in \autoref{subsec:motivation} can now be
+implemented as follows:
+
+\vspace{-4pt}
+\begin{lstlisting}
+let app = Camera::new((1920, 1080), 30)
+    .maybe_downsample(vec![(1600, 900), (1280, 720)])
+    .maybe_skip(vec![2, 5])
+    .map(|frame| frame.show())
+    .compose();
+\end{lstlisting}
+
+This snippet first instantiates a \texttt{Camera} source, which produces
+\texttt{Stream<Image>} with 1920x1080 resolution and 30 FPS\@. Two degradation
+operations follow the source: one that downsamples the image to 1600x900 or
+1280x720 resolution, and the other that skips every 2 or 5 frames, resulting in
+30/(2+1)=10 FPS or 30/(5+1)= 6 FPS\@. This example then displays degraded
+images. In practice, operators for further processing, such as encoding and
+transmission, can be chained.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../awstream"
+%%% End:
+
+%% LocalWords: UDFs Vec quantization quantized quantizes
+%% LocalWords: downsample downsamples subsec resize

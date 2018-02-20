@@ -1,0 +1,167 @@
+\section{Motivation}
+\label{sec:motivation}
+
+In this section, we first examine the gap between high application demands and
+limited WAN bandwidth. We then show that neither manual policies nor
+application-specific optimizations solve the problem.
+
+\subsection{Wide-area Streaming Applications}
+\label{sec:wide-area-streaming}
+
+We focus on wide-area streaming analytics, especially the emerging IoT
+applications. We give two concrete examples.
+
+\para{Video Surveillance.} We envisage a city-wide monitoring system that
+aggregates camera feeds, from stationary ground cameras and moving aerial
+vehicles, and analyzes video streams in real time for surveillance, anomaly
+detection, or business intelligence~\cite{oh2011large}. Recent advances in
+computer vision have dramatically increased the accuracy for automatic visual
+scene analysis, such as pedestrian detection~\cite{dollar2012pedestrian},
+vehicle tracking~\cite{coifman1998real}, and facial recognition to locate people
+of interest~\cite{Lu:2015:SHF:2888116.2888245, parkhi2015deep}. While some
+surveillance cameras use dedicated links, an increasing number of surveillance
+systems, such as Dropcam~\cite{dropcam} and Vigil~\cite{zhang2015design}, use
+the public Internet and wireless links to reduce the cost of deployment and
+management.
+
+% \para{High-frequency IoT Sensors:} Although environmental sensors used to be
+% slow and not data-intensive~\cite{atzori2010internet}, increasingly,
+% high-frequency, high-precision sensors are deployed. For example, uPMUs
+% monitor the electrical grid with a network of 1000 devices; each produces 12
+% streams of 120 Hz high-precision values accurate to 100 ns. This amounts to
+% 1.4 million points per second~\cite{andersen2016btrdb}.
+
+\para{Infrastructure Monitoring.} Large organizations today are managing tens of
+datacenters and edge clusters worldwide~\cite{calder2013mapping}. This
+geo-distributed infrastructure continuously produces large volumes of data such
+as data access logs, server monitoring logs, and performance
+counters~\cite{alspaugh2014analyzing, pu2015low, vulimiri2015global}. While most
+log analysis today runs in a batch mode on a daily basis, there is a trend
+towards analyzing logs in real time for rapid
+optimization~\cite{rabkin2014aggregation}. For example, CDNs can improve the
+overall efficiency by optimizing data placement if the access logs can be
+processed in real time. In Industrial IoT, large-scale real-time sensor
+monitoring is becoming pervasive to detect anomalies, direct controls, and
+predict maintenance ~\cite{balani2016enterprise, ge}.
+
+%% ~\cite{xu2009detecting} We generated the HDFS logs by setting up a Hadoop
+%% cluster on 203 EC2 nodes and running sample Hadoop map-reduce jobs for 48
+%% hours, generating and processing over 200 TB of random data. We collected
+%% over 24 million lines of logs from HDFS.
+
+% We consider the practical issues with deploying these applications in the
+% wide-area. Our stand is that these applications face a bigger network
+% challenge.  Data generated from the edge often fail to be delivered to the
+% processing site because of the scarce and variable bandwidth capacity in the
+% wide-area. Once they arrive, existing stream processing systems can easily
+% manage a large cluster and perform data analytics at real-time.
+
+\subsection{Wide-area Bandwidth Characteristics}
+\label{sec:wide-area-bandwidth}
+
+WAN bandwidth is insufficient and costly, as shown by other
+systems~\cite{hsieh17gaia, pu2015low, vulimiri2015wananlytics,
+  vulimiri2015global}. Using Amazon EC2 as a case study, the WAN bandwidth
+capacity is 15x smaller than their LAN bandwidth on average, and up to 60x
+smaller in the worst case~\cite{hsieh17gaia}. In terms of pricing, the average
+WAN bandwidth cost is up to 38x of the cost of renting two
+machines~\cite{amazon2017pricing, hsieh17gaia}.
+
+In addition to the scarcity and cost, the large variability of WAN bandwidth
+also affects streaming workloads. We conducted a day-long measurement with
+iPerf~\cite{iperf3} to study the pair-wise bandwidth between four Amazon EC2
+sites (N. California, N. Virginia, Tokyo, Ireland).  The results show large
+variance in almost all pairs---\autoref{fig:bw} is one such pair. There are
+occasions when the available bandwidth is below 25\% of the maximum bandwidth.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/aws-variation.pdf}
+  \caption{Bandwidth variations throughout the day between Amazon EC2 sites
+    (from Ireland to California).}
+  \label{fig:bw}
+  \vspace{-1em}
+\end{figure}
+
+The back-haul links between EC2 sites are better---if not at least
+representative---in comparison to general WAN links. Similar scarcity and
+variations exist in wireless networks~\cite{biswas2015large}, broadband access
+networks~\cite{grover2013peeking, sundaresan2014bismark} and cellular
+networks~\cite{nikravesh2014mobile}.
+
+\subsection{Motivation for \sysname{}}
+\label{subsec:motivation}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/motiv-app-specific.pdf}
+  \caption{The measured bandwidth and application accuracy for two video
+    analytics applications. (1) Manual policies lack precision without
+    measurements and need to handle multiple dimensions (as in a-d). (2)
+    Application-specific optimizations do not generalize: degrading frame rates
+    works well for stationary camera (a), but not for mobile camera (c). (e-h)
+    shows example frames.}
+  \label{fig:app-specific}
+\end{figure*}
+
+To address bandwidth limits, existing solutions use manual policies or
+application-specific solutions. We discuss their drawbacks to motivate
+\sysname{} (design in \autoref{sec:system}).
+
+\para{Manual polices are sub-optimal.} JetStream~\cite{rabkin2014aggregation} is
+the first to use degradation to address bandwidth limits in wide area. While
+effective in comparison to non-adaptive systems, JetStream requires developers
+to write manual policies, e.g.~\textit{``if bandwidth is insufficient, switch to
+  sending images at 75\% fidelity, then 50\% if there still isn't enough
+  bandwidth. Beyond that point, reduce the frame rate, but keep the image
+  fidelity.''}\footnote{Excerpt from JetStream \S
+  4.3~\cite{rabkin2014aggregation}.} We discuss the problems with manual
+policies below and present quantitative evaluations in
+\autoref{sec:runtime-adaptation}.
+
+First, this policy is not accurate.  Developers write such rules based on
+heuristics and do not back them up with measurements. Images with 75\% fidelity
+do not necessarily lead to 75\% application accuracy. In terms of bandwidth,
+naively one would think that reducing the frame rate by half will also half the
+data rate. But if video encoding such as H.264~\cite{richardson2011h} is used, a
+reduction in frame rate increases the inter-frame difference and creates
+P-frames with larger sizes. \hyperref[fig:app-specific]{Fig.~3c} shows that when
+reducing the frame rate to 33\% (from \(30~\text{FPS}\) to \(10~\text{FPS}\)),
+the bandwidth use can still be more than 50\%.
+
+Second, it is not scalable to specify rules one by one. A fine-grain control
+requires many rules in the policy. Besides, applications can degrade in multiple
+dimensions and each dimension has different impacts (compare
+\hyperref[fig:app-specific]{Fig.~3a} with \hyperref[fig:app-specific]{Fig.~3b}).
+Specifying rules in detail and across dimensions manually is a tedious and
+error-prone process.
+
+Lastly, this abstraction is too low-level. It forces developers to study and
+measure the impact of individual operations, prohibiting its wide adoption in
+practice.
+
+\para{Application-specific optimizations do not generalize.} Because each
+application has different performance metrics and relies on different features,
+a fine-tuned policy for one application will often work poorly for another. For
+example, DASH~\cite{sodagar2011mpeg} optimizes QoE for video streaming; it keeps
+a high frame rate and reduces resolutions for adaptation. Its policy that lowers
+the resolution works poorly for video analytics that relies on image
+details~\cite{lowe2004distinctive, viola2001rapid}. In
+\hyperref[fig:app-specific]{Fig.~3b}, we show that pedestrian detection accuracy
+drops fast when reducing resolutions as pedestrian are small in the scenes.
+
+Similar applications face different data distributions, as shown in
+\autoref{fig:app-specific} between stationary cameras detecting pedestrians (up)
+and mobile cameras recognizing objects (bottom). For stationary cameras, when we
+consider the slow walking speed of pedestrians, a high frame rate is not
+necessary. But high-resolution images are crucial because these surveillance
+cameras are far away from the targets. In the mobile camera case, because the
+camera moves, reducing the frame rate introduces significant errors.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../awstream"
+%%% End:
+
+%% LocalWords: Dropcam IoT DCs geo CDNs iPerf JetStream scalable
+%% LocalWords: bw runtime QoE analytics datacenters

@@ -1,0 +1,155 @@
+\appendix
+
+% \section{WAN Bandwidth Characteristics}
+
+% \autoref{fig:aws-bandwidth} shows the available bandwidth between Amazon EC2
+% servers (Tokyo, Ireland, N. Virginia, N. California) in our day-long
+% measurements. Most inter-continental links (between Ireland and all others,
+% between Tokyo and N. Virginia) have limited bandwidth (\textasciitilde
+% \SI{50}{Mbps}). Other pairs exhibit large variations from \SI{10}{Mbps} up to
+% \SI{150}{Mbps}.
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=\columnwidth]{figures/aws-bandwidth.pdf}
+%   \caption{Pair-wise bandwidth in time series from our day-long measurements.}
+%   \label{fig:aws-bandwidth}
+% \end{figure}
+
+\section{HLS Setup}
+\label{appendix:hls-setup}
+
+HTTP Live Streaming (HLS)~\cite{pantos2016http} represents a class of HTTP-based
+media streaming protocols. Other protocols include Adobe HTTP Dynamic
+Streaming~\cite{adobestreaming}, Microsoft Smooth
+Streaming~\cite{zambelli2009iis}, and a newer vendor-independent standard
+DASH~\cite{michalos2012dynamic, sodagar2011mpeg}. These adaptive streaming
+protocols are widely adopted for both video-on-demand (VoD) and live streaming
+(such as Periscope).
+
+Our setup (\autoref{fig:hls}) resembles the setup of popular live streaming
+services~\cite{wang2016anatomy}. Typical streaming servers set each chunk to be
+2-10 seconds~\cite{mao2017neural, sun2016cs2p, wang2016anatomy}. For our low
+latency streaming, we configured the chunk segment to be 1 second.
+
+\para{Why HLS/DASH is a poor match for video analytics?} It's hard to achieve
+ultra low latency using HLS/DASH: (1) HLS/DASH is pull-based: the client keeps
+requesting for new chunks; (2) HLS/DASH uses chunking: shorter chunks enable a
+lower latency, but induce a larger number of requests, and the chunk has to be
+made ready before the client can start fetching. There are proposals to reduce
+the latency, such as server push~\cite{wei2014low}, but they are still work in
+progress. For some applications, the accuracy can also be poor if these videos
+are limited to tuning resolution and encoding quality only, as demonstrated by
+in our PD evaluation.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/hls.pdf}
+  \caption{HLS setup: (1)~FFmpeg encodes video with multiple bitrates and groups
+    them into MPEG-TS programs;
+    (2)~\texttt{nginx-ts-module}~\cite{nginx-ts-module} generates HLS chunks on
+    the fly and stores them for nginx serving; (3)~the client (using
+    \texttt{hls.js}~\cite{hls.js}) periodically fetches the latest index file
+    (\texttt{index.m3u8}) and then downloads the right chunk according to
+    network conditions.}
+  \label{fig:hls}
+\end{figure}
+
+\section{JetStream++}
+\label{appendix:jetstream++}
+
+We modified the open source version of
+JetStream\footnote{\url{https://github.com/princeton-sns/jetstream/}, commit
+  bf0931b2d74d20fdf891669188feb84c96AF84.} in order to use our profile as its
+manual policy. Because JetStream doesn't support simultaneous degradation across
+multiple operators, we implemented a simple \texttt{VideoSource} operator that
+understands how to change image resolutions, frame rate, and video encoding
+quantization. At runtime, \texttt{VideoSource} queries congestion policy manager
+and adjusts three dimensions simultaneously. This operator is then exposed to
+the Python-implemented control plane. We call this modified version
+JetStream++.\footnote{URL to our patch is elided for anonymity.}
+
+%% https://github.com/nebgnahz/jetstream-clone/pull/2/files}
+
+JetStream's code base is modular and extensible: the modifications include 53
+lines for the header file, 171 lines for implementation, 75 lines for unit test,
+and 49 lines of python as the application. While extending JetStream with our
+profile is not challenging, JetStream++ performs degradation in a single
+operator and loses the composability. We could modify JetStream to support
+degradation across multiple operators, but that would require substantial
+changes to JetStream. Using JetStream++ with our profile, the comparison is
+enough to illustrate the difference between \sysname{}'s and JetStream's
+runtime.
+
+ % > summary(latency)
+ %      Time        JetStream++        JetStream            HLS
+ % Min.   :206.0   Min.   :  46.68   Min.   :   82.4   Min.   :1887
+ % 1st Qu.:264.2   1st Qu.: 380.70   1st Qu.: 1435.7   1st Qu.:2320
+ % Median :322.5   Median : 597.67   Median : 1534.9   Median :2623
+ % Mean   :322.5   Mean   : 624.21   Mean   : 2629.2   Mean   :2610
+ % 3rd Qu.:380.8   3rd Qu.: 831.75   3rd Qu.: 1688.1   3rd Qu.:2863
+ % Max.   :439.0   Max.   :1388.79   Max.   :11489.3   Max.   :4227
+ % NA's   :1       NA's   :1         NA's   :1         NA's   :1
+ %
+ % Streaming over TCP Streaming over UDP    AWStream
+ % Min.   :   878.8   Min.   :29.70      Min.   : 48.35
+ % 1st Qu.: 26176.3   1st Qu.:31.18      1st Qu.: 63.58
+ % Median : 50679.0   Median :32.68      Median : 77.98
+ % Mean   : 52130.4   Mean   :32.89      Mean   :105.56
+ % 3rd Qu.: 76010.8   3rd Qu.:34.60      3rd Qu.:124.71
+ % Max.   :111455.7   Max.   :36.30      Max.   :417.79
+ % NA's   :1          NA's   :1          NA's   :1
+ %%
+ %% 20x over JetStream, 7.7x over JetStream++
+
+ % > summary(accuracy)
+ %      Time        JetStream++       JetStream           HLS
+ % Min.   :206.0   Min.   :0.6735   Min.   :0.7822   Min.   :0.00000
+ % 1st Qu.:264.2   1st Qu.:0.7871   1st Qu.:0.8247   1st Qu.:0.04077
+ % Median :322.5   Median :0.8285   Median :0.8420   Median :0.06372
+ % Mean   :322.5   Mean   :0.8232   Mean   :0.8395   Mean   :0.09429
+ % 3rd Qu.:380.8   3rd Qu.:0.8667   3rd Qu.:0.8531   3rd Qu.:0.09346
+ % Max.   :439.0   Max.   :0.9148   Max.   :0.9130   Max.   :0.69602
+ % NA's   :1       NA's   :1        NA's   :1        NA's   :1
+ % Streaming over TCP Streaming over UDP      AWStream
+ % Min.   :0.8502     Min.   :-0.0000985   Min.   :0.7899
+ % 1st Qu.:0.9012     1st Qu.: 0.0021567   1st Qu.:0.8405
+ % Median :0.9150     Median : 0.0068409   Median :0.8552
+ % Mean   :0.9150     Mean   : 0.0314461   Mean   :0.8622
+ % 3rd Qu.:0.9295     3rd Qu.: 0.0312727   3rd Qu.:0.8805
+ % Max.   :0.9697     Max.   : 0.6220806   Max.   :0.9853
+ % NA's   :1          NA's   :1            NA's   :1
+ %%
+ %% 6% drop, 1% increase over JetStream
+
+% > summary(latency)
+%       Time       Streaming over TCP Streaming over UDP    AWStream
+%  Min.   :210.0   Min.   : 2036      Min.   :22.29      Min.   :  48.03
+%  1st Qu.:251.2   1st Qu.:11438      1st Qu.:22.42      1st Qu.: 485.08
+%  Median :292.5   Median :21014      Median :24.78      Median : 946.45
+%  Mean   :292.5   Mean   :20590      Mean   :23.85      Mean   :1145.05
+%  3rd Qu.:333.8   3rd Qu.:29662      3rd Qu.:24.87      3rd Qu.:1557.20
+%  Max.   :375.0   Max.   :39434      Max.   :24.98      Max.   :3509.99
+% > summary(accuracy)
+%       Time       Streaming over TCP Streaming over UDP    AWStream
+%  Min.   :210.0   Min.   :0.9808     Min.   :0.1097     Min.   :0.9284
+%  1st Qu.:251.2   1st Qu.:0.9892     1st Qu.:0.4467     1st Qu.:0.9694
+%  Median :292.5   Median :0.9967     Median :0.5329     Median :0.9800
+%  Mean   :292.5   Mean   :0.9928     Mean   :0.5236     Mean   :0.9786
+%  3rd Qu.:333.8   3rd Qu.:0.9977     3rd Qu.:0.6063     3rd Qu.:0.9883
+%  Max.   :375.0   Max.   :0.9991     Max.   :0.7981     Max.   :0.9991
+%
+% subsecond latency, 2% drop
+
+% \include{hls.tex}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../awstream"
+%%% End:
+
+%% LocalWords: Mbps analytics runtime JetStream OpenCV YOLO pre GStreamer appsrc
+%% LocalWords: appsink zerolatency quantization dataset SVM geo topk VideoSource
+%% LocalWords: JetStream's composability TK TCP UDP HLS FFmpeg bitrates nginx
+%% LocalWords: packetization TPUT topk NodeJS metadata timestamp Mbps Kbps
+%% LocalWords: aws PD's TK's hls js VoD awstream tk fdf feb

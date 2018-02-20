@@ -1,0 +1,50 @@
+\section{Discussion and Future work}
+\label{sec:discussion}
+
+\paraf{Reducing Developer Effort.} While \sysname{} simplifies developing
+adaptive applications, there are still application-specific parts required for
+developers: wrapping appropriate \maybe{} calls, providing training data, and
+implementing accuracy functions. Because \sysname{}'s API is extensible, we plan
+to build libraries for common degradation operations and accuracy functions,
+similar to machine learning libraries.
+
+\para{Fault-tolerance and Recovery.} \sysname{} tolerates bandwidth variation
+but not network partition or host failure. Although servers within data centers
+can handle faults in existing systems, such as Spark
+Streaming~\cite{zaharia2013discretized}, it is difficult to make edge clients
+failure-oblivious.  We leave failure detection and recovery as a future work.
+
+\para{Profile Modeling.} \sysname{} currently performs an exhaustive search when
+profiling, and only use parallelism and sampling to speed up. We plan to improve
+our profiler with statistical methods such as Bayesian
+Optimization~\cite{snoek2012practical, alipourfard2017cherrypick} that can model
+black box functions $B(c)$ and $A(c)$.
+
+% \para{Expressiveness}: Our \maybe{} APIs allow an easy integration with
+% existing stream processing systems. While it follows the operator model,
+% combined with other operators, this is expressive enough. We've presented
+% three applications in this paper; and we are implement more application using
+% this framework to understand the expressiveness better.
+
+% \para{Context detection.} \sysname{} is currently limited to one profile: the
+% offline profiling generates the default profile and the online profiling
+% updates the single profile continuously.  Real-world applications may produce
+% data with a multi-modal distribution, where the model changes upon context
+% changes, such as indoor versus outdoor. Therefore, one possible optimization
+% to \sysname{} is to allow multiple profiles for one application, detect
+% context changes, and use the profile that best matches the current data
+% distribution.  Switching contexts could reduce, or even eliminate, the
+% overhead of online profiling.
+
+\para{Predicting Bandwidth Changes.} \sysname{} currently does not predict
+future bandwidth. While reacting to bandwidth changes is enough to achieve
+sub-second latency, we plan to improve our runtime further (e.g.\,removing
+latency spikes) with techniques that can predict future resources, such as model
+predictive control (MPC)~\cite{camacho2013model, yin2015control}.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../awstream"
+%%% End:
+
+%% LocalWords: CherryPick runtime MPC QoE profiler

@@ -1,0 +1,130 @@
+\section{Related Work}
+\label{sec:related-work}
+
+\paraf{JetStream.} JetStream is the first to use degradation to reduce latency
+for wide-area streaming analytics. Compared to JetStream, \sysname{} makes five
+major contributions: $(1)$~a novel API design to specify degradation in a simple
+and composable way; $(2)$~automatic offline profiling to search for
+Pareto-optimal configurations; $(3)$~online profiling to address model drift;
+$(4)$~an improved runtime system achieving sub-second latency (comparison in
+\autoref{sec:runtime-adaptation}); $(5)$~support for different resource
+allocation policies for multiple applications.
+
+\para{Stream Processing Systems.} Early streaming
+databases~\cite{abadi2005design, chandrasekaran2003telegraphcq} have explored
+the use of dataflow models with specialized operators for stream
+processing. Recent research projects and open-source
+systems~\cite{akidau2013millwheel, toshniwal2014storm, sanjeev2015twitter,
+  zaharia2013discretized, carbone2015apache} primarily focus on fault-tolerance
+in the context of a single cluster. When facing back pressure,
+Storm~\cite{toshniwal2014storm}, Spark Streaming~\cite{zaharia2013discretized}
+and Heron~\cite{sanjeev2015twitter} throttle data ingestion; Apache
+Flink~\cite{carbone2015apache} uses edge-by-edge back-pressure techniques
+similar to TCP flow control; Faucet~\cite{lattuada2016faucet} leaves the flow
+control logic up to developers.  While our work has a large debt to prior
+streaming work, \sysname{} targets at the wide area and explicitly explores the
+trade-off between data fidelity and freshness.
+
+\para{Approximate Analytics.} The idea of degrading computation fidelity for
+responsiveness is also explored elsewhere, such as SQL
+queries~\cite{hellerstein1997online, agarwal2013blinkdb,
+  ananthanarayanan2014grass}, real-time processing~\cite{farrell2016meantime},
+and video processing within large clusters~\cite{zhang2017live}. The trade-off
+between available resource and application accuracy is a common theme among all
+these systems. \sysname{} targets at wide-area streaming analytics, an emerging
+application domain especially with the advent of IoT\@.
+
+\para{WAN-Aware Systems.} Geo-distributed systems need to cope with high latency
+and limited bandwidth. While some systems assume the network can prioritize a
+small amount of critical data under congestion~\cite{cho2012surviving}, most
+systems reduce data sizes in the first place to avoid congestion,
+e.g.\,LBFS~\cite{muthitacharoen2001low}. Over the past two years, we have seen a
+plethora of geo-distributed analytical frameworks~\cite{vulimiri2015wananlytics,
+  vulimiri2015global, pu2015low, kloudas2015pixida, viswanathan2016clarinet}
+that incorporate heterogeneous wide-area bandwidth into query optimization to
+minimize data movement. While effective in speeding up analytics, these systems
+focus on batch tasks such as MapReduce jobs or SQL queries. Such tasks are often
+executed infrequently and without real time constrain. In contrast, \sysname{}
+processes streams continuously in real time.
+
+%% - Pixida~\cite{kloudas2015pixida} minimizes data movement across inter-DC
+%% links by solving a traffic minimization problem in data analytics.
+
+%% - Iridium~\cite{pu2015low} optimizes data and task placement jointly to
+%% achieve an overall low latency goal.
+
+%% - Clarinet~\cite{viswanathan2016clarinet} incorporate bandwidth information
+%% into query optimizer to reduce data transfer.
+
+%% WheelFS~\cite{stribling2009flexible}
+
+%% Geode~\cite{vulimiri2015global} develops input data movement and join
+%% algorithm selection strategies to minimize WAN bandwidth usage.
+
+%% WANalytics~\cite{vulimiri2015wananlytics} focuses on batch analytics.
+
+%% SWAG~\cite{hung2015scheduling} coordinates compute task scheduling across
+%% DCs.
+
+%% \cite{heintz2015towards} discusses the complex trade-offs involved in
+%% wide-area analytics.
+
+\para{(Adaptive) Video Streaming.} Multimedia streaming protocols,
+e.g.\,RTP~\cite{schulzrinne2006rtp}, aim to be fast instead of reliable. While
+they can achieve low latency, their accuracy can be poor under congestion.
+Recent work has moved towards HTTP-based protocols and focused on designing
+adaptation strategy to improve QoE, as in research~\cite{mao2017neural,
+  sun2016cs2p, yin2015control} and industry (HLS~\cite{pantos2016http},
+DASH~\cite{michalos2012dynamic, sodagar2011mpeg}). These adaptation strategies
+are often pull-based: client keeps checking the index file for changes. And
+clients have to wait for the next chunk (typically 2-10 seconds). In addition,
+as we have shown in \autoref{sec:runtime-adaptation}, their adaptation is a poor
+match for analytics that rely on image details (e.g.\,6\% accuracy for PD). In
+contrast, \sysname{} learns an adaptation strategy for each application (also
+not limited to video analytics); and the runtime is optimized for low latency.
+
+\para{QoS.} Most QoS work~\cite{ferrari1990scheme, shenker1994integrated,
+  shenker1995fundamental} in the 1990s focuses on network-layer solutions that
+are not widely deployable. \sysname{} adopts an end-host application-layer
+approach ready today for WAN. For other application-layer
+approaches~\cite{vandalore2001survey}, \sysname{}'s API can incorporate their
+techniques, such as encoding the number of layers as a knob to realize the
+layered approach in Rejaie et al~\cite{rejaie2000layered}. Fundamentally,
+\sysname{} does not provide hard QoS guarantees; instead \sysname{} maximizes
+achievable accuracy (application performance) and minimizes latency (system
+performance) with respect to bandwidth constraints: a multidimensional
+optimization.
+
+%% TCP, for example, adapts to available bandwidth by controlling the congestion
+%% window with AIMD~\cite{jacobson1988congestion}.  Previous work has proposed
+%% modifications to TCP for specific contexts. For streaming over TCP, Goel et
+%% al.~\cite{goel2008low} proposes adaptive buffer-size tuning. For the cloud,
+%% Adaptive TCP~\cite{wu2013adaptive} proposes to modify the congestion control
+%% behavior based on flow size for the cloud.
+
+% \para{Scheduling and allocation:} Resource allocations in the cloud is how to
+% efficiently allocate tasks.  In the wide area, we face fundamental limit that
+% therefore degradation is more effective. For multiple tasks, Existing
+% allocations are for resources without considering application trade-offs.
+% MediaNet~\cite{hicks2003user} uses both local and online global resource
+% scheduling to improve user performance and network utilization, and adapts
+% without requiring underlying support for resource
+% reservations. VideoStorm~\cite{zhang2017live} primarily focuses on cluster
+% resource allocation among video queries. For wide-area, the resource
+% allocation is limited. We do not control the capacity; but still we can
+% allocate the available bandwidth.
+
+% Performance modeling: CherryPick~\cite{alipourfard2017cherrypick},
+% Ernest~\cite{venkataraman2016ernest}.
+%% Dolly~\cite{ananthanarayanan2013effective}.
+%% \para{Program Synthesis:}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../awstream"
+%%% End:
+
+%% LocalWords: JetStream analytics composable runtime Borealis TelegraphCQ
+%% LocalWords: dataflow MillWheel Flink TCP BlinkDB VideoStorm IoT geo LBFS
+%% LocalWords: WANalytics Pixida MapReduce RTP HLS QoE VoD QoS deployable Rejaie
+%% LocalWords: et al

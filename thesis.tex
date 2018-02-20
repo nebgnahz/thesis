@@ -1,40 +1,71 @@
-\documentclass[10pt, draft]{ucbthesis}
+\documentclass[12pt, oneside]{ucbthesis}
 
 \input{meta}
-\bibliography{thesis}
+
+\ssp
 
 \begin{document}
+\title{Adaptive Wide-area Streaming Analytics}
+\author{Ben Zhang}
+\prevdegrees{}
 
-\title{ Adaptive Wide-area Streaming Analytics }
-
-\author{ Ben Zhang }
-\degreesemester{Spring}
 \degreeyear{2018}
+\degreemonth{Spring}
+\defensemonth{Spring}
+\defenseyear{2018}
 \degree{Doctor of Philosophy}
+
+\numberofmembers{4}
 \chair{Professor John Wawrzynek}
-\othermembers{Professor Edward A. Lee \\
-  Professor Sylvia Ratnasamy \\
-  Professor John Chuang}
+\othermemberA{Professor Edward A. Lee}
+\othermemberB{Professor John Chuang}
+\othermemberC{Professor Sylvia Ratnasamy}
 \field{Computer Science}
 \campus{Berkeley}
-\numberofmembers{3}
 
+\begin{frontmatter}
 \maketitle
-
 \approvalpage
 \copyrightpage
+\abstract
+\input{chapters/abstract}
+% \abstractsignature
+\endabstract
 
-\include{chapters/abstract}
-\pagestyle{headings}
+\end{frontmatter}
+\begin{optionalFrontMatter}
+\begin{dedication}
+  \vspace*{\fill}
+  To my parents.
+  \vspace*{\fill}
+\end{dedication}
+\end{optionalFrontMatter}
+\addcontentsline{toc}{chapter}{Contents}
 
-% \include{intro}
-% \include{design}
-% \include{impl}
-% \include{future-work}
+\tableofcontents
+\listoffigures
+\listoftables
 
-\printbibliography
+\begin{acknowledgements}
+  \thispagestyle{plain}
+  Acknowledgment
+% \subfile{chapters/acknowledgements}
+\end{acknowledgements}
 
+\begin{dissertationText}
+
+\subfile{chapters/communication}
+
+\ssp
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{thesis}
+
+\appendix
+
+\end{dissertationText}
 \end{document}
+
+% Congratulations, Doc!
 
 %%% Local Variables:
 %%% mode: latex
