@@ -15,7 +15,7 @@ before_install:
 script:
   - make
   - mkdir -p pdf
-  - mv serving.pdf pdf/
+  - mv thesis.pdf pdf/
 
 branches:
   only:
