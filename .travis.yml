@@ -3,6 +3,7 @@ addons:
   apt:
     packages:
     - lmodern
+    - latex-xcolor
     - make
     - pgf
     - texlive-bibtex-extra
@@ -14,7 +15,6 @@ addons:
     - texlive-latex-recommended
     - texlive-pictures
     - texlive-science
-    - texlive-xcolor
 
 script:
   - make
