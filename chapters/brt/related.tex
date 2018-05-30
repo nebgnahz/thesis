@@ -1,0 +1,49 @@
+\newpage
+
+\section{Related Work}
+\label{sec:related-work}
+
+\para{Model Serving.} Frameworks such as Clipper~\cite{crankshaw2017clipper} and
+TensorFlow Serving~\cite{tensorflow2017serving} only focus on system-level
+techniques such as batching and hardware acceleration to improve
+throughput. While Clipper allows ensemble of models, the purpose is to improve
+accuracy at the cost of resources. Both frameworks have poor performance when
+under overload.
+
+\para{Mobile-Cloud Offloading.} Prior offloading framework, such as
+MAUI~\cite{cuervo2010maui}, CloneCloud~\cite{chun2011clonecloud},
+Gabriel~\cite{ha2014towards}, and Tango~\cite{gordon2015accelerating}, runs the
+same algorithm (with the same configurations) across different machines: a poor
+match for the future heterogeneous mobile-edge-cloud (MEC)
+environment. \sysname{} explicitly models performance and select the appropriate
+algorithm and configuration at runtime.
+
+\para{Low Latency via Redundancy.} The idea of initiating redundant operations
+across diverse resources and using the first result which completes has been
+explored in many contexts, such as cloud
+computing~\cite{ananthanarayanan2013effective}, cloud
+service~\cite{dean2013tail}, wide-area network service~\cite{vulimiri2013low},
+and mobile applications~\cite{gordon2015accelerating}. We extends the redundancy
+and offer a variety of policies for combining results from multiple services.
+
+\para{Approximate Techniques.} With the increasing workload to handle, recent
+systems~\cite{agarwal2013blinkdb, rabkin2014aggregation, zhang2017live}
+recognizes that timely-despite-inaccurate results are better than late
+results.
+
+\para{Bayesian Optimization.} To optimize complex systems in a principled way,
+many frameworks employ Bayesian Optimizations to tune application behavior, such
+as CherryPick~\cite{alipourfard2017cherrypick}, FLASH~\cite{zhang2016flash}, and
+BOAT~\cite{dalibard2017boat}. These frameworks focus on single-objective
+optimization: minimizing job completion time or maximizing application
+accuracy. In contrast, \sysname{} addresses a multi-dimensional optimization
+between application accuracy and processing times. We demonstrated that BO
+outperforms greedy heuristic approach used in VideoStorm~\cite{zhang2017live}.
+
+\para{SLO-awareness.} MittOS~\cite{hao2017mittos} advocates the return of
+\texttt{EBUSY} for IO operations to bound IO requests.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../serving"
+%%% End:
