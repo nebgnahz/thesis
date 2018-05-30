@@ -1,37 +1,23 @@
-NAME=thesis
+.PHONY: quick thesis.pdf clean
 
-TARGET=$(NAME)
-BIBTEX := bibtex
-TGIF   := tgif
-XFIG   := xfig
-GNUPLOT:= gnuplot
+LATEX = pdflatex
+BIBTEX = bibtex
+SRCS = $(shell find . -name '*.tex')
+TEX_FLAGS = -interaction=nonstopmode -halt-on-error
 
-all: $(TARGET).pdf
+ALL: thesis.pdf
 
-quick: Makefile *.tex chapters/*.tex *.bib *.sty figures/*
-	pdflatex  $(TARGET).tex
-	rm -f *.aux *.log *.out *.bbl *.blg *~ *.bak $(FIGS) $(TARGET).ps $(TARGET).synctex.gz
+quick: $(SRCS)
+	$(LATEX) $(TEX_FLAGS) thesis
 
-$(TARGET).pdf: Makefile *.tex chapters/*.tex *.bib figures/*
-	pdflatex  $(TARGET).tex
-	-bibtex --min-crossrefs=100    $(TARGET)
-	pdflatex  $(TARGET).tex
-	pdflatex  $(TARGET).tex
-	rm -f *.aux *.log *.out *.bbl *.blg *~ *.bak $(FIGS) *.ps *.synctex.gz
-
-%.pdf : %.fig #Makefile
-	fig2dev -L pdf -b 1 $< $@
-
-%.eps : %.dia #Makefile
-	dia --nosplash -e $@ $<
-
-%.eps : %.obj
-	TMPDIR=/tmp $(TGIF) -print -eps $<
-
-%.pdf : %.eps #Makefile
-	epstopdf $<
+thesis.pdf: $(SRCS)
+	$(LATEX) $(TEX_FLAGS) thesis
+	$(BIBTEX) thesis
+	$(LATEX) $(TEX_FLAGS) thesis
+	$(LATEX) $(TEX_FLAGS) thesis
 
 clean:
-	rm -f *.aux *.log *.out *.bbl *.blg *~ *.bak $(FIGS) *.ps *.pdf *.synctex.gz
-	rm -f *.bcf *.xml
+	rm -f *.aux *.log *.out *.bbl *.blg *~ *.bak *.ps *.pdf *.synctex.gz
+	rm -f *.bcf *.xml *.nav *.vrb *.snm *.toc *.lot *.lof
 	rm -rf auto
+	rm -f thesis.pdf

@@ -1,73 +1,58 @@
-\documentclass[12pt, oneside]{ucbthesis}
+\documentclass{ucbthesis}
 
 \input{meta}
-
-\ssp
+\bibliography{thesis}
 
 \begin{document}
-\title{Adaptive Wide-area Streaming Analytics}
+
+\title{Adapting Swarm Applications: A Systematic and Quantitative Approach}
 \author{Ben Zhang}
-\prevdegrees{}
-
+\degreesemester{Spring}
 \degreeyear{2018}
-\degreemonth{Spring}
-\defensemonth{Spring}
-\defenseyear{2018}
 \degree{Doctor of Philosophy}
-
-\numberofmembers{4}
 \chair{Professor John Wawrzynek}
-\othermemberA{Professor Edward A. Lee}
-\othermemberB{Professor John Chuang}
-\othermemberC{Professor Sylvia Ratnasamy}
+\othermembers{Professor Edward A. Lee \\
+  Professor John Chuang \\
+  Professor Sylvia Ratnasamy}
+\numberofmembers{3}
 \field{Computer Science}
 \campus{Berkeley}
 
-\begin{frontmatter}
 \maketitle
 \approvalpage
 \copyrightpage
-\abstract
-\input{chapters/abstract}
-% \abstractsignature
-\endabstract
 
+\include{sections/abstract}
+
+\begin{frontmatter}
+  \begin{dedication}
+    \null\vfil
+    \begin{center}
+      \vspace*{\fill}
+      To my parents
+      \vspace*{\fill}
+    \end{center}
+    \vfil\null
+  \end{dedication}
+
+  \tableofcontents
+  \clearpage
+  \listoffigures
+  \clearpage
+  \listoftables
+
+  \begin{acknowledgements}
+    Acknowledgment.
+  \end{acknowledgements}
 \end{frontmatter}
-\begin{optionalFrontMatter}
-\begin{dedication}
-  \vspace*{\fill}
-  To my parents.
-  \vspace*{\fill}
-\end{dedication}
-\end{optionalFrontMatter}
-\addcontentsline{toc}{chapter}{Contents}
 
-\tableofcontents
-\listoffigures
-\listoftables
+\pagestyle{headings}
 
-\begin{acknowledgements}
-  \thispagestyle{plain}
-  Acknowledgment
-% \subfile{chapters/acknowledgements}
-\end{acknowledgements}
+\include{chapters/intro}
+\include{chapters/network}
+\include{chapters/compute}
+\include{chapters/conclusion}
 
-\begin{dissertationText}
+\printbibliography
 
-\subfile{chapters/communication}
-
-\ssp
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{thesis}
-
-\appendix
-
-\end{dissertationText}
 \end{document}
-
-% Congratulations, Doc!
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
