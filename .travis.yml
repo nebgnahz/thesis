@@ -8,7 +8,6 @@ addons:
     - texlive-generic-extra
     - texlive-latex-extra
     - texlive-pictures
-    - texlive-publisher
     - texlive-science
     - texlive-bibtex-extra
 
