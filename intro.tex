@@ -175,7 +175,7 @@ face practical issues when deployed at a scale.
 \end{figure}
 
 To understand the bandwidth characteristics in the wide-area, I conducted a
-simple measurement using Amazon EC2. iPerf~\cite{iperf} was used to measure the
+simple measurement using Amazon EC2. iPerf~\cite{iperf3} was used to measure the
 pair-wise bandwidth between four geo-distributed sites throughout the day. The
 measurement shows large variance in the measured bandwidth and one such pair of
 sites is shown in \autoref{fig:bw}. Regardless of the number of
@@ -257,18 +257,18 @@ TelegraphCQ~\cite{chandrasekaran2003telegraphcq}, are the early academic
 explorations. They pioneered the usage of dataflow models with specialized
 operators for stream processing. Recent research projects and open-source
 systems, such as MillWheel~\cite{akidau2013millwheel},
-Storm~\cite{toshniwal2014storm}, Heron~\cite{kulkarni2015twitter}, Spark
-Streaming~\cite{zaharia2012discretized}, Apache Flink~\cite{carbone2015apache},
+Storm~\cite{toshniwal2014storm}, Heron~\cite{sanjeev2015twitter}, Spark
+Streaming~\cite{zaharia2013discretized}, Apache Flink~\cite{carbone2015apache},
 primary focus on fault-tolerant streaming in the context of a single
 cluster. While this thesis has a large debt to the prior streaming work,
 \sysname{} is designed for the wide-area and explicitly trades data fidelity for
 data freshness; many other stream processing systems choose to throttle the
-source when backpressure happens~\cite{kulkarni2015twitter}.
+source when backpressure happens~\cite{sanjeev2015twitter}.
 
 \para{WAN-aware:} There is a growing interest in building systems that optimizes
-data transfers for the wide area, such as GDA~\cite{pu2015low},
-Clarinet~\cite{viswanathan2016clarinet} and OWAN~\cite{jin2016optimizing}.  Most
-of these works focus on one-time queries or operations (such as data
+data transfers for the wide area, such as GDA~\cite{pu2015low} and
+Clarinet~\cite{viswanathan2016clarinet}.  Most of these works focus on one-time
+queries or operations (such as data
 transfer). JetStream~\cite{rabkin2014aggregation} is the first that studies
 streaming analytics in wide area and proposes to use structured storage (data
 cubes) and explicit degradation policies. While JetStream has demonstrated
