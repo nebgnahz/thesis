@@ -15,13 +15,13 @@ analyzed in real-time.
 
 Existing stream processing for ``big data,'' such as
 Storm~\cite{toshniwal2014storm} or Spark
-Streaming~\cite{zaharia2012discretized}, only work in the context of a single
+Streaming~\cite{zaharia2013discretized}, only work in the context of a single
 cluster, where the bandwidth is sufficient (or at least easy to
 provision). While they are the perfect back end for analyzing streams once data
 arrive, in the wide-area, the network, with scarce and variable bandwidth,
 easily becomes the bottleneck \cite{rabkin2014aggregation}. What's worse, the
 growth rate of wide-area network capacity is not keeping up with the increasing
-rate of traffic~\cite{index2013zettabyte}.
+rate of traffic~\cite{cisco2013zettabyte}.
 
 When facing situations where the bandwidth is not sufficient, applications
 deployed today either choose a conservative setting (e.g.\,only delivering 360p

@@ -1,7 +1,16 @@
 \documentclass{ucbthesis}
+\usepackage[backend=bibtex]{biblatex}
+\bibliography{thesis}
 
 \input{meta}
-\bibliography{thesis}
+
+\hypersetup{
+  pdfinfo={
+    Title={Adapting Swarm Applications: A Systematic and Quantitative Applications},
+    Author={Ben Zhang},
+    Subject={Computer Science}
+  }
+}
 
 \begin{document}
 
@@ -20,9 +29,10 @@
 
 \maketitle
 \approvalpage
-\copyrightpage
 
-\include{sections/abstract}
+{ \dsp\copyrightpage }
+
+\include{chapters/abstract}
 
 \begin{frontmatter}
   \begin{dedication}
@@ -49,9 +59,9 @@
 \pagestyle{headings}
 
 \include{chapters/intro}
-\include{chapters/network}
-\include{chapters/compute}
-\include{chapters/conclusion}
+% \include{chapters/network}
+% \include{chapters/compute}
+% \include{chapters/conclusion}
 
 \printbibliography
 
