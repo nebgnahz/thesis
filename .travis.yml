@@ -3,13 +3,14 @@ addons:
   apt:
     packages:
     - make
+    - texlive-bibtex-extra
     - texlive-fonts-extra
     - texlive-fonts-recommended
     - texlive-generic-extra
     - texlive-latex-extra
+    - texlive-latex-recommended
     - texlive-pictures
     - texlive-science
-    - texlive-bibtex-extra
 
 script:
   - make
