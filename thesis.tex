@@ -32,7 +32,7 @@
 
 { \dsp\copyrightpage }
 
-\include{chapters/abstract}
+\include{abstract}
 
 \begin{frontmatter}
   \begin{dedication}
@@ -58,11 +58,16 @@
 
 \pagestyle{headings}
 
-\include{chapters/intro}
-\include{chapters/network}
-\include{chapters/compute}
-\include{chapters/conclusion}
+\subfile{intro}
+\subfile{network}
+\subfile{compute}
+\subfile{conclusion}
 
 \printbibliography
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

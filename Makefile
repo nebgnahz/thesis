@@ -18,6 +18,6 @@ thesis.pdf: $(SRCS)
 
 clean:
 	rm -f *.aux *.log *.out *.bbl *.blg *~ *.bak *.ps *.pdf *.synctex.gz
-	rm -f *.bcf *.xml *.nav *.vrb *.snm *.toc *.lot *.lof
+	rm -f *.bcf *.xml *.nav *.vrb *.snm *.toc *.lot *.lof *-blx.bib
 	rm -rf auto
-	rm -f thesis.pdf
+	rm -f thesis.pdf intro.pdf network.pdf compute.pdf conclusion.pdf
