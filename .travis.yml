@@ -2,15 +2,19 @@ language: ruby
 addons:
   apt:
     packages:
+    - lmodern
     - make
+    - pgf
     - texlive-bibtex-extra
     - texlive-fonts-extra
     - texlive-fonts-recommended
     - texlive-generic-extra
+    - texlive-latex-base
     - texlive-latex-extra
     - texlive-latex-recommended
     - texlive-pictures
     - texlive-science
+    - texlive-xcolor
 
 script:
   - make
