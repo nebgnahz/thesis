@@ -1,61 +1,31 @@
 \begin{abstract}
 
-  The growing number of Internet-connected devices (sensors and actuators) over
-  the wide-area are challenging how we construct analytical
-  applications. Traditional approaches separate data collection, transportation
-  and distillation as individual one-shot tasks, often performed offline. They
-  are a poor match to the need of acting on data in real time. Recently, the
-  recognition of timely decision-making has spawned many stream processing
-  systems for ``big data.''  However, these systems are primarily tailored
-  towards the infrastructure within a single cluster. In a cluster, while
-  resource allocation is challenging, there are usually enough resources and the
-  allocation is a management problem for maximal utilization. In contrast, the
-  wide-area faces resource scarcity and variability, making it not possible to
-  guarantee enough allocation for applications. Instead, applications have to
-  adapt their behaviors to match the available resources.
+  The swarm refers to the vast collection of networked sensors and actuators
+  installed in our connected world. Many swarm applications transport, distill,
+  and process large streams of data across the wide area in real time. The
+  increasing volume of data generated at the edge challenges the existing
+  approaches of directly connecting devices to the cloud.
 
-  While developers can design each individual application to match a specific
-  resource configuration, the ad-hoc solution does not generalize across
-  applications and different data distributions. Besides, optimizations created
-  at design time often don't take the dynamics of the environment into
-  consideration and will behave sub-optimally at runtime.
+  In this thesis, I will first present architecture design trends and challenges
+  for developing swarm applications. Specifically, I will focus on the
+  challenges from the scarce and variable WAN bandwidth and the heterogeneous
+  compute environment (from low-power microcontrollers to powerful compute
+  units). When network resources or compute resources are insufficient,
+  non-adaptive applications will suffer from increased latency or degraded
+  accuracy. Existing approaches that supports adaptation require extensive
+  developer efforts to write manual policies or are limited to
+  application-specific solutions.
 
-  Recognizing the need for an adaptive behavior across diverse wide-area
-  streaming applications, this manuscript proposes a system-level approach that
-  separates the application logic from adaptation mechanisms. To achieve this
-  goal, I propose a three-stage design framework: (i) a high-level programming
-  abstraction that allows developers to express adaptation options; (ii) an
-  offline profiling tool that learns the resource demand and the impact on
-  application utilities for a specific adaptation strategy---generating an
-  application profile; (iii) a runtime system responsive to environment changes,
-  maximizing application utility according to the learned profile.
-
-  %% data acquisition devices running on battery have a limited energy budget;
-  %% data transportation links such as wireless channels or the wide-area have
-  %% limited capacity.
-
-  The resource and adaptation above are intentionally not specific as it
-  provides a general framework applicable to network resources, computing
-  resources, as well as storage resources. In this proposal, I focus on the
-  adaptation with regards to network resources in the wide-area. Adapting to the
-  heterogeneous computing infrastructures is planned as future work. It will be
-  another part of the final thesis. There is an ongoing research effort (led by
-  my colleagues and I had participated) on storage resources; the final thesis
-  will also briefly discuss the design and some preliminary results.
-
-  The bulk body of this proposal focuses on network resources. Specifically, I
-  present \sysname{}, a stream processing system for the wide area where the
-  network capacity is scarce and variable. The key observation is the explicit
-  trade-off between application accuracy and bandwidth demand. The system design
-  follows the three-stage framework above: degradation APIs, offline profiling
-  and a runtime system.
-
-  Using \sysname{}, I have built three real-world applications: a pedestrian
-  detection surveillance application, augmented reality for mobile devices and a
-  distributed top-k. At places where traditional non-adaptive approaches would
-  lead to either significant application accuracy drop or long tail latency,
-  \sysname{} gracefully adapts to the network changes, maintaining the balance
-  between application utility and system performance.
+  I propose a systematic and quantitative approach to build adaptive swarm
+  applications. Our solution includes three stages: (1) a set of programming
+  abstractions that allow developers to express adaptation options; (2) a
+  combination of offline and online profiling tool that learns an accurate
+  profile to characterize resource demands and application utilities; (3) a
+  runtime system responsive to environment changes, maximizing application
+  utility based on the learned profile. We evaluate the effectiveness of
+  adaptation with several swarm applications: pedestrian detection, augmented
+  reality, and monitoring log analysis. Our experiments show that all
+  applications can achieve low latency responses with nominal accuracy drops.
 
 \end{abstract}
 
