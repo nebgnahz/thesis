@@ -68,11 +68,53 @@ Object recognition returns a list of bounding boxes with the object type. Each
 bounding box is a rectangle with normalized coordinates on the image. We compare
 the detection against the reference result from raw data, and declare it success
 if the intersection over union (IOU) is greater than
-50\%~\cite{everingham2010pascal} and the object type matches. We use F1
-score~\cite{Rijsbergen:1979:IR:539927} as the accuracy function. In terms of
+50\%~\cite{everingham2010pascal} and the object type matches.
+
+We use F1 score~\cite{van1979information} as the accuracy function. In terms of
 dataset, we collected our own video clips: the training data is a 24-second long
 video of an office environment; the test data is a 246-second long video of a
 home environment.
+
+Positive if intersection over union (IOU) larger than 0.5.
+
+\[
+  \text{IOU} = \frac{\text{Area of Intersection}}{\text{Area of Union}}
+\]
+
+\begin{figure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.5]
+      \fill[color=blue!30] (0.5, 0.5) rectangle (1, 1);
+      \node[draw=none] () at (1.5, 1.5) {};
+      \draw (0, 0) rectangle (1, 1);
+      \draw[densely dashed] (0.5, 0.5) rectangle (1.5, 1.5);
+    \end{tikzpicture}
+    \caption{$\text{IOU} = 0.14$}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.5]
+      \fill[color=blue!30] (0.15, 0.15) rectangle (1, 1);
+      \node[draw=none] () at (1.5, 1.5) {};
+      \draw (0, 0) rectangle (1, 1);
+      \draw[densely dashed] (0.15, 0.15) rectangle (1.15, 1.15);
+    \end{tikzpicture}
+    \caption{$\text{IOU} = 0.57$}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=1.5]
+      \fill[color=blue!30] (0.05, 0.05) rectangle (1, 1);
+      \node[draw=none] () at (1.5, 1.5) {};
+      \draw[densely dashed] (0.05, 0.05) rectangle (1.05, 1.05);
+      \draw (0, 0) rectangle (1, 1);
+    \end{tikzpicture}
+    \caption{$\text{IOU} = 0.82$}
+  \end{subfigure}
+  \caption{Example IOU.}
+\end{figure}
+
 
 \para{Pedestrian Detection.} This application analyzes streams of videos from
 installed CCTV cameras and detects pedestrians inside. We use a similar setup
@@ -124,7 +166,7 @@ into one second.
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../awstream"
+%%% TeX-master: "../network"
 %%% End:
 
 %% LocalWords: runtime dataset quantization geo

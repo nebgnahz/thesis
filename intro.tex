@@ -25,7 +25,9 @@ control~\cite{skynet, london.surveillance}. Buildings are increasingly equipped
 with a wide variety of sensors to improve energy efficiency and occupant
 comfort~\cite{krioukov2012building}.
 
-Existing approach of directly connecting to the cloud and issues.
+Existing approach of directly connecting to the cloud and issues. For example,
+the long latency due to wide area communication. Also the insufficient
+bandwidth.
 
 Fundamental difference and challenges by the swarm. Swarm systems rely on vast
 numbers of heterogeneous sensors that are generating massive amounts of
@@ -37,8 +39,7 @@ of computation.
 This thesis argues that by providing adaptation as a core abstraction in
 application development, we can allow swarm applications with better
 performance. This thesis offers two systems with complete design, implementation
-and evaluation regarding network and compute resource,
-respectively.
+and evaluation regarding network and compute resource, respectively.
 
 \vspace{1em}
 
@@ -50,13 +51,16 @@ respectively.
 \section{Challenges with Existing Approaches}
 \label{sec:chall-with-exist}
 
-\para{Limited Resource.}
+\para{Limited Resource.} Swarm systems rely on vast numbers of heterogeneous
+sensors that are generating massive amounts of data.
 
-\para{Ad-hoc Development.}
+\para{Ad-hoc Development.} Developers strive to make the application working.
 
-\para{Huge Design Space.}
+\para{Huge Design Space.} Many devices. Choices of sensors, algorithms, data
+quality.
 
-\para{Heterogeneous Platforms.}
+\para{Heterogeneous Platforms.} Ranging from cheap low power platforms to
+powerful workstation.
 
 \section{Adaptation as a First-class Citizen}
 \label{sec:adaptation}
