@@ -4,31 +4,12 @@
 
 \chapter{Introduction}
 
-The growth of Internet of Things devices and applications.
-
-They face the challenge of insufficient resource and lack of quality of service
-guarantee.
-
-This thesis addresses network and compute resource insufficiency with
-adaptation.
-
-\noindent\fbox{%
-  \parbox{\textwidth}{%
-    \textbf{Thesis Statement}: Intelligence is the ability to adapt to changes.
-  }%
-}
-
-\section{The Swarm at the Edge of the Cloud}
-
-Over the past two decades, there has been a growing realization that large
-numbers of sensors dispersed into the environment can help to solve
-societal-scale problems. These sensory swarms (as they were called by Jan Rabaey
-in a keynote talk at the Asia and South Pacific Design Automation Conference in
-2008) can be wirelessly interconnected and interact with the cyber cloud, and
-offer an unprecedented ability to monitor and act on a range of evolving
-physical quantities. Such pervasive observations and measurements enable
-unprecedented learning and modeling of the physical world under dynamically
-changing conditions.
+Over the past two decades, we have seen a growing number of networked sensors
+and actuators installed in our connected world. Collectively, these sensory
+swarms---as they were called by Jan Rabaey in a keynote talk at ASPDAC
+2008~\cite{rabaey2008brand}---offer an unprecedented ability to monitor and act
+on a range of evolving physical quantities, holding enormous potentials in
+solving societal-scale problems.
 
 Wide-area streaming analytics are becoming pervasive, especially with the
 emerging Internet-of-Thing (IoT) applications. Large cities such as New York,
@@ -51,10 +32,37 @@ Smarter Planet.
 
 Swarm Lab, TerraSwarm and Swarm Lab 2.0.
 
-\section{Existing Approaches and Their Pitfalls}
-\label{sec:exist-appr-their}
+Realizing the swarm vision comes with several challenges for developing and
+deploying swarm applications. Swarm systems rely on vast numbers of
+heterogeneous sensors that are generating massive amounts of data. (2) Swarms
+and swarmlets that dynamically recruit resources will compete for those
+resources. (3) Heterogeneous: swarm components are of various types, requiring
+interfacing and interoperability across multiple platforms and models of
+computation.
 
-\input{sections/cloud-pitfalls}
+This thesis argues that by providing adaptation as a core abstraction in
+application development, we can allow swarm applications with better
+performance. This thesis offers two systems with complete design, implementation
+and evaluation regarding network and compute resource,
+respectively.
+
+\vspace{1em}
+
+\noindent\textbf{Thesis Statement}: \textit{Intelligence is the ability to adapt to
+  changes.}
+
+\vspace{1em}
+
+\section{Challenges with Existing Approaches}
+\label{sec:chall-with-exist}
+
+\para{Limited Resource.}
+
+\para{Ad-hoc Development.}
+
+\para{Huge Design Space.}
+
+\para{Heterogeneous Platforms.}
 
 \section{Adaptation as a First-class Citizen}
 \label{sec:adaptation}
@@ -68,20 +76,14 @@ application performance drop. Instead of ``suffering'' from a degraded network,
 applications can act proactively by adjusting their behavior: reducing the data
 rate to ensure that important data are delivered in time.
 
-\begin{itemize}
-\item An in-depth study of wide-area streaming applications in the case of
-  network resource variation.
-\item The proposal of novel APIs to allow for a design space exploration between
-  bandwidth and accuracy with minimal developer effort.
-\item A prototype implementation that demonstrates application profiling and
-  runtime adaptation.
-\item Thorough evaluations based on three real-world applications under
-  different scenarios.
-\end{itemize}
+\para{API.}
 
+\para{Automatic Profiling and Optimization.}
+
+\para{Runtime Adaptation.}
 
 \section{Summary of Results}
-\label{sec:summary-results}
+\label{sec:summary-results-1}
 
 \begin{enumerate}
 \item \sysname{} introduces new programming abstractions by which a developer
@@ -108,6 +110,22 @@ rate to ensure that important data are delivered in time.
   no persistent queue builds up. To recover, it progressively decreases the
   degradation level after probing for more available bandwidth.
 \end{enumerate}
+
+\section{Thesis Organization}
+\label{sec:thesis-organization}
+
+The remainder of this thesis is organized as follows:
+
+\begin{itemize}
+\item In Chapter 2, I first describe the landscape development for swarm
+  applications.
+\item In Chapter 3, I present the adaptation on network resources.
+\item In Chapter 4, I present the adaptation on compute resources.
+\item Chapter 5 discusses related research and industrial efforts related to
+  adaptation.
+\item Finally, I conclude this thesis and identify important research directions
+  for future work.
+\end{itemize}
 
 \end{document}
 
