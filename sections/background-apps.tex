@@ -2,6 +2,41 @@
 \section{Swarm Applications}
 \label{sec:swarm-applications}
 
+To date, IoT applications seem to fall into two general categories:
+
+\para{Ambient Data Collection and Analytics.}~These applications involve sensors
+installed in buildings~\cite{dawson2010smap}, homes~\cite{hnat2011hitchhiker},
+cities~\cite{sfpark}, and on humans themselves\footnote{Often referred to as
+  Quantified Self.}~\cite{fitbit, swan2013quantified}.  Normally, data is not
+immediately inspected and collected data is later used for
+analytics~\cite{kolter2011redd}.  The trend of data collection is constantly
+growing and many researchers predict a new big-data problem~\cite{diaz2012big,
+  zaslavsky2013sensing}.  Many of these applications have serious privacy
+implications (for personal health, operational security, etc.).
+
+\para{Real-time Applications with Low-latency Requirement.}~These applications
+include reactive environments with humans in the
+loop~\cite{cooperstock1997reactive}.
+%% http://www.nngroup.com/articles/response-times-3-important-limits/
+An upper latency limit to avoid notice by human participants is about 100
+ms~\cite{nielsen1994usability}.  In autonomous systems where humans are not
+involved (such as robots taking actions based on sensors), tight control over
+latency is important for deterministic
+applications~\cite{eidson2012distributed}.  Tight latency requirements are often
+incompatible with the unpredictable performance of cloud-based analytics or
+controllers.
+
+Tim O’Reilly believes that ``the future belongs to services that respond in real
+time to information provided either by their users or by nonhuman
+sensors.''~\cite{siegele2008let}. Such services will be attracted to the cloud
+not only because they must be highly available, but also because these services
+generally rely on large data sets that are most conveniently hosted in large
+datacenters. This is especially the case for services that combine two or more
+data sources or other services, e.g., mashups. While not all mobile devices
+enjoy connectivity to the cloud 100\% of the time, the challenge of disconnected
+operation has been addressed successfully in specific application domains, so we
+do not see this as a significant obstacle to the appeal of mobile applications.
+
 Many of today's IoT solutions arise by connecting embedded platforms to the
 cloud.  For example, Bolt~\cite{gupta2014bolt} provides data management for the
 Lab of Things (LoT)~\cite{brush2013lab} and uses Amazon S3 or Azure for data
@@ -20,30 +55,6 @@ directly to ``stovepipe'' solutions or balkanization. Data and services from one
 company cannot be shared or utilized by devices from another company: connection
 protocols, data formats, and security mechanisms (when present) are proprietary
 and often undocumented.
-
-To date, IoT applications seem to fall into two general categories:
-
-\para{Ambient Data Collection and Analytics.}~These applications involve sensors
-installed in buildings~\cite{dawson2010smap}, homes~\cite{hnat2011hitchhiker},
-cities~\cite{sfpark}, and on humans themselves\footnote{Often referred to as
-  Quantified Self.}~\cite{fitbit, swan2013quantified}.  Normally, data is not
-immediately inspected and collected data is later used for
-analytics~\cite{kolter2011redd}.  The trend of data collection is constantly
-growing and many researchers predict a new big-data problem~\cite{diaz2012big,
-  zaslavsky2013sensing}.  Many of these applications have serious privacy
-implications (for personal health, operational security, etc.).
-
-\para{Real-time Applications with Low-latency Requirement.}~These applications
-include reactive environments with humans in the
-loop~\cite{cooperstock1997reactive}.
-%% http://www.nngroup.com/articles/response-times-3-important-limits/
-An upper latency limit to avoid notice by human participants is about
-100 ms~\cite{nielsen1994usability}.  In autonomous systems where humans
-are not involved (such as robots taking actions based on sensors), tight
-control over latency is important for deterministic
-applications~\cite{eidson2012distributed}.  Tight
-latency requirements are often incompatible with the unpredictable
-performance of cloud-based analytics or controllers.
 
 %%% Local Variables:
 %%% mode: latex

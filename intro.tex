@@ -25,26 +25,36 @@ control~\cite{skynet, london.surveillance}. Buildings are increasingly equipped
 with a wide variety of sensors to improve energy efficiency and occupant
 comfort~\cite{krioukov2012building}.
 
-Existing approach of directly connecting to the cloud and issues. For example,
-the long latency due to wide area communication. Also the insufficient
-bandwidth.
+Riding on the popularity of the cloud infrastructure, swarm application
+developers have adopted the cloud as a universal computation resource and a
+storage backend~\cite{carriots, grovestreams, sami, xively, gupta2014bolt,
+  zachariah1001internet}. This trend is understandable given the economic
+benefits and simplified management.
 
-Fundamental difference and challenges by the swarm. Swarm systems rely on vast
-numbers of heterogeneous sensors that are generating massive amounts of
-data. (2) Swarms and swarmlets that dynamically recruit resources will compete
-for those resources. (3) Heterogeneous: swarm components are of various types,
+Privacy, Security, Availability, Latency, Bandwidth, etc. However, due to
+fundamental differences and unique characteristics of swarm applications, it is
+not the best long-term approach. Large data: Swarm systems rely on vast numbers
+of sensors that are generating massive amounts of data. Swarms and swarmlets
+that dynamically recruit resources will compete for those resources.
+
+To compensate the cloud, new infrastructure focusing edge computing appear, such
+as fog, cloudlet, and Swarmbox. While reducing the distance, these further
+increase the heterogeneous landscape: swarm components are of various types,
 requiring interfacing and interoperability across multiple platforms and models
 of computation.
 
 This thesis argues that by providing adaptation as a core abstraction in
-application development, we can allow swarm applications with better
-performance. This thesis offers two systems with complete design, implementation
-and evaluation regarding network and compute resource, respectively.
+application development, we can allow swarm applications with better performance
+and cope with environment changes. This thesis offers two systems with complete
+design, implementation and evaluation regarding network and compute resource,
+respectively.
 
 \vspace{1em}
 
-\noindent\textbf{Thesis Statement}: \textit{Intelligence is the ability to adapt to
-  changes.}
+\noindent\textbf{Thesis Statement}: \textit{Providing adaptation as a programming
+  abstraction allows for resilient swarm applications with less developer
+  effort.}
+
 
 \vspace{1em}
 
@@ -124,6 +134,14 @@ The remainder of this thesis is organized as follows:
 \item Finally, I conclude this thesis and identify important research directions
   for future work.
 \end{itemize}
+
+The research presented in this thesis is supported in part by Berkeley
+Ubiquitous SwarmLab~\cite{swarmlab} the TerraSwarm Research
+Center~\cite{terraswarm}, one of six centers supported by the STARnet phase of
+the Focus Center Research Program (FCRP) a Semiconductor Research Corporation
+program sponsored by MARCO and DARPA.
+
+
 
 \end{document}
 
