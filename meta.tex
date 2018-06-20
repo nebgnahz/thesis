@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{booktabs} % For formal tables
 \usepackage{caption}
+\usepackage{csquotes}
 \usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -24,9 +25,17 @@
 %% Custom Styling
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Make quote using italics
+\renewcommand{\mkbegdispquote}[2]{\itshape}
+
+%% Tune paragraph skip to look just a bit nicer!
 \setlength{\parskip}{5pt}
+
+%% French spacing inserts spaces around most punctuation marks, but
+%% single-spaced after sentences, colons, and semicolons.
 \frenchspacing
 
+%% Colors stolen from acmart template
 \definecolor[named]{ACMBlue}{cmyk}{1,0.1,0,0.1}
 \definecolor[named]{ACMYellow}{cmyk}{0,0.16,1,0}
 \definecolor[named]{ACMOrange}{cmyk}{0,0.42,1,0.01}
