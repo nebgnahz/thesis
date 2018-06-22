@@ -1,43 +1,200 @@
-
 \section{The Emerging Swarm}
 \label{sec:emerging-swarm}
 
-Rabaey~\cite{rabaey2011swarm} recognizes that,
+The swarm refers to the collection of sensors and actuators installed in our
+environment. Capable of computation and communication, they monitor and interact
+with the physical world. The term ``swarm'' was coined by Jan Rabaey in a
+keynote talk at ASPDAC 2008~\cite{rabaey2008brand}. Later the Qualcomm
+Ubiquitous Swarm Lab~\cite{swarmlab} and Terraswarm Research
+Center~\cite{terraswarm} were launched at Berkeley to address the huge
+potentials and challenges for swarm systems in December 2011 and January 2013,
+respectively. Outside of Berkeley, there are also buzz around a similar concept,
+but with different names: Internet of Things (IoT)~\cite{atzori2010internet},
+Internet of Everything (IoE)~\cite{bradley2013internet}, Industry
+4.0~\cite{lasi2014industry}, The Industrial
+Internet~\cite{eigner2018industrial}, TSensors (Trillion
+Sensors)~\cite{bogue2014towards}, Machine to Machine
+(M2M)~\cite{anton2014machine}, Smarter Planet~\cite{palmisano2008smarter}, etc.
+
+Billions of connected devices. By 2022, 1 trillion networked sensors will be
+embedded in the world around us, with up to 45 trillion in 20 years. Ubiquitous
+connectivity between devices (the Internet) is almost a reality today.
+
+The potentials of the swarm is best characterized by ``Metcalfe's law'', with
+$n$ devices, the effect is proportional to the square of the number of connected
+devices, i.e., $n^2$. This landscape change is further exacerbated by ``Moore's
+Law'''s ending---approaching its ending. quoting Rabaey~\cite{rabaey2011swarm},
 
 \begin{displayquote}
 
   The functionality of the swarm arises from connections of devices, leading to
-  a convergence between Moore’s and Metcalfe’s laws, in which scaling refers not
+  a convergence between Moore's and Metcalfe's laws, in which scaling refers not
   any longer to the number of transistors per chip, but rather to the number of
   interconnected devices.
 
 \end{displayquote}
 
-\para{Swarm and Wireless Sensor Networks.} The swarm finds its origin in the
-wireless sensor network concept that emerged in the mid 1990s. Yet, while the
-original sensor nets were application-specific and limited in scope and reach,
-the swarm represents a much broader vision, potentially connecting trillions of
-sensory and actuating devices worldwide into a single platform abstraction. This
-enables the true emergence of concepts such as cyber-physical and
-cyber-biological systems, immersive computing, and augmented reality, and will
-have a tremendous impact in domains such as advanced healthcare, improved energy
-efficiency, environment-friendly living, mobility management, enhanced security,
-and many others. As is shown in Fig. 1, the swarm coexists and closely interacts
-with the two other essential components of the global information-technology
-platform that have emerged over the past decades: the cloud, offering unbounded
-computational, communication and storage capacity; and the mobiles, which are
-the preferred means of access to and creation of information today. One may
-argue that the swarm may ultimately subsume the mobile access layer, as
-immersive computing and augmented reality environments with their much richer
-set of information exchange models may totally eliminate the need for us to
-carry a personal communication/computation device.
+\subsection{Swarm and WSN}
+\label{sec:swarm-wsn}
 
-One of the primary aspects of the “swarm” is that future scaling is not in the
-“number of transistors on a chip”, but in the “number of components connected in
-the systems”, that is “Moore’s law meets Metcalfe’s law”. The conception,
-analysis, design, deployment and management of swarm systems require
-methodologies that differ substantially from our current understandings.  More
-precisely, swarm systems are non-linear, non-deterministic, adaptive and complex
+In the 1990s, ``Smart Dust''~\cite{kahn1999next} envisions wireless sensor nodes
+with a volume of one cubic millimeter that can sense, communicate and
+compute. These devices can then be spread through our environment and enhance
+our interaction with the physical world. Wireless sensor networks (WSN) refers
+to a group of spatially dispersed and dedicated sensors for monitoring and
+recording the physical conditions of the environment and organizing the
+collected data at a central location.
+
+WSN is application-specific.
+
+WSN runs on a dedicated set of resources.
+
+WSN research focuses on energy.
+
+While this approach provides performance guarantees and reliability,
+application-specific and limited in scope and reach. In contrast, the swarm
+represents a much broader vision, potentially connecting trillions of sensory
+and actuating devices worldwide into a single platform abstraction.
+
+While this approach provides performance guarantees and reliability, it prevents
+economies of scale, and, more importantly, it prevents the explosion of
+possibilities that results from sharing data and devices across applications.
+
+While open architectures with dynamically recruitable resources can open up
+signifi- cant security and privacy risks, they can also make systems more
+efficient (through sharing of resources), more resilient (through dynamic
+reconfiguration leveraging redundant re- sources), and more capable, enabling
+applications we have not yet invented or that cannot yet be realized.
+
+The swarm differs as it coexists and closely interacts with the two other
+essential components of the global information-technology platform that have
+emerged over the past decades: the cloud, offering unbounded computational,
+communication and storage capacity; and the mobiles, which are the preferred
+means of access to and creation of information today. (see Fig. 1).
+
+The swarm finds its origin in the wireless sensor network concept that emerged
+in the mid 1990s. Yet, while the original sensor nets were application-specific
+and limited in scope and reach, the swarm represents a much broader vision,
+potentially connecting trillions of sensory and actuating devices worldwide into
+a single platform abstraction. This enables the true emergence of concepts such
+as cyber-physical and cyber-biological systems, immersive computing, and
+augmented reality, and will have a tremendous impact in domains such as advanced
+healthcare, improved energy efficiency, environment-friendly living, mobility
+management, enhanced security, and many others. As is shown in Fig. 1, the swarm
+coexists and closely interacts with the two other essential components of the
+global information-technology platform that have emerged over the past decades:
+the cloud, offering unbounded computational, communication and storage capacity;
+and the mobiles, which are the preferred means of access to and creation of
+information today. One may argue that the swarm may ultimately subsume the
+mobile access layer, as immersive computing and augmented reality environments
+with their much richer set of information exchange models may totally eliminate
+the need for us to carry a personal communication/computation device.
+
+\subsection{Swarm and CPS}
+\label{sec:swarm-cps}
+
+Cyber-physical systems (CPS) are physical and engineered systems whose
+operations are monitored, coordinated, controlled and integrated by a computing
+and communication core~\cite{rajkumar2010cyber}. For CPS, ``cyber'' and
+``physical'' parts are tightly coupled in a feedback relation, continuously
+affecting one another. This property of CPSs renders the separate understanding
+of the physical and the cyber insufficient, and requires CPS research to focus
+on the intersection of the two rather than the union by developing formalisms
+that require a complete understanding of the cyber-physical interaction [83,
+78]. Advancements in this domain have recently enabled disruptive applications,
+most notably in industrial automation, manufactur- ing, transportation, wearable
+technologies, and energy systems. Multiple research directions have emerged to
+realize systems sharing the theme of connecting billions of devices to humans
+and their environment, realizing large-scale ``smart'' systems. One such
+direction that has been receiving significant attention from researchers and
+investors is the Internet-of-Things (IoT).
+
+IoT systems, by definition, are a realization of CPSs, where the concept of
+inten- sively networked components is highly emphasized. IoT envisions
+leveraging Internet technology to connect and unprecedented number of devices,
+yielding a “swarm” of heterogeneous sensors and actuators that can interact with
+the physical environment and can be used to enable dynamic decision making in
+many different domains [79, 80]. Of course, the resulting device swarms are
+envisioned to be “smart,” continuously learning from behavioral patterns of
+humans and other devices, then autonomously adapting to changes at run
+time. This ability builds upon the implicit assumption that systems will be able
+to make real-time decisions on streaming data. While the meaningful
+interpretation of this specification is exceedingly context-dependent, for the
+purposes of the IoT, the implied requirement is the ability of a system to
+contin- ually process streams of data in order to extract actionable
+information.
+
+\subsection{Swarm Platforms}
+\label{sec:swarm-platforms}
+
+
+At the same time, we have seen a dizzying array of embedded platforms, from
+powerful computing units to low-power microcontrollers (see
+\autoref{tab:embedded}). None of these platforms \emph{must} connect with the
+cloud; in fact the smallest devices require \emph{gateway} devices to even
+communicate with cloud applications. Below are three categories of embedded
+platforms:
+
+\begin{enumerate}
+\item \textbf{Smartphones:}~Many companies (like Fitbit~\cite{fitbit} or
+  Automatic~\cite{automatic}) already use smartphones as gateways to connect
+  low-power devices to the network.  Researchers have explored how smartphones
+  can be used for IoT including reusing discarded
+  smartphones~\cite{challen2014mote}, writing new operating systems~\cite{janos}
+  and developing novel applications~\cite{hong2014smartphone}.
+
+\item \textbf{Mini PC:}~Ranging from the powerful Mac Mini and Intel Next Unit
+  of Computing (NUC) to inexpensive Raspberry Pi, BeagleBone Black, these
+  devices typically run various versions of Linux to simplify application
+  deployment.  Many companies~\cite{ninja, smartthings, wink} adopt these mini
+  PCs as their gateway devices.
+
+\item \textbf{Microcontroller platforms:}~Examples include
+  Arduino~\cite{arduino}, mbed~\cite{mbed}, and Spark~\cite{spark}. This is an
+  emerging category, providing new open platforms on crowdfunding
+  websites~\cite{kickstarter}, good ecosystems featuring great support and
+  libraries (e.g., Adafruit Online Tutorials~\cite{adafruit}), and novel
+  applications/products~\cite{iotlist}.
+
+\end{enumerate}
+
+\begin{table}
+  \centering
+  \begin{tabular}{c c c c}
+    \toprule
+    Device & CPU Speed & Memory & Price \\
+    \midrule
+    Intel NUC & 1.3 GHz & 16 GB & \texttildelow\$300 \\
+    Typical Phones & 2 GHz & 2 GB & \texttildelow\$300 \\
+    Discarded Phones\tablefootnote{This data is from \cite{challen2014mote}, where the
+    original authors noted ``Customer buyback price quoted by Sprint for a smartphone in good condition.''} & 1 GHz & 512 MB & \texttildelow\$22 \\
+    BeagleBone Black & 1 GHz & 512 MB & \$55 \\
+    Raspberry Pi & 900 MHz & 512 MB & \$35 \\
+    Arduino Uno & 16 MHz & 2 KB & \texttildelow\$22 \\
+    %% http://arduino.cc/en/Products.Compare
+    mbed NXP LPC1768 & 96 MHz & 32 KB & \$10 \\
+    \bottomrule
+  \end{tabular}
+  \vspace*{-0.075in}
+  \caption{The world of IoT includes a wide spectrum of computing platforms
+    (price as of 2015).}
+  \vspace*{-0.1in}
+  \label{tab:embedded}
+\end{table}
+
+%% CSV Data:
+%% Intel NUC:
+%% http://www.intel.com/content/dam/www/public/us/en/documents/product-briefs/nuc-kit-d54250wyk-product-brief.pdf
+
+% Platform, CPU, Memory, Price
+% Intel NUC, 1.3 GHz*4, 16 GB,
+% Apple A8, 1.4 GHz*2, 1 G, $600
+% Nexus 6, 2.7 GHz*4, 3G, $600
+% Raspberry Pi, 900MHz*4, 1G, $35
+% BeagleBone, 720MHz, 256MB,
+% Arduino, 16MHz, 8KB, $75
+% mbed NXP LPC11U24, 48MHz, 8KB, $10
+% mbed NXP LPC1768, 96MHz, 32KB, $10
 
 
 %%% Local Variables:
