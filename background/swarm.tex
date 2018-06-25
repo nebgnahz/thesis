@@ -1,132 +1,82 @@
 \section{The Emerging Swarm}
 \label{sec:emerging-swarm}
 
-The swarm refers to the collection of sensors and actuators installed in our
-environment. Capable of computation and communication, they monitor and interact
-with the physical world. The term ``swarm'' was coined by Jan Rabaey in a
-keynote talk at ASPDAC 2008~\cite{rabaey2008brand}. Later the Qualcomm
-Ubiquitous Swarm Lab~\cite{swarmlab} and Terraswarm Research
-Center~\cite{terraswarm} were launched at Berkeley to address the huge
-potentials and challenges for swarm systems in December 2011 and January 2013,
-respectively. Outside of Berkeley, there are also buzz around a similar concept,
-but with different names: Internet of Things (IoT)~\cite{atzori2010internet},
-Internet of Everything (IoE)~\cite{bradley2013internet}, Industry
-4.0~\cite{lasi2014industry}, The Industrial
-Internet~\cite{eigner2018industrial}, TSensors (Trillion
-Sensors)~\cite{bogue2014towards}, Machine to Machine
+Smart devices are everywhere: \href{http://ilumi.co/}{light bulb},
+\href{https://nest.com/}{thermostat}, \href{http://lunasleep.com/}{mattress
+  cover}, \href{https://www.indiegogo.com/projects/smart-diapers}{e-diaper},
+\href{https://www.fitbit.com/}{fitness tracker},
+\href{https://www.fitbit.com/aria}{smart scale},
+\href{https://www.myvessyl.com/}{smart cup},
+\href{https://www.kickstarter.com/projects/1816678675/smartplate-instantly-track-and-analyze-everything}{smart
+  plate},
+\href{http://www.amazon.com/HAPILABS-102-HAPIfork-Bluetooth-Enabled-Smart/dp/B00FRPCPEC}{smart
+  fork}, \href{http://electroluxdesignlab.com/en/submission/smart-knife/}{smart
+  knife},
+\href{http://www.clickandgrow.com/pages/what-is-click-grow}{flowerpot},
+\href{http://www.williams-sonoma.com/products/breville-die-cast-2-slice-stainless-steel-smart-toaster/}{toaster},
+\href{https://garageio.com/}{garage door},
+\href{http://www2.withings.com/us/en/products/baby/smart-baby-monitor}{baby
+  monitor},
+\href{https://www.indiegogo.com/projects/smartmat-the-world-s-first-intelligent-yoga-mat}{yoga
+  mat},
+\href{http://usnews.rankingsandreviews.com/cars-trucks/best-cars-blog/2013/02/2015_GM_Vehicles_Will_Get_Wi-Fi_Internet_Access/}{sport-utility
+  vehicle}, and
+\href{http://www.samsung.com/us/appliances/refrigerators/RF28HMELBSR/AA}{refrigerator}.\footnote{Courtesy
+  of Prof.\,Randy Katz.} Capable of computation and communication, they monitor
+and interact with the physical world.  The growth of number of devices Analysts
+predicted 26 billion devices by 2020~\cite{middleton2013forecast} and trillion
+by 2022.
+ 
+% At Person-level, Quantified Self (QS). Home/Office classic demo: turn on the
+% lights when I get to the office air-conditioning, HVAC (Building Robotics, Comfy
+% from SDB). Industrial (closer to the Wireless Sensor Networks in 2000s)
+% agriculture structure monitoring environment monitoring (SFpark, Beijing
+% Pollution).
+
+We refer to the collection of sensors and actuators installed in our environment
+as the ``Swarm'', a term coined by Jan Rabaey during a keynote talk at ASPDAC
+2008~\cite{rabaey2008brand}. This term well characterizes where the potentials
+lie: it is not in the individual components, but rather the scale and the number
+of interconnected devices: a shift from ``Moore's Law''\footnote{The number of
+  transistors on a chip doubles every year while the costs are halved.} to
+``Metcalfe's Law.''\footnote{The effect of a telecommunications network is
+  proportional to the square of the number of connected users of the system,
+  i.e., $n^2$.}.
+
+At Berkeley, the Qualcomm Ubiquitous Swarm Lab~\cite{swarmlab} and Terraswarm
+Research Center~\cite{terraswarm} were launched to address the huge potentials
+and challenges for Swarm systems in December 2011 and January 2013,
+respectively. Outside of Berkeley, this trend is also gaining attraction,
+although the names can be different: Internet of Things
+(IoT)~\cite{atzori2010internet}, Internet of Everything
+(IoE)~\cite{bradley2013internet}, Industry 4.0~\cite{lasi2014industry}, The
+Industrial Internet~\cite{eigner2018industrial}, Trillion Sensors
+(TSensors)~\cite{bogue2014towards}, Machine to Machine
 (M2M)~\cite{anton2014machine}, Smarter Planet~\cite{palmisano2008smarter}, etc.
 
-Billions of connected devices. By 2022, 1 trillion networked sensors will be
-embedded in the world around us, with up to 45 trillion in 20 years. Ubiquitous
-connectivity between devices (the Internet) is almost a reality today.
+To date, IoT applications seem to fall into two general categories:
 
-The potentials of the swarm is best characterized by ``Metcalfe's law'', with
-$n$ devices, the effect is proportional to the square of the number of connected
-devices, i.e., $n^2$. This landscape change is further exacerbated by ``Moore's
-Law'''s ending---approaching its ending. quoting Rabaey~\cite{rabaey2011swarm},
+\para{Ambient Data Collection and Analytics.}~These applications involve sensors
+installed in buildings~\cite{dawson2010smap}, homes~\cite{hnat2011hitchhiker},
+cities~\cite{sfpark}, and on humans themselves\footnote{Often referred to as
+  Quantified Self.}~\cite{fitbit, swan2013quantified}.  Normally, data is not
+immediately inspected and collected data is later used for
+analytics~\cite{kolter2011redd}.  The trend of data collection is constantly
+growing and many researchers predict a new big-data problem~\cite{diaz2012big,
+  zaslavsky2013sensing}.  Many of these applications have serious privacy
+implications (for personal health, operational security, etc.).
 
-\begin{displayquote}
-
-  The functionality of the swarm arises from connections of devices, leading to
-  a convergence between Moore's and Metcalfe's laws, in which scaling refers not
-  any longer to the number of transistors per chip, but rather to the number of
-  interconnected devices.
-
-\end{displayquote}
-
-\subsection{Swarm and WSN}
-\label{sec:swarm-wsn}
-
-In the 1990s, ``Smart Dust''~\cite{kahn1999next} envisions wireless sensor nodes
-with a volume of one cubic millimeter that can sense, communicate and
-compute. These devices can then be spread through our environment and enhance
-our interaction with the physical world. Wireless sensor networks (WSN) refers
-to a group of spatially dispersed and dedicated sensors for monitoring and
-recording the physical conditions of the environment and organizing the
-collected data at a central location.
-
-WSN is application-specific.
-
-WSN runs on a dedicated set of resources.
-
-WSN research focuses on energy.
-
-While this approach provides performance guarantees and reliability,
-application-specific and limited in scope and reach. In contrast, the swarm
-represents a much broader vision, potentially connecting trillions of sensory
-and actuating devices worldwide into a single platform abstraction.
-
-While this approach provides performance guarantees and reliability, it prevents
-economies of scale, and, more importantly, it prevents the explosion of
-possibilities that results from sharing data and devices across applications.
-
-While open architectures with dynamically recruitable resources can open up
-signifi- cant security and privacy risks, they can also make systems more
-efficient (through sharing of resources), more resilient (through dynamic
-reconfiguration leveraging redundant re- sources), and more capable, enabling
-applications we have not yet invented or that cannot yet be realized.
-
-The swarm differs as it coexists and closely interacts with the two other
-essential components of the global information-technology platform that have
-emerged over the past decades: the cloud, offering unbounded computational,
-communication and storage capacity; and the mobiles, which are the preferred
-means of access to and creation of information today. (see Fig. 1).
-
-The swarm finds its origin in the wireless sensor network concept that emerged
-in the mid 1990s. Yet, while the original sensor nets were application-specific
-and limited in scope and reach, the swarm represents a much broader vision,
-potentially connecting trillions of sensory and actuating devices worldwide into
-a single platform abstraction. This enables the true emergence of concepts such
-as cyber-physical and cyber-biological systems, immersive computing, and
-augmented reality, and will have a tremendous impact in domains such as advanced
-healthcare, improved energy efficiency, environment-friendly living, mobility
-management, enhanced security, and many others. As is shown in Fig. 1, the swarm
-coexists and closely interacts with the two other essential components of the
-global information-technology platform that have emerged over the past decades:
-the cloud, offering unbounded computational, communication and storage capacity;
-and the mobiles, which are the preferred means of access to and creation of
-information today. One may argue that the swarm may ultimately subsume the
-mobile access layer, as immersive computing and augmented reality environments
-with their much richer set of information exchange models may totally eliminate
-the need for us to carry a personal communication/computation device.
-
-\subsection{Swarm and CPS}
-\label{sec:swarm-cps}
-
-Cyber-physical systems (CPS) are physical and engineered systems whose
-operations are monitored, coordinated, controlled and integrated by a computing
-and communication core~\cite{rajkumar2010cyber}. For CPS, ``cyber'' and
-``physical'' parts are tightly coupled in a feedback relation, continuously
-affecting one another. This property of CPSs renders the separate understanding
-of the physical and the cyber insufficient, and requires CPS research to focus
-on the intersection of the two rather than the union by developing formalisms
-that require a complete understanding of the cyber-physical interaction [83,
-78]. Advancements in this domain have recently enabled disruptive applications,
-most notably in industrial automation, manufactur- ing, transportation, wearable
-technologies, and energy systems. Multiple research directions have emerged to
-realize systems sharing the theme of connecting billions of devices to humans
-and their environment, realizing large-scale ``smart'' systems. One such
-direction that has been receiving significant attention from researchers and
-investors is the Internet-of-Things (IoT).
-
-IoT systems, by definition, are a realization of CPSs, where the concept of
-inten- sively networked components is highly emphasized. IoT envisions
-leveraging Internet technology to connect and unprecedented number of devices,
-yielding a “swarm” of heterogeneous sensors and actuators that can interact with
-the physical environment and can be used to enable dynamic decision making in
-many different domains [79, 80]. Of course, the resulting device swarms are
-envisioned to be “smart,” continuously learning from behavioral patterns of
-humans and other devices, then autonomously adapting to changes at run
-time. This ability builds upon the implicit assumption that systems will be able
-to make real-time decisions on streaming data. While the meaningful
-interpretation of this specification is exceedingly context-dependent, for the
-purposes of the IoT, the implied requirement is the ability of a system to
-contin- ually process streams of data in order to extract actionable
-information.
-
-\subsection{Swarm Platforms}
-\label{sec:swarm-platforms}
-
+\para{Real-time Applications with Low-latency Requirement.}~These applications
+include reactive environments with humans in the
+loop~\cite{cooperstock1997reactive}.
+%% http://www.nngroup.com/articles/response-times-3-important-limits/
+An upper latency limit to avoid notice by human participants is about 100
+ms~\cite{nielsen1994usability}.  In autonomous systems where humans are not
+involved (such as robots taking actions based on sensors), tight control over
+latency is important for deterministic
+applications~\cite{eidson2012distributed}.  Tight latency requirements are often
+incompatible with the unpredictable performance of cloud-based analytics or
+controllers.
 
 At the same time, we have seen a dizzying array of embedded platforms, from
 powerful computing units to low-power microcontrollers (see
@@ -196,6 +146,128 @@ platforms:
 % mbed NXP LPC11U24, 48MHz, 8KB, $10
 % mbed NXP LPC1768, 96MHz, 32KB, $10
 
+At first glance, the Swarm may seem similar to other concepts such as wireless
+sensor network (WSN), cyber-physical systems (CPS), and ubiquitous computing
+(Ubicomp). However, as we will show with side-by-side comparisons, the Swarm has
+its fundamental differences and new challenges to address.
+
+\subsection{Swarm and WSN}
+\label{sec:swarm-wsn}
+
+In the 1990s, ``Smart Dust''~\cite{kahn1999next} envisions wireless sensor nodes
+with a volume of one cubic millimeter that can sense, communicate and
+compute. These devices can then be spread through our environment and enhance
+our interaction with the physical world. When answering the question
+\question{what happens if sensors become tiny, wireless, and self-contained,}
+researchers come up with the vision of a group of spatially dispersed and
+dedicated wireless sensors to monitor and record the physical conditions of the
+environment.
+
+WSN offers the potential to dramatically advance scientific fields or extracting
+engineering insights by enabling dense temporal and spatial measurements. The
+literature is rich and interested readers are welcome to read
+further~\cite{akyildiz2002wireless, zhao2009wireless}. We list a few notable
+representative deployments as follows,
+
+\begin{itemize}[itemsep=5pt]
+\item \textbf{Redwoods.} Tolle et al.\,deployed 80 nodes at redwoods that
+  recorded 44 days of air temperature, relative humidity, and photosynthetically
+  active solar radiation data.~\cite{tolle2005macroscope}
+\item \textbf{GGB.} Kim et al. deployed 59 nodes over the span and the tower,
+  collecting ambient vibrations in two directions synchronously at 1KHz rate at
+  Golden Gate Bridge for structural health monitoring~\cite{kim2007health}.
+\item \textbf{ZebraNet.} It tracks animal migration by placing sensor nodes into
+  the zebra's collar and the nodes travel with the
+  animals~\cite{zhang2005habitat}.
+\end{itemize}
+
+Compared with the Swarm, WSN has at least the following differences,
+
+\begin{itemize}
+
+\item WSN is application-specific while the Swarm can re-purpose
+  itself.  Envision a futuristic “tale of two smart cities” with safe, efficient,
+  and comfortable transportation and communication during the best of times, and
+  secure, quick, and adapt- able emergency response during the worst of
+  times. Smart Cities use the TerraSwarm infrastructure to aggregate information
+  from multiple sources, and use this information to (for example) automatically
+  reroute traffic and identify health and safety threats, such as those created
+  by an earthquake or a terrorist attack. TerraSwarm applications identify
+  individuals who can benefit from information that has been gathered, and
+  notify them using local resources such as cell phones, nearby displays, or
+  audio systems. These sys- tems can be used to form response teams and
+  implement a range of rescue and security operations.
+
+\item WSN runs on a dedicated set of resources while the Swarm can dynamically
+  recruit devices. Tolerate nodes failures.
+
+\item WSN nodes are significantly less heterogeneous than Swarm devices.
+
+\end{itemize}
+
+While open architectures with dynamically recruit-able resources can open up
+significant security and privacy risks, they can also make systems more
+efficient (through sharing of resources), more resilient (through dynamic
+reconfiguration leveraging redundant re- sources), and more capable, enabling
+applications we have not yet invented or that cannot yet be realized.
+
+The swarm differs as it coexists and closely interacts with the two other
+essential components of the global information-technology platform that have
+emerged over the past decades: the cloud, offering unbounded computational,
+communication and storage capacity; and the mobiles, which are the preferred
+means of access to and creation of information today. (see Fig. 1).
+
+The swarm finds its origin in the wireless sensor network concept that emerged
+in the mid 1990s. Yet, while the original sensor nets were application-specific
+and limited in scope and reach, the swarm represents a much broader vision,
+potentially connecting trillions of sensory and actuating devices worldwide into
+a single platform abstraction. This enables the true emergence of concepts such
+as cyber-physical and cyber-biological systems, immersive computing, and
+augmented reality, and will have a tremendous impact in domains such as advanced
+healthcare, improved energy efficiency, environment-friendly living, mobility
+management, enhanced security, and many others. As is shown in Fig. 1, the swarm
+coexists and closely interacts with the two other essential components of the
+global information-technology platform that have emerged over the past decades:
+the cloud, offering unbounded computational, communication and storage capacity;
+and the mobiles, which are the preferred means of access to and creation of
+information today. One may argue that the swarm may ultimately subsume the
+mobile access layer, as immersive computing and augmented reality environments
+with their much richer set of information exchange models may totally eliminate
+the need for us to carry a personal communication/computation device.
+
+\subsection{Swarm and CPS}
+\label{sec:swarm-cps}
+
+Cyber-physical systems (CPS) are physical and engineered systems whose
+operations are monitored, coordinated, controlled and integrated by a computing
+and communication core~\cite{rajkumar2010cyber}. For CPS, ``cyber'' and
+``physical'' parts are tightly coupled in a feedback relation, continuously
+affecting one another. This property of CPSs renders the separate understanding
+of the physical and the cyber insufficient, and requires CPS research to focus
+on the intersection of the two rather than the union by developing formalisms
+that require a complete understanding of the cyber-physical interaction [83,
+78]. Advancements in this domain have recently enabled disruptive applications,
+most notably in industrial automation, manufactur- ing, transportation, wearable
+technologies, and energy systems. Multiple research directions have emerged to
+realize systems sharing the theme of connecting billions of devices to humans
+and their environment, realizing large-scale ``smart'' systems. One such
+direction that has been receiving significant attention from researchers and
+investors is the Internet-of-Things (IoT).
+
+IoT systems, by definition, are a realization of CPSs, where the concept of
+inten- sively networked components is highly emphasized. IoT envisions
+leveraging Internet technology to connect and unprecedented number of devices,
+yielding a “swarm” of heterogeneous sensors and actuators that can interact with
+the physical environment and can be used to enable dynamic decision making in
+many different domains [79, 80]. Of course, the resulting device swarms are
+envisioned to be “smart,” continuously learning from behavioral patterns of
+humans and other devices, then autonomously adapting to changes at run
+time. This ability builds upon the implicit assumption that systems will be able
+to make real-time decisions on streaming data. While the meaningful
+interpretation of this specification is exceedingly context-dependent, for the
+purposes of the IoT, the implied requirement is the ability of a system to
+contin- ually process streams of data in order to extract actionable
+information.
 
 %%% Local Variables:
 %%% mode: latex

@@ -52,6 +52,36 @@ e.g., mashups. While not all mobile devices enjoy connectivity to the cloud
 successfully in specific application domains, 2 so we do not see this as a
 significant obstacle to the appeal of mobile applications.
 
+Tim O’Reilly believes that ``the future belongs to services that respond in real
+time to information provided either by their users or by nonhuman
+sensors.''~\cite{siegele2008let}. Such services will be attracted to the cloud
+not only because they must be highly available, but also because these services
+generally rely on large data sets that are most conveniently hosted in large
+datacenters. This is especially the case for services that combine two or more
+data sources or other services, e.g., mashups. While not all mobile devices
+enjoy connectivity to the cloud 100\% of the time, the challenge of disconnected
+operation has been addressed successfully in specific application domains, so we
+do not see this as a significant obstacle to the appeal of mobile applications.
+
+Many of today's IoT solutions arise by connecting embedded platforms to the
+cloud.  For example, Bolt~\cite{gupta2014bolt} provides data management for the
+Lab of Things (LoT)~\cite{brush2013lab} and uses Amazon S3 or Azure for data
+storage\footnote{This approach is for ``efficiently sharing data across
+  homes''~\cite{gupta2014bolt}.}.  Such direct connections often require an
+application gateway~\cite{zachariah1001internet} to support low-power wireless
+communications such as Z-Wave or Bluetooth Low Energy (BLE).  Even when devices
+can utilize more standard communication protocols such as WiFi, the gateways
+still exist as downloadable applications that run on cellphones or computers.
+Companies tend to provide their own gateways (such as Ninja Sphere~\cite{ninja},
+SmartThings Hub~\cite{smartthings}, Wink Hub~\cite{wink}); and researchers adopt
+a similar approach (e.g., HomeHub for the LoT~\cite{brush2013lab}).
+
+The fact that custom gateways are an integral part of IoT applications leads
+directly to ``stovepipe'' solutions or balkanization. Data and services from one
+company cannot be shared or utilized by devices from another company: connection
+protocols, data formats, and security mechanisms (when present) are proprietary
+and often undocumented.
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../background"
