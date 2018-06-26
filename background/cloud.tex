@@ -1,56 +1,59 @@
 \section{Massive Adoption of Cloud Platforms}
 \label{sec:cloud}
 
-The illusion of infinite computing resources available on demand, thereby
-eliminating the need for Cloud Com- puting users to plan far ahead for
-provisioning.  The elimination of an up-front commitment by Cloud users, thereby
-allowing companies to start small and increase hardware resources only when
-there is an increase in their needs.
+Cloud Computing is the delivery of computing services over the Internet. It
+refers to both the applications delivered as services and the hardware and
+systems software in the datacenters that provide those
+services~\cite{armbrust2010view}. It has the potential to transform a large part
+of the IT industry due to a number of advantages over traditional IT approaches:
 
-The advantages of SaaS to both end users and service providers are well
-understood. Service providers enjoy greatly simplified software installation and
-maintenance and centralized control over versioning; end users can access the
-service “anytime, anywhere”, share data and collaborate more easily, and keep
-their data stored safely in the infrastructure. Cloud Computing does not change
-these arguments, but it does give more application providers the choice of
-deploying their product as SaaS without provisioning a datacenter: just as the
-emergence of semiconductor foundries gave chip companies the opportunity to
-design and sell chips without owning a fab, Cloud Computing allows deploying
-SaaS—and scaling on demand—without building or provisioning a
-datacenter. Analogously to how SaaS allows the user to offload some problems to
-the SaaS provider, the SaaS provider can now offload some of his problems to the
-Cloud Computing provider. From now on, we will focus on issues related to the
-potential SaaS Provider (Cloud User) and to the Cloud Providers, which have
-received less attention.
 
-Over the last few years, cloud computing has shaped the software industry and
-made the development and deployment of web services easier than ever.  Public
-cloud providers such as Amazon, Microsoft, Google, Rackspace offer pay-as-you-go
-services for the general public.  Such a service model has reduced capital
-expenses, enabled elasticity for dynamic load adaption, and simplified resource
-management~\cite{armbrust2010view}.
+\para{The cloud offers an illusion of infinite resources on demand}. This
+eliminates the need for cloud users to plan far ahead for provisioning. The
+elimination of an up-front commitment by Cloud users, thereby allowing companies
+to start small and increase hardware resources only when there is an increase in
+their needs.
 
-We have seen a huge recent trend of migrating computations and services to the
-cloud.  Taking Amazon S3 as an example, over two trillion objects were reported
-stored in the system back as of April 2013~\cite{barr2013amazon}.  Riding on
-this popularity, application developers in the IoT space have blithely adopted
-the cloud as a universal computation and storage backend.  This approach has
-been taken by both industrial efforts (such as Carriots~\cite{carriots},
-GroveStreams~\cite{grovestreams}, SAMI~\cite{sami}, Xively~\cite{xively}) and
-academic research~\cite{gupta2014bolt, zachariah1001internet}.
+\para{The cloud eliminates up-front cost and simplified resource
+  management}. Computing as a utility allows companies to start small and
+increase hardware resources only when there is an increase in their needs. This
+is also useful for specialized computing resources, such as GPUs, TPUs and FPGA.
 
-Specialized computing resources, such as GPUs, TPUs and FPGA.
+\para{Pay-as-you-go model benefits both users and providers}.  Users are
+rewarded to release the resources that are no longer needed. As a result, the
+cloud provider can reuse the resources, improving the utilization.
 
-Cloud Pricing?
+\para{The cloud facilitates data availability and sharing.} End users can access
+the service ``anytime, anywhere'', share data and collaborate more easily, and
+keep their data stored safely in the infrastructure
 
-Such services will be attracted to the cloud not only because they must be
-highly available, but also because these services generally rely on large data
-sets that are most conveniently hosted in large datacenters. This is especially
-the case for services that combine two or more data sources or other services,
-e.g., mashups. While not all mobile devices enjoy connectivity to the cloud
-100\% of the time, the challenge of disconnected operation has been addressed
-successfully in specific application domains, 2 so we do not see this as a
-significant obstacle to the appeal of mobile applications.
+As a result, we have seen a huge recent trend of migrating computations and
+services to the cloud.  Taking Amazon S3 as an example, over two trillion
+objects were reported stored in the system back as of April
+2013~\cite{barr2013amazon}.
+
+Riding on this popularity of the cloud, many of today's IoT solutions arise by
+connecting embedded platforms to the cloud as a universal computation and
+storage backend. This approach has been taken by both industrial efforts (such
+as Carriots~\cite{carriots}, GroveStreams~\cite{grovestreams}, SAMI~\cite{sami},
+Xively~\cite{xively}) and academic research~\cite{gupta2014bolt,
+  zachariah1001internet}. For example, Bolt~\cite{gupta2014bolt} provides data
+management for the Lab of Things (LoT)~\cite{brush2013lab} and uses Amazon S3 or
+Azure for data storage. Such direct connections often require an application
+gateway~\cite{zachariah1001internet} to support low-power wireless
+communications such as Z-Wave or Bluetooth Low Energy (BLE).  Even when devices
+can utilize more standard communication protocols such as WiFi, the gateways
+still exist as downloadable applications that run on cellphones or computers.
+Companies tend to provide their own gateways (such as Ninja Sphere~\cite{ninja},
+SmartThings Hub~\cite{smartthings}, Wink Hub~\cite{wink}); and researchers adopt
+a similar approach (e.g., HomeHub for the LoT~\cite{brush2013lab}).
+
+Admittedly, over the last few years, cloud computing has shaped the software
+industry and made the development and deployment of web services easier than
+ever. Public cloud providers such as Amazon, Microsoft, Google, Rackspace offer
+pay-as-you-go services for the general public.  Such a service model has reduced
+capital expenses, enabled elasticity for dynamic load adaption, and simplified
+resource management~\cite{armbrust2010view}.
 
 Tim O’Reilly believes that ``the future belongs to services that respond in real
 time to information provided either by their users or by nonhuman
@@ -62,19 +65,6 @@ data sources or other services, e.g., mashups. While not all mobile devices
 enjoy connectivity to the cloud 100\% of the time, the challenge of disconnected
 operation has been addressed successfully in specific application domains, so we
 do not see this as a significant obstacle to the appeal of mobile applications.
-
-Many of today's IoT solutions arise by connecting embedded platforms to the
-cloud.  For example, Bolt~\cite{gupta2014bolt} provides data management for the
-Lab of Things (LoT)~\cite{brush2013lab} and uses Amazon S3 or Azure for data
-storage\footnote{This approach is for ``efficiently sharing data across
-  homes''~\cite{gupta2014bolt}.}.  Such direct connections often require an
-application gateway~\cite{zachariah1001internet} to support low-power wireless
-communications such as Z-Wave or Bluetooth Low Energy (BLE).  Even when devices
-can utilize more standard communication protocols such as WiFi, the gateways
-still exist as downloadable applications that run on cellphones or computers.
-Companies tend to provide their own gateways (such as Ninja Sphere~\cite{ninja},
-SmartThings Hub~\cite{smartthings}, Wink Hub~\cite{wink}); and researchers adopt
-a similar approach (e.g., HomeHub for the LoT~\cite{brush2013lab}).
 
 The fact that custom gateways are an integral part of IoT applications leads
 directly to ``stovepipe'' solutions or balkanization. Data and services from one

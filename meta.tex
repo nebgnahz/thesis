@@ -1,4 +1,5 @@
 \usepackage{times}
+% \usepackage{pxfonts}
 
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{amsmath}
@@ -56,13 +57,16 @@
 %% Paper setup
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
 \newcommand{\question}[1]{``\textit{#1}''}
 
 \newcommand{\sysname}{AWStream}
 \newcommand{\para}[1]{\smallskip\noindent\textbf{#1}}
 \newcommand{\paraf}[1]{\noindent\textbf{#1}}
-\newcommand{\todo}[1]{{\color{ACMRed}\bf{TODO: #1}\normalfont}}
-\newcommand{\fixme}[1]{{\color{ACMRed}\bf{FIXME: #1}\normalfont}}
+\newcommand{\todo}[1]{{\color{ACMRed}\textbf{TODO: #1}\normalfont}}
+\newcommand{\fixme}[1]{{\color{ACMRed}\textbf{FIXME: #1}\normalfont}}
 
 
 \newcommand{\maybe}{\texttt{maybe}}
