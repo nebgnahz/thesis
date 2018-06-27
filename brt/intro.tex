@@ -76,35 +76,33 @@ latency among end devices, the edge and the cloud in
   \label{fig:mobile-edge-cloud}
 \end{figure}
 
-This paper presents \sysname{}, a general prediction serving framework that
-provides bounded response times for IoT. Its core is about performance modeling
-by exploring the tradeoff space between application accuracy and cost
-(processing times). Orthogonal to existing system solutions with scale-out,
-scale-up, caching or batching, \sysname{} requires knowledge from the
-application.
+Its core is about performance modeling by exploring the tradeoff space between
+application accuracy and cost (processing times). Orthogonal to existing system
+solutions with scale-out, scale-up, caching or batching, BRT requires knowledge
+from the application.
 
 \para{(short) Accuracy-Cost Tradeoff.} For a particular inference task, multiple
 algorithms or tunable parameters for one algorithm exist that requires different
 processing times and result in different accuracy. To accommodate the
 resource-constrained devices, one can use an algorithm or a parameter that suits
-the particular platform. In order to explore the trade-off space, \sysname{}
-takes a data-driven approach to learn the relationship between inference
-accuracy and processing times for each algorithm and different parameters for
-individual platforms. We call this process ``profiling'' and its goal is to find
+the particular platform. In order to explore the trade-off space, we take a
+data-driven approach to learn the relationship between inference accuracy and
+processing times for each algorithm and different parameters for individual
+platforms. We call this process ``profiling'' and its goal is to find
 Pareto-optimal configurations (algorithm and parameter) as the performance
 model. Profiling with an exhaustive search may not be feasible for some
-algorithms due to their large parameter space. In these cases, \sysname{} uses a
+algorithms due to their large parameter space. In these cases, we use a
 statistical method, Bayesian Optimization (BO), to model the relationship as a
 black-box function and only searches for near-optimal configurations.
 
 \para{(short) Ensemble of Machines.} While running a low accuracy configuration
 on end devices ensures bounded latency, the accuracy may not be
-satisfactory. \sysname{} improves the accuracy by combining available resources
+satisfactory. \brt{} improves the accuracy by combining available resources
 such as the edge and the cloud, similar to existing techniques such as
 offloading~\cite{chun2011clonecloud,cuervo2010maui} and redundant
 requests~\cite{ananthanarayanan2013effective, dean2013tail,
   gordon2015accelerating, vulimiri2013low}. One key difference between
-\sysname{} and existing approaches is that \sysname{} uses the learned
+\brt{} and existing approaches is that \brt{} uses the learned
 performance model to find platform-specific configurations instead of running
 the same computation (\autoref{fig:dr}).
 
@@ -126,7 +124,7 @@ accuracy. The result is then returned and merged with the initial result. From
 the user's perspective, face detection is \emph{instantaneous} and gradually
 \emph{accurate}.
 
-To make DR effective and efficient, \sysname{} should utilize available
+To make DR effective and efficient, \brt{} should utilize available
 resources but avoid sending unnecessary requests. We treat the as a multi-armed
 bandit problem and model the uncertainty behind network delays and service
 contention. When the uncertainty grows, it favors redundant requests
@@ -138,23 +136,23 @@ service-level objective (SLO) that describes the deadline and accuracy
 demand. Upon receiving a request, the server runs a real-time scheduler to meet
 all SLOs. Existing real-time scheduler often assumes a worst-case execution time
 (WCET) and runs earliest deadline first (EDF) schedule. Our scheduler has two
-key differences when trying to meet SLOs: $(i)$ \sysname{} can adjust each
-request's serving time and quality based on the profile; $(ii)$ \sysname{} is
+key differences when trying to meet SLOs: $(i)$ \brt{} can adjust each
+request's serving time and quality based on the profile; $(ii)$ \brt{} is
 allowed to reject a request because of the redundancy mentioned above.
 
 At runtime, when a request comes in, the server first performs triage to
 determine the urgency of the request and its priority among all pending
 tasks. If all tasks are still schedulable after admitting the new request, it's
-added to the task queue; otherwise, \sysname{} rejects the request. The
+added to the task queue; otherwise, \brt{} rejects the request. The
 schedulability is checked if all requests are serviced at its lowest-allowed
 quality; this allows us to reject fast by only keeping track of available
-\texttt{capacity}. When performing the actual scheduling, \sysname{} can spare
+\texttt{capacity}. When performing the actual scheduling, \brt{} can spare
 the remaining capacity to increase some tasks' quality. Our scheduler is
 non-preemptive and treat all requests equally.
 
 We've implemented the aforementioned techniques and evaluated their
 effectiveness over three applications. We make the following contributions with
-\sysname{}:
+\brt{}:
 
 \begin{itemize}[leftmargin=*, topsep=0pt, itemsep=0pt]
 
