@@ -3,9 +3,10 @@
 
 While our proposed API is general and not language specific, we have implemented
 \sysname{} prototype in Rust (\textasciitilde 4000 lines of code). \sysname{} is
-open source on GitHub.\footnote{URL elided for anonymity.}  Applications use
-\sysname{} as a library and configure the execution mode---profiling, runtime as
-client, or runtime as server---with command line arguments.
+open source on GitHub.\footnote{\url{https://github.com/awstream/awstream}}
+Applications use \sysname{} as a library and configure the execution
+mode---profiling, runtime as client, or runtime as server---with command line
+arguments.
 
 % \begin{figure}
 %   \centering
@@ -16,7 +17,6 @@ client, or runtime as server---with command line arguments.
 % \end{figure}
 
 \begin{table}
-  \footnotesize
   \centering
   \begin{tabular}{c c c c}
     \toprule
@@ -40,10 +40,8 @@ client, or runtime as server---with command line arguments.
     testing: 16 days} \\
     \bottomrule
   \end{tabular}
-  \vspace{0.5em}
   \caption{Application details.}
   \label{tab:apps}
-  \vspace{-1em}
 \end{table}
 
 Using \sysname{}, we have built three applications: augmented reality (AR) that
@@ -53,8 +51,8 @@ accessed files (TK). \autoref{tab:apps} summarizes the application-specific
 parts: knobs, accuracy functions, and datasets.
 
 \para{Augmented Reality.} We target at augmented reality applications running on
-mobile phones that recognize nearby objects by offloading the heavy computation
-elsewhere, e.g.\,the cloud.
+mobile phones that recognize objects by offloading the heavy computation
+elsewhere (e.g.,~the cloud).
 
 Our implementation uses OpenCV~\cite{opencvlibrary} for image-related operations
 and YOLO~\cite{darknet13, redmon2016yolo9000}, a GPU-enabled pre-trained neural
@@ -68,53 +66,11 @@ Object recognition returns a list of bounding boxes with the object type. Each
 bounding box is a rectangle with normalized coordinates on the image. We compare
 the detection against the reference result from raw data, and declare it success
 if the intersection over union (IOU) is greater than
-50\%~\cite{everingham2010pascal} and the object type matches.
-
-We use F1 score~\cite{van1979information} as the accuracy function. In terms of
+50\%~\cite{everingham2010pascal} and the object type matches. We use F1
+score~\cite{Rijsbergen:1979:IR:539927} as the accuracy function. In terms of
 dataset, we collected our own video clips: the training data is a 24-second long
 video of an office environment; the test data is a 246-second long video of a
 home environment.
-
-Positive if intersection over union (IOU) larger than 0.5.
-
-\[
-  \text{IOU} = \frac{\text{Area of Intersection}}{\text{Area of Union}}
-\]
-
-\begin{figure}
-  \begin{subfigure}{0.3\textwidth}
-    \centering
-    \begin{tikzpicture}[scale=1.5]
-      \fill[color=blue!30] (0.5, 0.5) rectangle (1, 1);
-      \node[draw=none] () at (1.5, 1.5) {};
-      \draw (0, 0) rectangle (1, 1);
-      \draw[densely dashed] (0.5, 0.5) rectangle (1.5, 1.5);
-    \end{tikzpicture}
-    \caption{$\text{IOU} = 0.14$}
-  \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
-    \centering
-    \begin{tikzpicture}[scale=1.5]
-      \fill[color=blue!30] (0.15, 0.15) rectangle (1, 1);
-      \node[draw=none] () at (1.5, 1.5) {};
-      \draw (0, 0) rectangle (1, 1);
-      \draw[densely dashed] (0.15, 0.15) rectangle (1.15, 1.15);
-    \end{tikzpicture}
-    \caption{$\text{IOU} = 0.57$}
-  \end{subfigure}
-  \begin{subfigure}{0.3\textwidth}
-    \centering
-    \begin{tikzpicture}[scale=1.5]
-      \fill[color=blue!30] (0.05, 0.05) rectangle (1, 1);
-      \node[draw=none] () at (1.5, 1.5) {};
-      \draw[densely dashed] (0.05, 0.05) rectangle (1.05, 1.05);
-      \draw (0, 0) rectangle (1, 1);
-    \end{tikzpicture}
-    \caption{$\text{IOU} = 0.82$}
-  \end{subfigure}
-  \caption{Example IOU.}
-\end{figure}
-
 
 \para{Pedestrian Detection.} This application analyzes streams of videos from
 installed CCTV cameras and detects pedestrians inside. We use a similar setup
@@ -135,7 +91,6 @@ runtime.
     would have been purged if the clients use threshold T=3, demonstrating
     degradation that reduces data sizes affects fidelity.}
   \label{fig:topk}
-  \vspace{-0.5em}
 \end{figure}
 
 \para{Distributed Top-K.} This application aggregates machine logs from

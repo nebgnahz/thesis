@@ -16,21 +16,8 @@ explores. For each configuration $c$, there are two mappings that are of
 particular interest: a mapping from $c$ to its bandwidth consumption $B(c)$ and
 its accuracy measure $A(c)$. \autoref{tab:notations} summarizes these symbols.
 
-The profiling looks for Pareto-optimal configurations; that is, for any
-configuration $c$ in the Pareto-optimal set $\mathbb{P}$, there is no
-alternative configuration $c'$ that requires less bandwidth and offers a higher
-accuracy. Formally, $\mathbb{P}$ is defined as follows:
-
-{\small \vspace{-1em}
-  \begin{equation}
-  \mathbb{P} = \{ c \in \mathbb{C} : \{ c' \in \mathbb{C}: B(c') < B(c),
-  A(c') > A(c) \} = \varnothing\}
-  \label{eq:pareto}
-\end{equation}
-}%
 
 \begin{table}
-  \footnotesize
   \centering
   \begin{tabular}{r l}
     \toprule
@@ -56,25 +43,39 @@ accuracy. Formally, $\mathbb{P}$ is defined as follows:
   \vspace{0.3em}
   \caption{Notations used in this paper.}
   \label{tab:notations}
-  \vspace{-3em}
 \end{table}
 
-Because \sysname{} allows arbitrary functions as the degradation functions, it
-does not assume a closed-form relationship for $B(c)$ and $A(c)$. Instead,
-\sysname{} takes a data-driven approach: profiling applications with
-developer-supplied training data.  We measure $B(c)$ at the point of
-transmission. The accuracy $A(c)$ is measured either against the groundtruth, or
-the reference results when all degradation operations are off.  We show examples
-of knobs, configurations, and accuracy functions when we present applications in
-\autoref{sec:implementation}.
+The profiling looks for Pareto-optimal configurations; that is, for any
+configuration $c$ in the Pareto-optimal set $\mathbb{P}$, there is no
+alternative configuration $c'$ that requires less bandwidth and offers a higher
+accuracy. Formally, $\mathbb{P}$ is defined as follows:
+
+{\small \vspace{-1em}
+  \begin{equation}
+  \mathbb{P} = \{ c \in \mathbb{C} : \{ c' \in \mathbb{C}: B(c') < B(c),
+  A(c') > A(c) \} = \varnothing\}
+  \label{eq:pareto}
+\end{equation}
+}%
+
+We show examples of knobs, configurations, and accuracy functions when we
+present applications in \autoref{sec:implementation} and visualize the profile
+of sample applications in \autoref{fig:all-profiles}.
 
 \para{Offline Profiling.} We first use an offline process to build a bootstrap
-profile (or default profile).  \sysname{} makes no assumptions on the
-performance models, and thus evaluates all possible configurations.  While all
-knobs form a combinatorial space, the offline profiling is only a one-time
-process.  We exploit parallelism to reduce the profiling time.  Without any
-\textit{a priori} knowledge, all configurations are assigned randomly to
-available machines.
+profile (or default profile).  Because \sysname{} allows arbitrary functions as
+the degradation functions, it does not assume a closed-form relationship for
+$B(c)$ and $A(c)$. \sysname{} takes a data-driven approach: profiling
+applications with developer-supplied training data. $B(c)$ is measured as the
+data rate (bps) at the point of transmission. The accuracy $A(c)$ is measured
+either against the groundtruth, or the reference results when all degradation
+operations are off.
+
+\sysname{} makes no assumptions on the performance models, and thus evaluates
+all possible configurations.  While all knobs form a combinatorial space, the
+offline profiling is only a one-time process.  We exploit parallelism to reduce
+the profiling time.  Without any \textit{a priori} knowledge, all configurations
+are assigned randomly to available machines.
 
 % \para{Offline Profiling.} We first use an offline process to build a bootstrap
 % profile (or default profile).  Because \sysname{} supports arbitrary
@@ -123,7 +124,7 @@ combination of parallelization and sampling to speed up profiling, as below:
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../awstream"
+%%% TeX-master: "../network"
 %%% End:
 
 %% LocalWords: ProbeDone th combinatorial runtime parallelization priori

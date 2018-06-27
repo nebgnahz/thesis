@@ -1,6 +1,7 @@
 \usepackage{times}
 % \usepackage{pxfonts}
 
+\usepackage[T1]{fontenc}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -57,6 +58,21 @@
 %% Paper setup
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\lstset{
+  captionpos=b,
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  escapeinside={(*@}{@*)},
+  basicstyle=\footnotesize\ttfamily,
+  columns=fullflexible,
+  morekeywords={maybe_downsample, maybe_skip, maybe}
+}
+
+\renewcommand{\lstlistingname}{Example}
+
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{2}
 
@@ -67,7 +83,6 @@
 \newcommand{\paraf}[1]{\noindent\textbf{#1}}
 \newcommand{\todo}[1]{{\color{ACMRed}\textbf{TODO: #1}\normalfont}}
 \newcommand{\fixme}[1]{{\color{ACMRed}\textbf{FIXME: #1}\normalfont}}
-
 
 \newcommand{\maybe}{\texttt{maybe}}
 

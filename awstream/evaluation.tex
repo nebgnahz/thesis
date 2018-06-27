@@ -1,4 +1,29 @@
-\begin{figure*}[htb]
+\section{Evaluation}
+\label{sec:evaluation}
+
+In this section, we show the evaluations of \sysname{}, summarizing the results
+as follows.
+
+\begin{itemize}[topsep=3pt]
+\item[\autoref{sec:application-profiles}] \sysname{} generates Pareto-optimal
+  profiles across multiple dimensions with precision
+  (\autoref{fig:all-profiles}).
+\item[\autoref{sec:online-profiling}] Our parallel and sampling techniques
+  speeds up offline and online profiling (\autoref{fig:parallel},
+  \autoref{fig:online-tricks}).
+\item[\autoref{sec:runtime-adaptation}] At runtime, \sysname{} achieves
+  sub-second latency and nominal accuracy drop for all applications
+  (\autoref{fig:ar-runtime}, \autoref{fig:pd-tk}) and across various network
+  conditions (\autoref{fig:ar-rtt}).
+\item[\autoref{sec:multi-task-alloc}] \sysname{} profiles allow different
+  resource allocations: resource fairness and utility fairness
+  (\autoref{fig:multitask}).
+\end{itemize}
+
+\subsection{Application Profiles}
+\label{sec:application-profiles}
+
+\begin{figure}
   \centering
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
@@ -25,32 +50,7 @@
     boundary as well as the performance if only tuning one dimension. Note the
     x-axis is in log scale.}
   \label{fig:all-profiles}
-\end{figure*}
-
-\section{Evaluation}
-\label{sec:evaluation}
-
-In this section, we show the evaluations of \sysname{}, summarizing the results
-as follows.
-
-\begin{itemize}[itemsep=0pt, topsep=3pt]
-\item[\autoref{sec:application-profiles}] \sysname{} generates Pareto-optimal
-  profiles across multiple dimensions with precision
-  (\autoref{fig:all-profiles}).
-\item[\autoref{sec:online-profiling}] Our parallel and sampling techniques
-  speeds up offline and online profiling (\autoref{fig:parallel},
-  \autoref{fig:online-tricks}).
-\item[\autoref{sec:runtime-adaptation}] At runtime, \sysname{} achieves
-  sub-second latency and nominal accuracy drop for all applications
-  (\autoref{fig:ar-runtime}, \autoref{fig:pd-tk}) and across various network
-  conditions (\autoref{fig:ar-rtt}).
-\item[\autoref{sec:multi-task-alloc}] \sysname{} profiles allow different
-  resource allocations: resource fairness and utility fairness
-  (\autoref{fig:multitask}).
-\end{itemize}
-
-\subsection{Application Profiles}
-\label{sec:application-profiles}
+\end{figure}
 
 We run offline profiling using the training dataset described
 in~\autoref{tab:apps} and show the learned profiles in
@@ -225,7 +225,6 @@ profiling techniques.
 %% expensive. Processing TK over all configurations.
 
 \begin{table}[t]
-  \small
   \centering
   \begin{tabular}{c c c}
     \toprule
@@ -236,11 +235,9 @@ profiling techniques.
     Partial configurations & 6X & 8.7$\times$ \\
     \bottomrule
   \end{tabular}
-  \vspace{0.5em}
   \caption{Compared to the continuous profiling baseline (52X overhead), our
     sampling techniques speed up by 3$\times$ or 8.7$\times$.}
   \label{tab:online}
-  \vspace{-1em}
 \end{table}
 
 \subsection{Runtime Adaptation}
@@ -273,12 +270,13 @@ further decrease the bandwidth to \SI{5}{Mbps}; $(iv)$~at t=440s, we remove all
 traffic shaping. For UDP, HTB doesn't emulate the packet loss or out-of-order
 delivery; so we use \texttt{netem} and configure the loss probability according
 to the delivery rate. Because each pair-wise connection has a different
-capacity, we impose a \textit{background} bandwidth limit---\SI{25}{Mbps}---to
-normalize the capacity.
+capacity, we impose a \textit{background} bandwidth limit---\SI{25}{Mbps}---such
+that all clients can use at most 25 Mbps of network bandwidth.
 
-We compare \sysname{} with the following baselines:
+We compare \sysname{} with the following baselines (additional information about
+the setup for baselines are available in \autoref{sec:addit-inform-about}):
 
-\begin{itemize}[noitemsep, nolistsep, leftmargin=*]
+\begin{itemize}
 
 \item Streaming over TCP/UDP (non-adaptive). For TCP, we re-use \sysname{}
   runtime that runs over TCP but disable the adaptation. For UDP, we use
@@ -308,6 +306,8 @@ latency-based measure of capacity ratio; $(ii)$ \sysname{} has an explicit probe
 phase while JetStream changes its policy immediately after capacity ratio
 changes.
 
+\captionsetup[subfigure]{justification=justified, singlelinecheck=true}
+
 \begin{figure}[t]
   \begin{subfigure}[t]{\columnwidth}
     \centering
@@ -318,13 +318,12 @@ changes.
       the same results in \autoref{fig:ar-runtime-boxplot} for clarity.}
     \label{fig:ar-runtime-timeseries}
   \end{subfigure}
-  \vspace{0.2em}
   \\
+  \vspace{1em}
   \begin{subfigure}[t]{\columnwidth}
     \centering
     \includegraphics[width=\columnwidth]{figures/runtime_darknet-boxplot.pdf}
-    \caption{Latency and accuracy during the traffic shaping
-      (i.e.,~t=200s--440s).}
+    \caption{Latency and accuracy during the traffic shaping (t=200s--440s).}
     \label{fig:ar-runtime-boxplot}
   \end{subfigure}
   \caption{For AR, \sysname{} simultaneously achieves low latency and high
@@ -376,10 +375,10 @@ and JetStream++ are able to adapt during traffic shaping. With a more precise
 and fine-grain policy, JetStream++ achieves a lower latency (median
 \SI{539}{\ms}) in comparison to JetStream (median \SI{1732}{\ms}). Because
 JetStream's runtime reacts instantaneously when the congestion condition
-changes, both baselines oscillate among polices during the
-experiment. \sysname{} effectively addresses the oscillation with probing and
-achieves a much lower latency: median \SI{118}{\ms}, 15$\times$ improvement over
-JetStream and 5$\times$ improvement over JetStream++.
+changes, both baselines easily overcompensate and exhibit oscillation among
+polices during the experiment. \sysname{} effectively addresses the oscillation
+with probing and achieves a much lower latency: median \SI{118}{\ms}, 15$\times$
+improvement over JetStream and 5$\times$ improvement over JetStream++.
 
 % summary(accuracy)
 % Time        JetStream++        JetStream           HLS
@@ -431,11 +430,13 @@ AR. However, HLS's adaptation works poorly for PD (6\% accuracy as in
 % Max.   :375.0   Max.   :0.9991     Max.   :0.7981     Max.   :0.9991
 
 In summary, \autoref{fig:ar-runtime} shows that \sysname{} achieves low latency
-and high accuracy simultaneously. We show the results \textit{during shaping} in
-a different form in \autoref{fig:intro} to discuss the trade-off between
-fidelity and freshness.\footnote{We obtain \autoref{fig:intro}'s app-specific
-  data by feeding PD's profile to AR. We refer to JetStream as manual policies
-  in \autoref{fig:intro}.}
+and high accuracy simultaneously. The latency improvement over JetStream allows
+interactive applications, such as AR, to feel responsive rather than
+interrupted~\cite{nielsen1994usability}. We show the results \textit{during
+  shaping} in a different form in \autoref{fig:intro} to discuss the trade-off
+between fidelity and freshness.\footnote{We obtain \autoref{fig:intro}'s
+  app-specific data by feeding PD's profile to AR. We refer to JetStream as
+  manual policies in \autoref{fig:intro}.}
 
 \begin{figure}
   \centering
@@ -452,6 +453,7 @@ fidelity and freshness.\footnote{We obtain \autoref{fig:intro}'s app-specific
       \put(-10, 60){\parbox{2cm}{\centering \caption{TK}\label{fig:tk-runtime}}}
     \end{picture}
   \end{subfigure}
+  \vspace{-1em}
   \caption{PD and TK performance summary. Box plot shows latency and accuracy
     during the traffic shaping (i.e.,~t=200s-440s).}
   \label{fig:pd-tk}
@@ -537,7 +539,6 @@ latency.
 
 \vspace{0.3em}
 \para{Performance with Varying Network Delays}
-\vspace{0.2em}
 
 \noindent \sysname{} targets at wide area whose key characteristic is the large
 variation in latency~\cite{li2010cloudcmp}. While we have conducted experiments
@@ -546,28 +547,16 @@ To evaluate how \sysname{} performs with increased network delays, we conducted
 another experiment with one pair of client and server under different network
 conditions. We use \texttt{netem} to add delays, up to \SI{250}{ms} each way, so
 the added RTT can be as high as \SI{500}{ms}. The delay follows a normal
-distribution where the variation is 10\%, e.g.\,$250\pm 25\text{ms}$.
+distribution where the variation is 10\% (e.g.,~$250\pm 25\text{ms}$).
 
 \begin{figure}
   \centering
-  \includegraphics[width=.88\columnwidth]{figures/runtime_darknet-bench.pdf}
+  \includegraphics[width=.8\columnwidth]{figures/runtime_darknet-bench.pdf}
   \caption{\sysname{} maintains low latency and high accuracy under different
     network delay conditions.}
   \label{fig:ar-rtt}
-  \vspace{-0.5em}
+  \vspace{-1em}
 \end{figure}
-
-\autoref{fig:ar-rtt} shows the runtime behavior with various added network
-delays. While the latency increases with the added delay, \sysname{} mostly
-manages to achieve sub-second latency for all conditions. We see a higher
-variation in latency and more outliers as network delay increases, because the
-congestion detection is slow when the RTT is high. In terms of accuracy, because
-\sysname{} mostly stays in \texttt{Steady} state and accuracy only depends on
-the level of degradation, \sysname{} achieves similar accuracy for different
-network delays.
-
-\subsection{Resource Allocation and Fairness}
-\label{sec:multi-task-alloc}
 
 \begin{figure}
   \centering
@@ -595,6 +584,18 @@ network delays.
   \vspace{-0.8em}
 \end{figure}
 
+\autoref{fig:ar-rtt} shows the runtime behavior with various added network
+delays. While the latency increases with the added delay, \sysname{} mostly
+manages to achieve sub-second latency for all conditions. We see a higher
+variation in latency and more outliers as network delay increases, because the
+congestion detection is slow when the RTT is high. In terms of accuracy, because
+\sysname{} mostly stays in \texttt{Steady} state and accuracy only depends on
+the level of degradation, \sysname{} achieves similar accuracy for different
+network delays.
+
+\subsection{Resource Allocation and Fairness}
+\label{sec:multi-task-alloc}
+
 We evaluate resource allocations with two applications. In this way, the result
 also covers the case of a single application, and can generalize to more
 applications.
@@ -612,7 +613,7 @@ receives \SI{4}{Mbps}; and both achieve 80\% accuracy (\autoref{fig:eq-acc}).
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../awstream"
+%%% TeX-master: "../network"
 %%% End:
 
 %% LocalWords: TK PD runtime JetStream AR alloc YOLO dataset outliers
