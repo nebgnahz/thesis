@@ -1,0 +1,34 @@
+\subsection{JetStream++}
+\label{sub:jetstream++}
+
+We modified the open source version of
+JetStream\footnote{\url{https://github.com/princeton-sns/jetstream/}, \newline
+  commit bf0931b2d74d20fdf891669188feb84c96AF84.} in order to use our profile as
+its manual policy. Because JetStream doesn't support simultaneous degradation
+across multiple operators, we implemented a simple \texttt{VideoSource} operator
+that understands how to change image resolutions, frame rate, and video encoding
+quantization. At runtime, \texttt{VideoSource} queries congestion policy manager
+and adjusts three dimensions simultaneously. This operator is then exposed to
+the Python-implemented control plane. We call this modified version
+JetStream++.\footnote{\url{https://github.com/awstream/jetstream-clone/pull/1}}
+
+JetStream's code base is modular and extensible: the modifications include 53
+lines for the header file, 171 lines for implementation, 75 lines for unit test,
+and 49 lines of python as the application. While extending JetStream with our
+profile is not challenging, JetStream++ performs degradation in a single
+operator and loses the composability. We could modify JetStream to support
+degradation across multiple operators, but that would require substantial
+changes to JetStream. Using JetStream++ with our profile, the comparison is
+enough to illustrate the difference between \sysname{}'s and JetStream's
+runtime.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../network"
+%%% End:
+
+%% LocalWords: Mbps analytics runtime JetStream OpenCV YOLO pre GStreamer appsrc
+%% LocalWords: appsink zerolatency quantization dataset SVM geo topk VideoSource
+%% LocalWords: JetStream's composability TK TCP UDP HLS FFmpeg bitrates nginx
+%% LocalWords: packetization TPUT topk NodeJS metadata timestamp Mbps Kbps
+%% LocalWords: aws PD's TK's hls js VoD awstream tk fdf feb

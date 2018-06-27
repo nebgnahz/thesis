@@ -28,15 +28,15 @@ find \textit{near-optimal} configurations without exhaustive search.
 % three applications in this paper; and we are implement more application using
 % this framework to understand the expressiveness better.
 
-% \para{Context detection.} \sysname{} is currently limited to one profile: the
-% offline profiling generates the default profile and the online profiling
-% updates the single profile continuously.  Real-world applications may produce
-% data with a multi-modal distribution, where the model changes upon context
-% changes, such as indoor versus outdoor. Therefore, one possible optimization
-% to \sysname{} is to allow multiple profiles for one application, detect
-% context changes, and use the profile that best matches the current data
-% distribution.  Switching contexts could reduce, or even eliminate, the
-% overhead of online profiling.
+\para{Context detection.} \sysname{} is currently limited to one profile: the
+offline profiling generates the default profile and the online profiling
+updates the single profile continuously.  Real-world applications may produce
+data with a multi-modal distribution, where the model changes upon context
+changes, such as indoor versus outdoor. Therefore, one possible optimization
+to \sysname{} is to allow multiple profiles for one application, detect
+context changes, and use the profile that best matches the current data
+distribution.  Switching contexts could reduce, or even eliminate, the
+overhead of online profiling.
 
 \para{Bandwidth Estimation and Prediction.} Accurately estimating and predicting
 available bandwidth in wide area remains a challenge~\cite{huang2012confused,
@@ -48,7 +48,7 @@ neural network~\cite{mao2017neural}. We plan to explore these techniques next.
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../awstream"
+%%% TeX-master: "../network"
 %%% End:
 
 %% LocalWords: CherryPick runtime MPC QoE profiler

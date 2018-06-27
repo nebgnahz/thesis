@@ -6,16 +6,16 @@
   \centering
   \begin{tabular}{ c r l }
     \toprule
-    \multirow{4}{*}{\shortstack{Normal \\ Operators}}
+    \multirow{6}{*}{\shortstack{Normal \\ Operators}}
     & \textit{map} (f: I $\Rightarrow$ O) & Stream<I> $\Rightarrow$ Stream<O> \\
     & \textit{skip} (i: Int) & Stream<I> $\Rightarrow$
                                    Stream<I> \\
     & \textit{sliding\_window} (count: Int, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
                                                                             Stream<O> \\
-    % & \textit{tumbling\_window} (count: Int, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
-    %                                                                          Stream<O> \\
-    % & \textit{timed\_window} (time: Duration, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
-    %                                                                      Stream<O> \\
+    & \textit{tumbling\_window} (count: Int, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
+                                                                            Stream<O> \\
+    & \textit{timed\_window} (time: Duration, f: Vec<I> $\Rightarrow$ O) & Stream<I> $\Rightarrow$
+                                                                            Stream<O> \\
     & ... & ... \\
     \midrule
     \multirow{5}{*}{\shortstack{Degradation\\Operators}}

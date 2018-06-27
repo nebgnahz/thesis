@@ -4,7 +4,7 @@
 In this section, we show the evaluations of \sysname{}, summarizing the results
 as follows.
 
-\begin{itemize}[topsep=3pt]
+\begin{itemize}[leftmargin=1.5cm]
 \item[\autoref{sec:application-profiles}] \sysname{} generates Pareto-optimal
   profiles across multiple dimensions with precision
   (\autoref{fig:all-profiles}).
@@ -25,21 +25,22 @@ as follows.
 
 \begin{figure}
   \centering
-  \begin{subfigure}[t]{0.32\textwidth}
+  \begin{subfigure}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/profile-darknet.pdf}
     \caption{Augmented Reality (AR)}
     \label{fig:ar-profile}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{0.32\textwidth}
+  \begin{subfigure}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/profile-mot.pdf}
     \caption{Pedestrian Detection (PD)}
     \label{fig:pd-profile}
   \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.32\textwidth}
+  \\
+  \vspace{1em}
+  \begin{subfigure}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/profile-topk.pdf}
     \caption{Top-K (TK)}
@@ -82,12 +83,12 @@ harmful in AR than PD; while tuning frame rate hurts AR more than PD\@. This
 echoes our initial observation in~\autoref{subsec:motivation} that
 application-specific optimizations do not generalize.
 
-% \para{Quantification with precision}. The generated profiles are actionable
-% configurations that control the knobs with precision. For example, if PD
-% transmits video at 1920x1080 resolution, \(10~\text{FPS}\) and a quantization
-% of 20, it will consume 11.7 mbps of bandwidth, achieving roughly 90\%
-% accuracy. This saves developers from laboriously analyzing their application
-% to compute manual policies.
+\para{Quantification with precision}. The generated profiles are actionable
+configurations that control the knobs with precision. For example, if PD
+transmits video at 1920x1080 resolution, \(10~\text{FPS}\) and a quantization of
+20, it will consume 11.7 mbps of bandwidth, achieving roughly 90\%
+accuracy. This saves developers from laboriously analyzing their application to
+compute manual policies.
 
 \subsection{Profiling Efficiency \& Online Profiling}
 \label{sec:online-profiling}
@@ -113,7 +114,7 @@ evaluations as follows.
 
 \begin{figure}
   \centering
-  \includegraphics[width=1.0\columnwidth]{figures/parallel.pdf}
+  \includegraphics[width=0.8\columnwidth]{figures/parallel.pdf}
   \vspace{-1em}
   \caption{Parallelism speeds up both offline and online profiling.  The y-axis
     shows the profiling time for 1-second video.}
@@ -207,6 +208,22 @@ profiling less often (only two full profiling). It is an 8.7$\times$ gain.
   \vspace{-0.5em}
 \end{figure}
 
+\begin{table}[t]
+  \centering
+  \begin{tabular}{c c c}
+    \toprule
+    Online scheme & Overhead & Improvements \\
+    \midrule
+    Continuous & 52X & Baseline \\
+    Partial data & 17X & 3$\times$\\
+    Partial configurations & 6X & 8.7$\times$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{Compared to the continuous profiling baseline (52X overhead), our
+    sampling techniques speed up by 3$\times$ or 8.7$\times$.}
+  \label{tab:online}
+\end{table}
+
 %% Offline: 0
 %% Online: 1 frame (1852.21 GPU * seconds)
 %% Online (1/10)   (185.2 GPU * seconds)
@@ -224,24 +241,31 @@ profiling techniques.
 %% doesn't exhibit model drift.  Nor is online profiling always
 %% expensive. Processing TK over all configurations.
 
-\begin{table}[t]
-  \centering
-  \begin{tabular}{c c c}
-    \toprule
-    Online scheme & Overhead & Improvements \\
-    \midrule
-    Continuous & 52X & Baseline \\
-    Partial data & 17X & 3$\times$\\
-    Partial configurations & 6X & 8.7$\times$ \\
-    \bottomrule
-  \end{tabular}
-  \caption{Compared to the continuous profiling baseline (52X overhead), our
-    sampling techniques speed up by 3$\times$ or 8.7$\times$.}
-  \label{tab:online}
-\end{table}
-
 \subsection{Runtime Adaptation}
 \label{sec:runtime-adaptation}
+
+\begin{figure}
+  \begin{subfigure}[t]{\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/runtime_darknet-timeseries.pdf}
+    \caption{Time-series plot of the runtime behaviors: throughput (top),
+      showing the effect of bandwidth shaping; latency (middle) in log scale;
+      and accuracy (bottom). Overlapped lines may be hard to read; we present
+      the same results in \autoref{fig:ar-runtime-boxplot} for clarity.}
+    \label{fig:ar-runtime-timeseries}
+  \end{subfigure}
+  \vspace{1em}
+  \\
+  \begin{subfigure}[t]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/runtime_darknet-boxplot.pdf}
+    \caption{Latency and accuracy during the traffic shaping (t=200s--440s).}
+    \label{fig:ar-runtime-boxplot}
+  \end{subfigure}
+  \caption{For AR, \sysname{} simultaneously achieves low latency and high
+    accuracy (accuracy has a smaller variation).}
+  \label{fig:ar-runtime}
+\end{figure}
 
 In this section, we evaluate the runtime performance by controlling bandwidth
 across geo-distributed sites and compare \sysname{} with baselines including
@@ -273,8 +297,7 @@ to the delivery rate. Because each pair-wise connection has a different
 capacity, we impose a \textit{background} bandwidth limit---\SI{25}{Mbps}---such
 that all clients can use at most 25 Mbps of network bandwidth.
 
-We compare \sysname{} with the following baselines (additional information about
-the setup for baselines are available in \autoref{sec:addit-inform-about}):
+We compare \sysname{} with the following baselines:
 
 \begin{itemize}
 
@@ -285,15 +308,18 @@ the setup for baselines are available in \autoref{sec:addit-inform-about}):
   signaling~\cite{schulzrinne1998rtsp}; as in typical video conferencing and IP
   cameras~\cite{durresi2005rtp, king2009cisco}.
 
-\item Adaptive video streaming. We use HTTP Live Streaming (HLS) to represent
-  popular adaptive video streaming techniques. Our setup resembles personalized
-  live streaming systems~\cite{wang2016anatomy} but uses a smaller chunk for low
-  latency (1 second instead of typical 2-10 seconds).
+\item Adaptive video streaming. We use HTTP Live Streaming (HLS) to
+  represent popular adaptive video streaming techniques. Our setup
+  resembles personalized live streaming systems~\cite{wang2016anatomy}
+  but uses a smaller chunk for low latency (1 second instead of
+  typical 2-10 seconds). Additional information about the setup for
+  HLS is available in \autoref{sec:hls}.
 
 \item JetStream with the manual policy described in \autoref{subsec:motivation}.
 
-\item JetStream++, a modified version of JetStream that uses the profile learned
-  by \sysname{}.
+\item JetStream++, a modified version of JetStream that uses the
+  profile learned by \sysname{}. Additional information about the
+  setup for HLS is available in \autoref{sec:hls}.
 
 \end{itemize}
 
@@ -305,32 +331,6 @@ configuration to match available bandwidth while JetStream employs a
 latency-based measure of capacity ratio; $(ii)$ \sysname{} has an explicit probe
 phase while JetStream changes its policy immediately after capacity ratio
 changes.
-
-\captionsetup[subfigure]{justification=justified, singlelinecheck=true}
-
-\begin{figure}[t]
-  \begin{subfigure}[t]{\columnwidth}
-    \centering
-    \includegraphics[width=0.95\columnwidth]{figures/runtime_darknet-timeseries.pdf}
-    \caption{Time-series plot of the runtime behaviors: throughput (top),
-      showing the effect of bandwidth shaping; latency (middle) in log scale;
-      and accuracy (bottom). Overlapped lines may be hard to read; we present
-      the same results in \autoref{fig:ar-runtime-boxplot} for clarity.}
-    \label{fig:ar-runtime-timeseries}
-  \end{subfigure}
-  \\
-  \vspace{1em}
-  \begin{subfigure}[t]{\columnwidth}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/runtime_darknet-boxplot.pdf}
-    \caption{Latency and accuracy during the traffic shaping (t=200s--440s).}
-    \label{fig:ar-runtime-boxplot}
-  \end{subfigure}
-  \caption{For AR, \sysname{} simultaneously achieves low latency and high
-    accuracy (accuracy has a smaller variation).}
-  \label{fig:ar-runtime}
-  \vspace{-0.8em}
-\end{figure}
 
 \para{Results.} \autoref{fig:ar-runtime-timeseries} shows the runtime behavior
 of \sysname{} and all baselines in time series. \autoref{fig:ar-runtime-boxplot}
@@ -440,17 +440,19 @@ between fidelity and freshness.\footnote{We obtain \autoref{fig:intro}'s
 
 \begin{figure}
   \centering
-  \begin{subfigure}[t]{\columnwidth}
+  \begin{subfigure}[t]{\textwidth}
     \captionsetup[subfigure]{aboveskip=-1em}
-    \includegraphics[width=\columnwidth]{figures/runtime_mot-boxplot.pdf}
+    \includegraphics[width=\textwidth]{figures/runtime_mot-boxplot.pdf}
     \begin{picture}(0,0)
-      \put(-10, 80){\parbox{2cm}{\centering \caption{PD}\label{fig:pd-runtime}}}
+      \put(-10, 150){\parbox{2cm}{\centering \caption{PD}\label{fig:pd-runtime}}}
     \end{picture}
   \end{subfigure}
-  \begin{subfigure}[t]{\columnwidth}
-    \includegraphics[width=\columnwidth]{figures/runtime_tk-boxplot.pdf}
+  \\
+  \vspace{1em}
+  \begin{subfigure}[t]{\textwidth}
+    \includegraphics[width=\textwidth]{figures/runtime_tk-boxplot.pdf}
     \begin{picture}(0,0)
-      \put(-10, 60){\parbox{2cm}{\centering \caption{TK}\label{fig:tk-runtime}}}
+      \put(-10, 90){\parbox{2cm}{\centering \caption{TK}\label{fig:tk-runtime}}}
     \end{picture}
   \end{subfigure}
   \vspace{-1em}
@@ -555,17 +557,15 @@ distribution where the variation is 10\% (e.g.,~$250\pm 25\text{ms}$).
   \caption{\sysname{} maintains low latency and high accuracy under different
     network delay conditions.}
   \label{fig:ar-rtt}
-  \vspace{-1em}
 \end{figure}
 
 \begin{figure}
   \centering
-  \begin{subfigure}[t]{0.7\columnwidth}
+  \begin{subfigure}[t]{0.6\columnwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/multitask-legend.pdf}
   \end{subfigure}
-  \\
-  \vspace{0.4em}
+  \\\vspace{0.4em}
   \begin{subfigure}[t]{0.45\columnwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/multitask-left.pdf}
@@ -581,7 +581,6 @@ distribution where the variation is 10\% (e.g.,~$250\pm 25\text{ms}$).
   \end{subfigure}
   \caption{\sysname{} allows different resource allocation schemes.}
   \label{fig:multitask}
-  \vspace{-0.8em}
 \end{figure}
 
 \autoref{fig:ar-rtt} shows the runtime behavior with various added network

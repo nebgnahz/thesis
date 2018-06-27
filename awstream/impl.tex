@@ -8,14 +8,6 @@ Applications use \sysname{} as a library and configure the execution
 mode---profiling, runtime as client, or runtime as server---with command line
 arguments.
 
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\columnwidth]{figures/apps.pdf}
-%   \caption{Three \sysname{} applications: augmented reality, pedestrian
-%     detection, and distributed Top-K.}
-%   \label{fig:three-apps}
-% \end{figure}
-
 \begin{table}
   \centering
   \begin{tabular}{c c c c}
@@ -44,6 +36,15 @@ arguments.
   \label{tab:apps}
 \end{table}
 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{figures/apps.pdf}
+  \caption{Three \sysname{} applications: augmented reality, pedestrian
+    detection, and distributed Top-K.}
+  \label{fig:three-apps}
+\end{figure}
+
 Using \sysname{}, we have built three applications: augmented reality (AR) that
 recognizes nearby objects on mobile phones, pedestrian detection (PD) for
 surveillance cameras, and a distributed log analysis to extract the Top-K mostly
@@ -66,11 +67,13 @@ Object recognition returns a list of bounding boxes with the object type. Each
 bounding box is a rectangle with normalized coordinates on the image. We compare
 the detection against the reference result from raw data, and declare it success
 if the intersection over union (IOU) is greater than
-50\%~\cite{everingham2010pascal} and the object type matches. We use F1
-score~\cite{Rijsbergen:1979:IR:539927} as the accuracy function. In terms of
-dataset, we collected our own video clips: the training data is a 24-second long
-video of an office environment; the test data is a 246-second long video of a
-home environment.
+50\%~\cite{everingham2010pascal} (illustrated in \autoref{fig:iou}) and the
+object type matches. We use F1 score~\cite{van1979information} as the accuracy
+function. In terms of dataset, we collected our own video clips: the training
+data is a 24-second long video of an office environment; the test data is a
+246-second long video of a home environment.
+
+\input{awstream/iou}
 
 \para{Pedestrian Detection.} This application analyzes streams of videos from
 installed CCTV cameras and detects pedestrians inside. We use a similar setup
