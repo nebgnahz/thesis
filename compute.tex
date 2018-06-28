@@ -5,13 +5,26 @@
 \chapter{Compute Resource Adaptation}
 \label{cha:comp-reso-adapt}
 
-This chapter features BRT.
+Many swarm applications rely on heavy computation tasks to finish within bounded
+deadlines. However, because there is a large discrepancy between the
+capabilities of swarm platforms and unpredictable network/service workload, it
+is challenging to achieve bounded response times.
 
-Adaptation: Different algorithm and parameters affect the accuracy and
-processing times.
+We observe that to achieve the same task, there are often more than one
+algorithms or the algorithm have configurable parameters. The combination of
+algorithms and parameters defines a large search space and affects the
+processing times and application accuracy.
 
-Within the tradeoff space, select appropriate algorithm and parameters to meet
-bounded response time goal.
+To achieve bounded response times (BRT), our stand is that applications must be
+able to adapt to available resource and select the right algorithm and the right
+parameter given the deadline.
+
+Achieving the adaptation is challenging due to the large parameter space and
+heterogeneous platforms with different capabilities. We address the performance
+modeling with two techniques: 1. We propose Bayesian Optimization (BO) for
+profiling. Previous approaches use random search or coordinate/greedy
+approach. 2. Heterogeneous capabilities (and not available when
+profiling). Profile transfer: refine existing Pareto-optimal points.
 
 \input{brt/intro}
 \input{brt/motivation}

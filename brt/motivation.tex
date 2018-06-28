@@ -2,33 +2,35 @@
 \label{sec:motivation}
 
 We focus on computation-heavy ML applications that is beyond the capability of
-local devices. Offer some concrete numbers here. Mention that many approaches in
-application domains are improving accuracy at a cost of increased
-computation. And the spectrum of accuracy-cost is common in these applications.
+local devices. In this chapter, we will first show the heterogeneity of swarm
+platforms for such heavy computation tasks.
 
-Also describe application benchmark data set here.
-
-For Face, we use FDDB dataset.
-
-Motivated by the above applications, we outline the key challenges of exploiting
-accuracy-cost trade-off for prediction serving and describe how \sysname{}
-addresses these challenges.
+We then motivate profiling by showing the trade-off between application accuracy
+and processing times among different algorithms or different parameters for a
+given task.
 
 \subsection{Heterogeneous Environment}
 
-\begin{table}
-  \centering
-  \begin{tabular}{c c c}
-    \toprule
-    \specialcell{RPi\\Model B}
-    & \specialcell{Macbook \\ Model A1502}
-    & \specialcell{Workstation\\Xeon E5-1620} \\
-    \midrule
-    4105 & 544 & 346 \\
-    \bottomrule
-  \end{tabular}
-  \caption{Processing times (ms) on different platforms.}
-\end{table}
+\begin{figure}
+  \begin{minipage}{0.4\textwidth}
+    \includegraphics[width=.9\columnwidth]{figures/physicist.pdf}
+    \label{fig:physicist}
+  \end{minipage}%
+  \begin{minipage}{0.6\textwidth}
+    \begin{tabular}{c c c}
+      \toprule
+      \specialcell{RPi\\Model B}
+      & \specialcell{Macbook \\ Model A1502}
+      & \specialcell{Workstation\\Xeon E5-1620} \\
+      \midrule
+      4105 & 544 & 346 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+  \caption{(Left) Face detection with a photograph of the Fifth Solvay
+    International Conference on Electrons and Photons. (Right) Processing times
+    (ms) on different platforms.}
+\end{figure}
 
 Our target application environment consists of machines with large range of
 computing resources. $(i)$ End-devices, like mobile phones or IoT platforms, are
@@ -42,29 +44,25 @@ GPU-powered workstation~\cite{zhang2015cloud}.  Even in the cloud, there are
 various VM options in the cloud: companies rent VMs based on budget or because
 of a lack of expertise.
 
-\textbf{Solution:} Because of the such heterogeneity, we hypothesis an ensemble
-of available resources (\autoref{fig:dr}) can overcome the shortcomings of
-individual platforms and offer end-users with bounded response times, similar to
-prior solutions in both cloud-offloading (Tango~\cite{gordon2015accelerating})
-and straggler mitigation in the cloud
-(Dolly~\cite{ananthanarayanan2013effective}).
-
-\subsection{Complex Performance Model}
+\subsection{Accuracy-Time Tradeoff}
 \label{sec:comp-perf-model}
 
-\begin{figure}[t]
+\begin{figure}
   \centering
-  \includegraphics[width=.9\columnwidth]{figures/tradeoff-cnn.pdf}
-  \caption{Accuracy-cost trade-off for different CNNs.}
-  \label{fig:motiv-functions}
-\end{figure}
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=.9\columnwidth]{figures/exhaustive-face.pdf}
-  \caption{Complex performance model: spanning multiple dimensions and
-    exhibiting non-linear relationship.}
-  \label{fig:motiv-params}
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/motiv-functions.pdf}
+    \caption{Benchmarks for popular convolutional neural network (CNN) models.}
+    \label{fig:motiv-functions}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/motiv-params.pdf}
+    \caption{Benchmarks for Viola Jones face detection when changing different
+      parameters.}
+    \label{fig:motiv-params}
+  \end{subfigure}
 \end{figure}
 
 For many ML inference task, there exist more than one algorithm, or tunable
@@ -74,8 +72,8 @@ some computation tractable on end devices and handling more requests on the
 edge/cloud.
 
 For example, accuracy-cost trade-offs for object detection using convolutional
-neural network (CNN)~\cite{huang2016speed}. \autoref{fig:tradeoff-cnn} shows one
-such benchmark~\cite{cnn.benchmarks}.
+neural network (CNN)~\cite{huang2016speed}. \autoref{fig:motiv-functions} shows
+one such benchmark~\cite{cnn.benchmarks}.
 
 Many algorithms have large number of knobs to tune that will affect accuracy and
 processing cost. We use Viola-Jones (VJ) cascade face
@@ -86,6 +84,26 @@ shows the large parameter space with respect to three parameters:
 ML algorithms have many tunable parameters. For many algorithms, processing
 times and the accuracy may exhibit \textit{non-linear} behavior with respect to
 the parameters.
+
+\subsection{Challenges}
+\label{sec:challenges}
+
+Exhaustive Search is Too Expensive.
+
+\begin{itemize}
+\item \texttt{scale}: how much image size is reduced at each image scale.
+\item \texttt{min\_size}: minimum detect-able object size.
+\item \texttt{min\_neighbors}: how many neighbors each candidate rectangle should
+  have to retain it.
+\end{itemize}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=.9\columnwidth]{figures/exhaustive-face.pdf}
+  \caption{Complex performance model: spanning multiple dimensions and
+    exhibiting non-linear relationship.}
+  \label{fig:motiv-params}
+\end{figure}
 
 %%% Local Variables:
 %%% mode: latex
