@@ -13,17 +13,17 @@ attraction, as demonstrated by its many names: Internet of Things
 (IoE)~\cite{bradley2013internet}, Industry 4.0~\cite{lasi2014industry}, The
 Industrial Internet~\cite{eigner2018industrial}, TSensors (Trillion
 Sensors)~\cite{bogue2014towards}, Machine to Machine
-(M2M)~\cite{anton2014machine}, Smarter Planet~\cite{palmisano2008smarter}, etc.
-In this thesis, we use the term ``swarm''---as called by Jan Rabaey in a keynote
-talk at ASPDAC 2008~\cite{rabaey2008brand}---to refer to the vast collection of
-networked sensors and actuators.
+(M2M)~\cite{anton2014machine}, Smarter Planet~\cite{palmisano2008smarter},
+etc. In this thesis, we use the term ``swarm''---as called by Jan Rabaey in a
+keynote talk at ASPDAC 2008~\cite{rabaey2008brand}---to refer to the vast
+collection of networked sensors and actuators.
 
-Swarm applications transport, distill, and process large streams of data across
-the wide area in real time. For example, large cities such as London and Beijing
-have deployed millions of cameras for surveillance and traffic
+Swarm applications generate, transport, distill, and process large streams of
+data across the wide area in real time. For example, large cities such as London
+and Beijing have deployed millions of cameras for surveillance and traffic
 control~\cite{skynet, london.surveillance}. Buildings are increasingly equipped
 with a wide variety of sensors to improve energy efficiency and occupant
-comfort~\cite{krioukov2012building}.
+comfort~\cite{dawson2010smap, krioukov2012building}.
 
 Riding on the popularity of the cloud infrastructure, swarm application
 developers have adopted the cloud as a universal computation resource and a
@@ -44,11 +44,17 @@ distance, these further increase the heterogeneous landscape: swarm components
 are of various types, requiring interfacing and interoperability across multiple
 platforms and models of computation.
 
-This thesis argues that by providing adaptation as a core abstraction in
-application development, we can allow swarm applications with better performance
-and cope with environment changes. This thesis offers two systems with complete
-design, implementation and evaluation regarding network and compute resource,
-respectively.
+We recognize the challenges in developing swarm applications: constrained
+resource and heterogeneous environment. We argue that the key to unfold the
+potential of swarm applications is to allow applications to adapt to environment
+changes. Manual adaptation or exhaustive explore the design space are not
+feasible given the scale and large problem space.
+
+In this thesis, we propose to provide adaptation as a core abstraction in
+application development. In this way, we can build tools to automatically learn
+the effect of adaptation and apply adaptation strategies accordingly. We
+demonstrate this methodology with two systems focusing on network resources and
+compute resources for swarm applications.
 
 \vspace{1em}
 
@@ -56,16 +62,18 @@ respectively.
   abstraction allows for resilient swarm applications with less developer
   effort.}
 
-
 \vspace{1em}
 
-\section{Challenges with Existing Approaches}
+\section{Challenges with Developing Swarm Applications}
 \label{sec:chall-with-exist}
+
+We identify the following challenges that are unique to swarm applications:
 
 \para{Limited Resource.} Swarm systems rely on vast numbers of heterogeneous
 sensors that are generating massive amounts of data.
 
-\para{Ad-hoc Development.} Developers strive to make the application working.
+\para{Ad-hoc Development.} Developers strive to make the application working due
+to many moving pieces.
 
 \para{Huge Design Space.} Many devices. Choices of sensors, algorithms, data
 quality.
@@ -73,51 +81,52 @@ quality.
 \para{Heterogeneous Platforms.} Ranging from cheap low power platforms to
 powerful workstation.
 
+These challenges are hard to overcome.
+
 \section{Adaptation as a First-class Citizen}
 \label{sec:adaptation}
 
-When facing situations where the bandwidth is not sufficient, applications
-deployed today either choose a conservative setting (e.g.\,only delivering 360p
-videos) or leave their fate to the underlying transport layer: (1) in the case
-of TCP, the sender will be blocked and data are backlogged, leading to severe
-delay; (2) in the case of UDP, uncontrolled packet loss occurs, leading to
-application performance drop. Instead of ``suffering'' from a degraded network,
-applications can act proactively by adjusting their behavior: reducing the data
-rate to ensure that important data are delivered in time.
+\para{API.} To encode adaption and allow tools to be built in a systematic way.
+Such API can be reused both for development and for execution: with a effective
+runtime.
 
-\para{API.}
+\para{Automatic Profiling and Optimization.} Free developer from manual tuning
+knobs or struggle to explore a huge parameter space.
 
-\para{Automatic Profiling and Optimization.}
+Take network resource as an example, when facing situations where the bandwidth
+is not sufficient, applications deployed today either choose a conservative
+setting (e.g.\,only delivering 360p videos) or leave their fate to the
+underlying transport layer: (1) in the case of TCP, the sender will be blocked
+and data are backlogged, leading to severe delay; (2) in the case of UDP,
+uncontrolled packet loss occurs, leading to application performance
+drop. Instead of ``suffering'' from a degraded network, applications can act
+proactively by adjusting their behavior: reducing the data rate to ensure that
+important data are delivered in time.
 
-\para{Runtime Adaptation.}
+We apply the same principle to compute resource as well.
 
 \section{Summary of Results}
 \label{sec:summary-results-1}
 
 \begin{enumerate}
-\item \sysname{} introduces new programming abstractions by which a developer
-  expresses \emph{what} degradation functions can be used by the framework.
-  Importantly, developers do not have to specify exactly when and how different
-  degradation functions are to be used which is instead left to the \sysname{}
-  framework.
+\item We propose to introduces new programming abstractions by which a developer
+  expresses \emph{what} adaptations are available. Importantly, developers do
+  not have to specify exactly when and how different adaptations are to be used
+  which is instead left to the underlying framework.
 
-\item Rather than rely on manual policies, \sysname{} automatically
-  \emph{learns} a Pareto-optimal policy or strategy for when and how to invoke
-  different degradation functions.  For this, we design a methodology that uses
-  a combination of offline and online training to build an accurate model of the
-  relationship between an application's accuracy and its bandwidth consumption
-  under different combinations of degradation functions. Our solution exploits
-  parallelism and sampling to efficiently explore the configuration space and
-  learn an optimal strategy.
+\item Rather than rely on manual policies, we can build tools that automatically
+  \emph{learns} adaptation policy that are Pareto optimal. This learning process
+  can be both offline and online, exploiting parallelism, sampling or
+  statistical approaches to efficiently explore the configuration space.
 
-\item \sysname{}'s final contribution is the design and implementation of a
-  runtime system that continually measures and adapts to network conditions.
-  \sysname{} matches the streaming data rate to the measured available
-  bandwidth, and achieves high accuracy by using the learned Pareto-optimal
-  configurations.  Upon encountering network congestion, our adaptation
-  algorithm increases the degradation level to reduce the data rate, such that
-  no persistent queue builds up. To recover, it progressively decreases the
-  degradation level after probing for more available bandwidth.
+\item We also demonstrate how such strategy can be employed in running systems
+  and adapt to resource changes. For example, \sysname{} matches the streaming
+  data rate to the measured available bandwidth. Upon encountering network
+  congestion, it increases the degradation level to reduce the data rate, such
+  that no persistent queue builds up. To recover, it progressively decreases the
+  degradation level after probing for more available bandwidth. Our experiments
+  show that \sysname{} achieves sub-second latency with only nominal accuracy
+  drop (2-6\%).
 \end{enumerate}
 
 \section{Thesis Organization}
