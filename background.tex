@@ -2,20 +2,29 @@
 
 \begin{document}
 
-\chapter{Background And Motivation}
+\chapter{Background and Motivation}
 \label{cha:background}
 
-In this chapter, we analyze the trend of swarm applications. Through comparison
-with previous topics such as wireless sensor networks, cyber-physical systems
-and ubiquitous computing, we discuss the fundamental properties of swarm
-applications. One key property is scale facilitated by the inter-connectivity,
-especially the mature infrastructure cloud. The cloud has become the \textit{de
-  facto} foundation around which distributed applications are constructed. This
-trend, although understandable, is not the best long term approach and not well
-suited for swarm applications. In particular, we will discuss the pitfalls with
-directly connecting sensors to the cloud. To accompany the cloud, the edge
-infrastructure comprised of local computing resources has been proposed. The
-edge infrastructure, comes with new challenges.
+In this chapter, we first show the trends of swarm applications and how they
+differ from previous topics, such as wireless sensor networks, cyber-physical
+systems and ubiquitous computing. By analyzing the fundamental properties of
+swarm applications, we summarize the core challenges with developing swarm
+applications, such as constrained resources and heterogeneous environment.
+
+One key potential with swarm applications is due to the scale facilitated by the
+inter-connectivity, especially as the cloud becomes mature and is used as the
+universal computation and storage backend. Many applications are constructed by
+directly connecting devices to the cloud. This trend, although understandable,
+is not the best long term approach. We discuss the pitfalls with this
+cloud-centric approach and argue that ``the cloud is not enough.''
+
+To accompany the cloud, a new tier of computing infrastructure, the edge,
+arises. Due to their close proximity to end devices, the edge is effective to
+reduce network latency and provide more resource guarantees to end
+devices. However, unlike the cloud, the edge is resource constrained and it is
+unclear what capabilities we can expect from the edge. As a result, swarm
+applications relying on the edge need to take the heterogeneous landscape into
+account.
 
 \input{background/swarm}
 \input{background/cloud}
