@@ -29,7 +29,7 @@
     \bottomrule
   \end{tabular}
   \vspace{0.2em}
-  \caption{Stream processing operators in \sysname{}. \texttt{Vec<T>} represents
+  \caption{Stream processing operators in \awstream{}. \texttt{Vec<T>} represents
     a list of elements with type \texttt{T}.}
   \label{tab:operators}
 \end{table*}
@@ -37,12 +37,12 @@
 %% Introduce graphs of operators model
 Most stream processing systems construct applications as a directed graph of
 operators~\cite{toshniwal2014storm, zaharia2013discretized}. Each operator
-transforms input streams into new streams. \sysname{} borrows the same
+transforms input streams into new streams. \awstream{} borrows the same
 computation model and can support normal operators found in existing stream
 processing systems such as JetStream~\cite{rabkin2014aggregation} (see example
 operators in \autoref{tab:operators}).
 
-To integrate adaptation as a first-class abstraction, \sysname{} introduces
+To integrate adaptation as a first-class abstraction, \awstream{} introduces
 \maybe{} operators that degrade data quality, yielding potential bandwidth
 savings.  Our API design has three considerations. $(i)$~To free developers from
 specifying exact rules, the API should allow specifications with
@@ -75,7 +75,7 @@ level of degradation.
 Based on the \texttt{maybe} primitive, one can implement additional degradation
 operators for common data types. For instance, \texttt{maybe\_head} will
 optionally take the top values of a list; \texttt{maybe\_downsample} can resize
-the image to a configured resolution. \sysname{} provides a number of such
+the image to a configured resolution. \awstream{} provides a number of such
 operations as a library to simplify application development
 (\autoref{tab:operators}).
 

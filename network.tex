@@ -5,27 +5,27 @@
 \chapter{Network Resource Adaptation}
 \label{cha:netw-reso-adapt}
 
-Applying abstraction, profiling, and runtime adaptation to network resource.
+In this chapter, we focus on swarm applications adapting to network
+resources. Specifically, we target at swarm applications that rely on wide-area
+streaming and perform analytics elsewhere, e.g., the cloud. These streaming
+applications face the challenge of scarce and variable wide-area network (WAN)
+bandwidth. Many applications today are built directly with TCP or UDP, and they
+suffer from increased latency or degraded accuracy. State-of-the-art approaches
+that adapt to network changes require developer writing sub-optimal manual
+policies or are limited to application-specific optimizations.
 
-The emerging class of wide-area streaming analytics faces the challenge of
-scarce and variable WAN bandwidth. Non-adaptive applications built with TCP or
-UDP suffer from increased latency or degraded accuracy. State-of-the-art
-approaches that adapt to network changes require developer writing sub-optimal
-manual policies or are limited to application-specific optimizations.
-
-We present \sysname{}, a stream processing system that simultaneously achieves
-low latency and high accuracy in the wide area, requiring minimal developer
-efforts. To realize this, \sysname{} uses three ideas: $(i)$ it integrates
-application adaptation as a first-class programming abstraction in the stream
-processing model; $(ii)$ with a combination of offline and online profiling, it
-automatically learns an accurate profile that models accuracy and bandwidth
-trade-off; and $(iii)$ at runtime, it carefully adjusts the application data
-rate to match the available bandwidth while maximizing the achievable
-accuracy. We evaluate \sysname{} with three real-world applications: augmented
-reality, pedestrian detection, and monitoring log analysis. Our experiments show
-that \sysname{} achieves sub-second latency with only nominal accuracy drop
-(2-6\%).
-
+In this chapter, we present \awstream{}, a stream processing system that uses
+adaptation to simultaneously achieve low latency and high accuracy in the wide
+area, requiring minimal developer efforts. To realize this, \awstream{} follows
+our proposed methodology: $(i)$ it integrates application adaptation as a
+first-class programming abstraction in the stream processing model; $(ii)$ with
+a combination of offline and online profiling, it automatically learns an
+accurate profile that models accuracy and bandwidth trade-off; and $(iii)$ at
+runtime, it carefully adjusts the application data rate to match the available
+bandwidth while maximizing the achievable accuracy. We evaluate \awstream{} with
+three real-world applications: augmented reality, pedestrian detection, and
+monitoring log analysis. Our experiments show that \awstream{} achieves
+sub-second latency with only nominal accuracy drop (2-6\%).
 
 \input{awstream/intro}
 \input{awstream/motivation}
@@ -38,3 +38,8 @@ that \sysname{} achieves sub-second latency with only nominal accuracy drop
 \input{awstream/conclusion}
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

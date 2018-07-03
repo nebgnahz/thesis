@@ -1,10 +1,10 @@
 \section{Introduction}
 
-Wide-area streaming analytics are becoming pervasive, especially with emerging
-Internet of Things (IoT) applications. Large cities such as London and Beijing
-have deployed millions of cameras for surveillance and traffic
-control~\cite{skynet, london.surveillance}. Buildings are increasingly equipped
-with a wide variety of sensors to improve energy efficiency and occupant
+Among swarm applications, wide-area streaming analytics are becoming
+pervasive. Large cities such as London and Beijing have deployed millions of
+cameras for surveillance and traffic control~\cite{skynet,
+  london.surveillance}. Buildings are increasingly equipped with a wide variety
+of sensors to improve energy efficiency and occupant
 comfort~\cite{krioukov2012building}. Geo-distributed infrastructure, such as
 content delivery networks (CDNs), analyze requests from machine logs across the
 globe~\cite{mukerjee2015practical}. These applications all transport, distill,
@@ -90,19 +90,19 @@ favor smoothness over image quality, these systems maintain a high frame rate
 However, low resolution images can lead to poor accuracy for video analytics
 that rely on the image details (e.g.,~face detection~\cite{viola2001rapid}).
 
-In this chapter, we present \sysname{}, a framework for building adaptive stream
+In this chapter, we present \awstream{}, a framework for building adaptive stream
 processing applications that simultaneously simplifies development \emph{and}
 improves application accuracy in the face of limited or varying wide-area
 bandwidth.
 % for the wide area that achieves low latency and high accuracy simultaneously
 % with minimal developer effort.
-\sysname{} achieves this with three novel contributions:
+\awstream{} achieves this with three novel contributions:
 
 \begin{enumerate}[leftmargin=*, topsep=5pt]
-\item \sysname{} introduces new programming abstractions by which a developer
+\item \awstream{} introduces new programming abstractions by which a developer
   expresses \emph{what} degradation functions can be used by the framework.
   % {\bf Sylvia: Cut remainder of para? Too much detail for intro?}  More
-  % specifically, \sysname{} augments existing stream processing operators with
+  % specifically, \awstream{} augments existing stream processing operators with
   % a new \maybe{} operator. Its basic form takes a function that degrades the
   % input stream, and a list of values that serve as a knob to control the level
   % of degradation.  and . The knob specifies the degradation level that affects
@@ -113,10 +113,10 @@ bandwidth.
   % jointly), and \textit{extensible} (arbitrary functions and external
   % libraries can be embedded with our operators).
   Importantly, developers do not have to specify exactly when and how different
-  degradation functions are to be used which is instead left to the \sysname{}
+  degradation functions are to be used which is instead left to the \awstream{}
   framework.
 
-\item Rather than rely on manual policies, \sysname{} automatically
+\item Rather than rely on manual policies, \awstream{} automatically
   \emph{learns} a Pareto-optimal policy or strategy for when and how to invoke
   different degradation functions.  For this, we design a methodology that uses
   a combination of offline and online training to build an accurate model of the
@@ -134,9 +134,9 @@ bandwidth.
   % sampling-based techniques to efficiently explore the configuration space and
   % learn a adaptation strategy.
 
-\item \sysname{}'s final contribution is the design and implementation of a
+\item \awstream{}'s final contribution is the design and implementation of a
   runtime system that continually measures and adapts to network conditions.
-  \sysname{} matches the streaming data rate to the measured available
+  \awstream{} matches the streaming data rate to the measured available
   bandwidth, and achieves high accuracy by using the learned Pareto-optimal
   configurations.  Upon encountering network congestion, our adaptation
   algorithm increases the degradation level to reduce the data rate, such that
@@ -149,24 +149,24 @@ bandwidth.
   % to allocate bandwidth among competing tasks for \textit{utility fairness}.
 \end{enumerate}
 
-We implement \sysname{} and use it to prototype three streaming applications:
+We implement \awstream{} and use it to prototype three streaming applications:
 augmented reality (AR), pedestrian detection (PD), and distributed Top-K
 (TK). We use real-world data to profile these applications and evaluate their
 runtime performance on a geo-distributed public cloud.  We show that
-\sysname{}'s data-driven approach generates accurate profiles and that our
+\awstream{}'s data-driven approach generates accurate profiles and that our
 parallelism and sampling techniques can speed up profiling by up to 29$\times$
 and 8.7$\times$ respectively.
 
-With the combination of \sysname{}'s ability to learn better policies and its
-well-designed runtime, our evaluation shows that \sysname{} significantly
+With the combination of \awstream{}'s ability to learn better policies and its
+well-designed runtime, our evaluation shows that \awstream{} significantly
 outperforms non-adaptive applications: achieving a 40--100$\times$ reduction in
 packet delivery times relative to applications built over TCP, or an over
 45--88\% improvement in data fidelity (application accuracy) relative to
-applications built over UDP. We also compare \sysname{} to
+applications built over UDP. We also compare \awstream{} to
 JetStream~\cite{rabkin2014aggregation}, a state-of-the-art system for building
 adaptive streaming analytics that is based on manual policies. Our results show
 that besides the benefit of generating optimal policies \textit{automatically},
-\sysname{} achieves a 15-20$\times$ reduction in latency and 1-5\% improvement
+\awstream{} achieves a 15-20$\times$ reduction in latency and 1-5\% improvement
 in accuracy simultaneously relative to JetStream.
 
 %%% Local Variables:

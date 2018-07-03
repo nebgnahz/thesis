@@ -2,9 +2,9 @@
 \label{sec:implementation}
 
 While our proposed API is general and not language specific, we have implemented
-\sysname{} prototype in Rust (\textasciitilde 4000 lines of code). \sysname{} is
+\awstream{} prototype in Rust (\textasciitilde 4000 lines of code). \awstream{} is
 open source on GitHub.\footnote{\url{https://github.com/awstream/awstream}}
-Applications use \sysname{} as a library and configure the execution
+Applications use \awstream{} as a library and configure the execution
 mode---profiling, runtime as client, or runtime as server---with command line
 arguments.
 
@@ -40,12 +40,12 @@ arguments.
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{figures/apps.pdf}
-  \caption{Three \sysname{} applications: augmented reality, pedestrian
+  \caption{Three \awstream{} applications: augmented reality, pedestrian
     detection, and distributed Top-K.}
   \label{fig:three-apps}
 \end{figure}
 
-Using \sysname{}, we have built three applications: augmented reality (AR) that
+Using \awstream{}, we have built three applications: augmented reality (AR) that
 recognizes nearby objects on mobile phones, pedestrian detection (PD) for
 surveillance cameras, and a distributed log analysis to extract the Top-K mostly
 accessed files (TK). \autoref{tab:apps} summarizes the application-specific
@@ -109,12 +109,12 @@ source node then filters the tail: (1) head(\texttt{N}) takes the top \texttt{N}
 entries; (2) threshold(\texttt{T}) filters small entries whose count is smaller
 than \texttt{T}. These two operations affect the final result and the exact
 impact depends on data distribution. We implement these two operators by using
-\sysname{}'s \maybe{} abstraction.
+\awstream{}'s \maybe{} abstraction.
 
 To measure the accuracy, we need to compare the correlation between two ranked
 list. Kendall's~$\tau$~\cite{abdi2007kendall} is a correlation measure of the
 concordance between two ranked list. The output ranges from \(-1\) to 1,
-representing no agreement to complete agreement. To integrate with \sysname{},
+representing no agreement to complete agreement. To integrate with \awstream{},
 we convert Kendall's~$\tau$ to [0, 1] with a linear transformation. For our
 evaluation, we set K as 50 and use Apache log files that record and store user
 access statistics for the \href{https://www.sec.gov}{SEC.gov} website. The logs

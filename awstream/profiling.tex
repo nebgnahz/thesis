@@ -2,7 +2,7 @@
 \label{sec:automatic-profiling}
 
 After developers use \maybe{} operators to specify potential degradation
-operations, \sysname{} automatically builds an accurate profile. The profile
+operations, \awstream{} automatically builds an accurate profile. The profile
 captures the relationship between \textit{application accuracy} and
 \textit{bandwidth consumption} under different combinations of data degradation
 operations. We describe the formalism, followed by techniques that efficiently
@@ -62,43 +62,43 @@ present applications in \autoref{sec:implementation} and visualize the profile
 of sample applications in \autoref{fig:all-profiles}.
 
 \para{Offline Profiling.} We first use an offline process to build a bootstrap
-profile (or default profile).  Because \sysname{} allows arbitrary functions as
+profile (or default profile).  Because \awstream{} allows arbitrary functions as
 the degradation functions, it does not assume a closed-form relationship for
-$B(c)$ and $A(c)$. \sysname{} takes a data-driven approach: profiling
+$B(c)$ and $A(c)$. \awstream{} takes a data-driven approach: profiling
 applications with developer-supplied training data. $B(c)$ is measured as the
 data rate (bps) at the point of transmission. The accuracy $A(c)$ is measured
 either against the groundtruth, or the reference results when all degradation
 operations are off.
 
-\sysname{} makes no assumptions on the performance models, and thus evaluates
+\awstream{} makes no assumptions on the performance models, and thus evaluates
 all possible configurations.  While all knobs form a combinatorial space, the
 offline profiling is only a one-time process.  We exploit parallelism to reduce
 the profiling time.  Without any \textit{a priori} knowledge, all configurations
 are assigned randomly to available machines.
 
 % \para{Offline Profiling.} We first use an offline process to build a bootstrap
-% profile (or default profile).  Because \sysname{} supports arbitrary
+% profile (or default profile).  Because \awstream{} supports arbitrary
 % degradation operations, we need to evaluate all combinations of the
-% configurations offline profiling is a one-time process, \sysname{} currently
+% configurations offline profiling is a one-time process, \awstream{} currently
 % performs an exhaustive evaluation of all configurations in $\mathbb{C}$
 % despite all knobs form a combinatorial space. Future work could explore
 % statistical methods to build performance models with a smaller number of
 % training samples~\cite{venkataraman2016ernest, alipourfard2017cherrypick}.
-% \sysname{} exploits parallelism when profiling all configurations.  Without
+% \awstream{} exploits parallelism when profiling all configurations.  Without
 % any \textit{a priori} knowledge, all configurations are assigned randomly to
 % all available machines.
 
-\para{Online Profiling:} \sysname{} supports online profiling to continuously
+\para{Online Profiling:} \awstream{} supports online profiling to continuously
 refine the profile. The refinement handles \textit{model drift}, a problem when
 the learned profile fails to predict the performance accurately. There are two
 challenges with online profiling.  $(i)$~There are no ground-truth labels or
 reference data to compute accuracy. Because labeling data is prohibitively labor
-intensive and time consuming~\cite{russell2008labelme}, \sysname{} currently
+intensive and time consuming~\cite{russell2008labelme}, \awstream{} currently
 uses raw data (data without degradation) as the reference. At runtime, if the
 application streams raw data, it is used for online profiling. Otherwise, we
 allocate additional bandwidth to transmit raw data, but only do so when there is
 spare capacity. $(ii)$~Exhaustive profiling is expensive. If the profiling takes
-too much time, the newly-learned profile may already be stale. \sysname{} uses a
+too much time, the newly-learned profile may already be stale. \awstream{} uses a
 combination of parallelization and sampling to speed up profiling, as below:
 
 \begin{itemize}[leftmargin=*, topsep=3pt]
