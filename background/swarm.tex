@@ -92,53 +92,62 @@ aims to reduce energy usage~\cite{krioukov2012building}, there are 2,151
 \href{http://www.keti.re.kr/}{KETI Motes}---463 \ce{CO2} sensors, 466 humidity
 sensors, 26 illumination sensors, 440 light sensors, 290 PIR (passive infrared)
 sensor, and 466 temperature sensors---configured to report data every five
-seconds. For the air quality monitoring, the sensors only sample once a
-minute~\cite{cheng2014aircloud}.
+seconds. For the air quality monitoring mentioned above, the sensors only sample
+once a minute.
 
 On the other hand, we are seeing high-frequency, high-precision sensors being
 deployed at scale as technology evolves and applications' requirement
 changes. For example, energy disaggregation takes a whole building's aggregated
 energy signal and separates it into appliance-specific data. Recent works start
 to sample at 15 kHz or higher to analyze the harmonics to identify type of
-electrical circuitry in appliance~\cite{kolter2011redd} whereas a low sampling
-rate can only show visual patterns and offer state
-changes~\cite{hart1992nonintrusive}.
+electrical circuitry in appliance~\cite{kolter2011redd} with a higher
+accuracy. This contrasts with prior approaches using low sampling rates and only
+relying on state changes~\cite{hart1992nonintrusive}.
 
-Regardless of the sampling frequency and data rate, in this category, the
-collected data is not immediately inspected and often stored for future
-anlaytics. Values and insights are gained by aggregated view, comparison with
-historic data, and cross examination. With the increasing
+Regardless of the sampling frequency and data rate, in this category,
+applications do not inspect the data immediately and often store it for future
+analytics and archival purposes. Data scientists may employ exploratory data
+analysis to visualize the collected data for patterns, or compare data across
+sensors and time for insights.
 
-Due to the nature of continuous sensing, aggregated historical data will be huge
-and creating a new kind of big-data problem~\cite{diaz2012big,
-  zaslavsky2013sensing}. For example, microsynchophasors, or uPMUs, monitor the
-electrical grid with a network of 1000 devices; each produces 12 streams of 120
-Hz high-precision values accurate to 100 ns. This amounts to 1.4 million points
-per second and requires specialized storage systems for time-series
-analysis~\cite{andersen2016btrdb}.
+The aggregated historical data will keep increasing and create a new kind of
+big-data problem~\cite{diaz2012big, zaslavsky2013sensing}, challenging our
+existing ways of data storage and analysis. For example, microsynchophasors, or
+uPMUs, monitor the electrical grid with a network of 1000 devices; each produces
+12 streams of 120 Hz high-precision values accurate to 100 ns. This amounts to
+1.4 million points per second and requires specialized storage systems for
+time-series analysis~\cite{andersen2016btrdb}.
 
-At last, many of these applications have serious privacy implications as the
-collected data can be related with personal health or manufacture's operation
-status.
+At last, because the collected data can be related with personal health or
+manufacture's operation status, many of these applications have serious privacy
+implications.
 
 \subsubsection{Real-time Applications with Low-Latency Requirements}
 \label{sec:inter-low-latency}
 
-Interactive applications that involve humans in the loop requires a low latency
-response to engage the users. For example, to build an reactive
-environment~\cite{cooperstock1997reactive} that engages the users attention and
-gives gives the feeling of instantaneous response, the application only has a
-budget of 100 ms~\cite{nielsen1994usability}. Wearable Cognitive
-Assistance~\cite{chen2018application}.
+Interactive applications that involve humans in the loop require a low latency
+response to engage the users. For example, Wearable cognitive
+assistant~\cite{chen2018application} uses wearable devices, such as Google
+Glass, for deep cognitive assistance (e.g., offering hints for social
+interaction via real-time scene analysis). A general rule of thumb for systems
+that give the feeling of instantaneous response is to bound the latency to 100
+ms~\cite{miller1968response, nielsen1994usability}.
 
-In autonomous systems where humans are not involved (such as robots taking
-actions based on sensors), tight control over latency is important for
-deterministic applications~\cite{eidson2012distributed}. CPS.
+In autonomous systems where humans are not involved, a tight control over
+latency is important for proper and deterministic
+behavior~\cite{eidson2012distributed}, especially when it involves a group or
+feedback control. Schulz et al.~\cite{schulz2017latency} summarizes several
+latency critical uses, including factory automation, smart grids, intelligent
+transport systems, etc.
 
-Tight latency requirements with guarantee are often incompatible with the
-unpredictable performance of cloud-based analytics or controllers. Timeliness is
-not a factor in any widespread Internet technology, with Quality-of-Service
-(QoS) features having been routinely omitted for decades.
+Satisfying applications' tight latency requirements is challenging. Timing
+behavior in software execution emerges from implementations rather than
+specifications~\cite{lee2018real}. The goal for timing is often to speed up some
+execution, but not to provide guaranteed and repeatable timing. Similarly, the
+Internet provides ``best-effort'' service and fails to provide quality of
+service (QoS) guarantees~\cite{shenker1995fundamental}. The situation is
+becoming worse as swarm applications become more complex and generate large
+amount of data.
 
 \subsection{Heterogeneous Swarm Platforms}
 \label{sec:swarm-platforms}
