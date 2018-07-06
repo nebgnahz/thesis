@@ -67,7 +67,8 @@ based on their domains: 1) transportation and logistics; 2) health-care domain;
 social~\cite{atzori2010internet}. We characterize the applications based on the
 usage pattern. In this way, it is easier to analyze application requirements and
 understand implications for system support. We characterize swarm applications
-into two general categories.
+into two general categories.\footnote{Note that these two categories are not
+  exclusive to each other. Some applications may fall into both.}
 
 \subsubsection{Ambient Data Collection and Analytics}
 \label{sec:ambi-data-coll}
@@ -152,31 +153,42 @@ amount of data.
 \subsection{Heterogeneous Swarm Platforms}
 \label{sec:swarm-platforms}
 
-At the same time, we have seen a dizzying array of embedded platforms, from
-powerful computing units to low-power microcontrollers (see
-\autoref{tab:embedded}). None of these platforms \emph{must} connect with the
-cloud; in fact the smallest devices require \emph{gateway} devices to even
-communicate with cloud applications. Below are three categories of embedded
-platforms:
+There has been a dizzying array of embedded platforms, from powerful computing
+units to low-power microcontrollers (see \autoref{tab:embedded}).
 
-\para{Microcontroller Platforms.}~Examples include Arduino~\cite{arduino},
-mbed~\cite{mbed}, and Spark~\cite{spark}. This is an emerging category,
-providing new open platforms on crowdfunding websites~\cite{kickstarter}, good
+\subsubsection{Microcontrollers}
+
+Examples include Arduino~\cite{arduino}, mbed~\cite{mbed}, and
+Spark~\cite{spark}. This emerging category continues to expand as new open
+platforms appear on crowdfunding websites~\cite{kickstarter}.  With an
 ecosystems featuring great support and libraries (e.g., Adafruit Online
-Tutorials~\cite{adafruit}), and novel applications/products~\cite{iotlist}.
+Tutorials~\cite{adafruit}), people can easily add new sensors/actuators and
+develop applications. These platforms have unleashed the creativity of millions
+in building smart and interactive devices, spawning the Maker
+Movement~\cite{dougherty2012maker}.
 
-\para{Smartphones.}~Many companies (like Fitbit~\cite{fitbit} or
-Automatic~\cite{automatic}) already use smartphones as gateways to connect
-low-power devices to the network.  Researchers have explored how smartphones can
-be used for IoT including reusing discarded smartphones~\cite{challen2014mote},
-writing new operating systems~\cite{janos} and developing novel
-applications~\cite{hong2014smartphone}. Mobile platforms.
+\subsubsection{Smartphones}
 
-\para{Mini PC.}~Ranging from the powerful Mac Mini and Intel Next Unit of
-Computing (NUC) to inexpensive Raspberry Pi, BeagleBone Black, these devices
-typically run various versions of Linux to simplify application deployment.
-Many companies~\cite{ninja, smartthings, wink} adopt these mini PCs as their
-gateway devices. Not mobile. Infrastructure.
+As a key enabler for mobile computing, smartphones have become ubiquitous. They
+are equipped with an impressive set of sensors, including accelerometer,
+gyroscope, proximity sensor, camera, microphone, etc. The processors and
+displays on smartphones keep upgrading. In addition to use smartphones alone,
+many companies (like Fitbit~\cite{fitbit} or Automatic~\cite{automatic}) use
+smartphones as gateways to connect low-power devices to the Internet via
+Bluetooth. Creative use of smartphones is also a hot topic in research,
+including reusing discarded smartphones~\cite{challen2014mote}, writing new
+operating systems~\cite{janos}, and developing novel
+applications~\cite{hong2014smartphone}.
+
+\subsubsection{Mini PCs}
+
+Ranging from powerful Intel Next Unit of Computing (NUC) to inexpensive
+Raspberry Pi, BeagleBone Black, these devices typically run various versions of
+Linux to simplify application deployment. Many companies~\cite{ninja,
+  smartthings, wink} adopt these mini PCs with all kinds of networking
+capabilities---802.15.4, Bluetooth, WiFi, Ethernet---as their gateway devices.
+In contrast to using smartphones as gateways, mini PCs serve as nearby
+always-available infrastructure---the ``immobiles.''~\cite{swarmbox}.
 
 \begin{table}
   \centering
@@ -198,8 +210,8 @@ gateway devices. Not mobile. Infrastructure.
     \bottomrule
   \end{tabular}
   \vspace*{-0.075in}
-  \caption{The world of IoT includes a wide spectrum of computing platforms
-    (price as of 2015).}
+  \caption{The swarm includes a wide spectrum of computing platforms (price as
+    of 2015).}
   \vspace*{-0.1in}
   \label{tab:embedded}
 \end{table}
