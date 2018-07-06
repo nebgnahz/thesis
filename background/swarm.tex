@@ -251,10 +251,9 @@ sensors---a wireless sensor network---to monitor and record the physical
 conditions of the environment
 
 WSNs offer the potential to dramatically advance scientific fields or extracting
-engineering insights with dense temporal and spatial measurements. Without an
-exhaustive list from the rich literature~\cite{akyildiz2002wireless,
-  zhao2009wireless}, we list a few notable representative deployments as
-follows,
+engineering insights with dense temporal and spatial measurements. Without
+exhaustively listing the rich literature~\cite{akyildiz2002wireless,
+  zhao2009wireless}, we show a few notable deployments as follows,
 
 \begin{itemize}[itemsep=5pt]
 \item \textbf{ZebraNet}~\cite{zhang2005habitat}. Zhang et al.\, deployed 7 nodes
@@ -271,43 +270,44 @@ follows,
   monitoring.
 \end{itemize}
 
-\noindent Compared with WSNs, the swarm is one step further, as we illustrate below with
-their differences,
+We then compared the swarm with WSNs and show that while the swarm finds its
+origin in the WSN concept, the swarm represents a much broader vision,
+potentially connecting trillions of sensory and actuating devices that are
+heterogeneous and worldwide into a single platform abstraction.
 
-\para{WSN is application-specific; the swarm can re-purpose itself}.
-Envision a futuristic ``tale of two smart cities'' with safe, efficient, and
+\para{WSN is application-specific; the swarm can re-purpose itself}. Most WSNs
+focus on specific use cases. Because energy is usually the primary concern in
+deployed networks, the lifespan of a network benefits greatly from custom
+hardware design and careful tuning of software stack. After the deployment,
+sensor nodes are dedicated for the particular task. For the swarm, it is
+important to be reprogrammed on the fly for other purposes. This is best
+illustrated with the vision of ``a tale of two smart
+cities''~\cite{lee2012terraswarm}: the swarm allows safe, efficient, and
 comfortable transportation and communication during the best of times, and
-secure, quick, and adapt- able emergency response during the worst of
-times. Smart Cities use the TerraSwarm infrastructure to aggregate information
-from multiple sources, and use this information to (for example) automatically
-reroute traffic and identify health and safety threats, such as those created by
-an earthquake or a terrorist attack. TerraSwarm applications identify
-individuals who can benefit from information that has been gathered, and notify
-them using local resources such as cell phones, nearby displays, or audio
-systems. These sys- tems can be used to form response teams and implement a
-range of rescue and security operations.
+secure, quick, and adaptable emergency response during the worst of times. The
+swarm is more efficient through sharing of resources; it is more resilient
+through dynamic recruiting; and it is more capable by enabling novel
+applications beyond developers' imagination. At the same time, the open
+architecture can lead to bigger security and privacy risks.
 
-\para{WSN runs on a dedicated set of resources; the swarm can dynamically
-  recruit devices}. Sensor node failure due to environmental conditions, such as
-underwater. While open architectures with dynamically recruit-able resources can
-open up significant security and privacy risks, they can also make systems more
-efficient (through sharing of resources), more resilient (through dynamic
-reconfiguration leveraging redundant re- sources), and more capable, enabling
-applications we have not yet invented or that cannot yet be realized.
-
-\para{WSN nodes are significantly less heterogeneous than swarm devices}.
+\para{WSN nodes are significantly less heterogeneous than swarm devices}. WSNs
+typically are comprised of sensor nodes and gateway nodes. Sensors nodes are
+often the same batch of hardware and form a star, tree or mesh network after
+deployment. Gateway nodes are more powerful in processing capability, battery
+life, and transmission range, acting as data aggregation point and bridge to
+other networks. In comparison, each swarm node can have different types of
+sensors and actuators. Their processing and networking capabilities will depend
+on many factors, including tasks, prices, manufactures and hardware
+availability.
 
 \para{WSNs are mostly stand-alone while the swarm interacts with the cloud and
-  others closely}. The swarm differs as it coexists and closely interacts with
-the two other essential components of the global information-technology platform
-that have emerged over the past decades: the cloud, offering unbounded
-computational, communication and storage capacity; and the mobiles, which are
-the preferred means of access to and creation of information today.
-
-In summary, while the swarm finds its origin in the WSN concept, the swarm
-represents a much broader vision, potentially connecting trillions of sensory
-and actuating devices that are heterogeneous and worldwide into a single
-platform abstraction.
+  others closely}. Once deployed, WSNs rarely interact with the external world,
+except shipping sensor data to some central storage location via the
+gateways. Therefore, when designing WSN, one has to carefully provision the
+resources. The swarm, on the other hand, coexists and closely interacts with the
+cloud and other essential components of the Internet. The cloud offers unbounded
+computational, communication and storage capacity. By offloading tasks to the
+cloud, the swarm can achieve what is beyond its own hardware capability.
 
 \subsubsection{Swarm and CPS}
 \label{sec:swarm-cps}
