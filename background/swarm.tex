@@ -235,46 +235,47 @@ always-available infrastructure---the ``immobiles.''~\cite{swarmbox}.
 
 At first glance, the swarm may seem similar to other concepts such as wireless
 sensor network (WSN), cyber-physical systems (CPS), and ubiquitous computing
-(Ubicomp). However, as we will show with side-by-side comparisons, the swarm has
-its fundamental differences and new challenges to address.
+(Ubicomp). In this section, we will show the difference with side-by-side
+comparisons. We argue that the swarm has its fundamental differences and new
+challenges to address.
 
 \subsubsection{Swarm and WSN}
 \label{sec:swarm-wsn}
 
 In the 1990s, ``Smart Dust''~\cite{kahn1999next} envisions wireless sensor nodes
 with a volume of one cubic millimeter that can sense, communicate and
-compute. These devices can then be spread through our environment and enhance
-our interaction with the physical world. When answering the question
-\question{what happens if sensors become tiny, wireless, and self-contained,}
-researchers come up with the vision of a group of spatially dispersed and
-dedicated wireless sensors to monitor and record the physical conditions of the
-environment.
+compute. Being so small, these devices can then be spread through our
+environment and enhance our interaction with the physical world. This vision
+quickly leads to deploying a group of spatially dispersed and dedicated wireless
+sensors---a wireless sensor network---to monitor and record the physical
+conditions of the environment
 
-WSN offers the potential to dramatically advance scientific fields or extracting
-engineering insights by enabling dense temporal and spatial measurements. The
-literature is rich and interested readers are welcome to read
-further~\cite{akyildiz2002wireless, zhao2009wireless}. We list a few notable
-representative deployments as follows,
+WSNs offer the potential to dramatically advance scientific fields or extracting
+engineering insights with dense temporal and spatial measurements. Without an
+exhaustive list from the rich literature~\cite{akyildiz2002wireless,
+  zhao2009wireless}, we list a few notable representative deployments as
+follows,
 
 \begin{itemize}[itemsep=5pt]
+\item \textbf{ZebraNet}~\cite{zhang2005habitat}. Zhang et al.\, deployed 7 nodes
+  by placing sensor nodes into the zebra's collar at the 24,000-acre Sweetwaters
+  Reserve at Kenya. The nodes traveled with zebras and measuresd GPS positions
+  and sun/shade indication.
 \item \textbf{Redwoods}~\cite{tolle2005macroscope}. Tolle et al.\,deployed 80
-  nodes at redwoods that recorded 44 days of air temperature, relative humidity,
-  and photosynthetically active solar radiation data.
+  nodes at the redwoods in Sonoma, California. The network recorded 44 days of
+  air temperature, relative humidity, and photosynthetically active solar
+  radiation data.
 \item \textbf{GGB}~\cite{kim2007health}. Kim et al.\,deployed 59 nodes over the
-  span and the tower, collecting ambient vibrations in two directions
-  synchronously at 1KHz rate at Golden Gate Bridge for structural health
-  monitoring
-\item \textbf{ZebraNet}~\cite{zhang2005habitat}. It tracks animal migration by
-  placing sensor nodes into the zebra's collar and the nodes travel with the
-  animals.
+  span and the tower of the Golden Gate Bridge. The network collected ambient
+  vibrations in two directions synchronously at 1 kHz rate for structural health
+  monitoring.
 \end{itemize}
 
-While WSNs have great potential for many applications in a wide range of
-scenarios, the swarm is one step further, as we illustrate below with their
-differences:
+\noindent Compared with WSNs, the swarm is one step further, as we illustrate below with
+their differences,
 
-\para{WSN is application-specific while the Swarm can re-purpose itself}.
-Envision a futuristic “tale of two smart cities” with safe, efficient, and
+\para{WSN is application-specific; the swarm can re-purpose itself}.
+Envision a futuristic ``tale of two smart cities'' with safe, efficient, and
 comfortable transportation and communication during the best of times, and
 secure, quick, and adapt- able emergency response during the worst of
 times. Smart Cities use the TerraSwarm infrastructure to aggregate information
@@ -286,7 +287,7 @@ them using local resources such as cell phones, nearby displays, or audio
 systems. These sys- tems can be used to form response teams and implement a
 range of rescue and security operations.
 
-\para{WSN runs on a dedicated set of resources while the Swarm can dynamically
+\para{WSN runs on a dedicated set of resources; the swarm can dynamically
   recruit devices}. Sensor node failure due to environmental conditions, such as
 underwater. While open architectures with dynamically recruit-able resources can
 open up significant security and privacy risks, they can also make systems more
@@ -294,7 +295,7 @@ efficient (through sharing of resources), more resilient (through dynamic
 reconfiguration leveraging redundant re- sources), and more capable, enabling
 applications we have not yet invented or that cannot yet be realized.
 
-\para{WSN nodes are significantly less heterogeneous than Swarm devices}.
+\para{WSN nodes are significantly less heterogeneous than swarm devices}.
 
 \para{WSNs are mostly stand-alone while the swarm interacts with the cloud and
   others closely}. The swarm differs as it coexists and closely interacts with
