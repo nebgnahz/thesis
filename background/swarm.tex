@@ -235,9 +235,11 @@ always-available infrastructure---the ``immobiles.''~\cite{swarmbox}.
 
 At first glance, the swarm may seem similar to other concepts such as wireless
 sensor network (WSN), cyber-physical systems (CPS), and ubiquitous computing
-(Ubicomp). In this section, we will show the difference with side-by-side
-comparisons. We argue that the swarm has its fundamental differences and new
-challenges to address.
+(Ubicomp). These concepts all reflect a vision of how technology can affect our
+lives if they become deeply connected to the physical world: through large scale
+sensing, sense-compute-actuate, and pervasive computing. In this section, we
+will show the difference with side-by-side comparisons. We argue that the swarm
+has its fundamental differences and new challenges to address.
 
 \subsubsection{Swarm and WSN}
 \label{sec:swarm-wsn}
@@ -321,31 +323,33 @@ robotics.
 Because ``cyber'' and ``physical'' parts are tightly coupled in a feedback
 relation, it is important to study the intersection, or the joint dynamics, of
 the two for a complete understanding of the systems~\cite{rajkumar2010cyber}. It
-is not sufficient to separately understand only one side. For example, for many
-applications only in the cyberspace, i.e., general-purpose software, timing is a
-performance concern: a slower program is not an incorrect program and reducing
-the execution time is a performance optimization. In CPS, because the decision
-made by the cyber parts affect the physical processes and subsequent feedback
-reactions, a precise control of the timing is often a correctness
-concern. Another challenge that is unique in the intersection of ``cyber'' and
-``physical'' is the level of concurrency. Physical processes are composed of
-many parallel processes. Software, on the other hand, is often constructed as a
-sequence of steps. The challenge is to bridging the inherent sequential cyber
-world with the concurrent physical world.
+is not sufficient to separately understand only one side. For many applications
+only in the cyberspace, i.e., general-purpose software, timing is a performance
+concern: a slower program is not an incorrect program and reducing the execution
+time is considered an optimization. In CPS, because the decision made by the
+cyber parts affects the physical processes and subsequent feedback reactions, a
+precise control of the timing is a correctness concern. Another challenge that
+is unique in the intersection of ``cyber'' and ``physical'' is the level of
+concurrency. Physical processes are composed of many parallel
+processes. Software, on the other hand, is often constructed as a sequence of
+steps. The challenge is to bridging the inherent sequential cyber world with the
+concurrent physical world.
 
-One can view the swarm as a realization of CPSs: in addition to the timing and
-concurrency challenges, the swarm emphasizes the concept of intensively
-networked components. Leveraging Internet technology to connect and
-unprecedented number of devices, yielding a ``swarm'' of heterogeneous sensors
-and actuators that can interact with the physical environment and can be used to
-enable dynamic decision making in many different domains. 
+The swarm can be viewed as a network of CPSs: leveraging Internet technology to
+connect and unprecedented number of devices, yielding a ``swarm'' of
+heterogeneous sensors and actuators that can interact with the physical
+environment. As a result, the swarm also needs to address timing and concurrency
+issues related with physical processes.
 
-Swarm challenges in addition to CPS. This ability builds upon the implicit
-assumption that systems will be able to make real-time decisions on streaming
-data. While the meaningful interpretation of this specification is exceedingly
-context-dependent, for the purposes of the IoT, the implied requirement is the
-ability of a system to contin- ually process streams of data in order to extract
-actionable information.
+While the swarm can reuse technologies and methodologies developed from decades
+of CPS research, its open architecture and the interoperability requirement with
+third-party services have made the challenges harder. For example, in a
+standalone CPS development, one can use specialized networks with synchronized
+clocks and time-division multiple access (TDMA), including CAN busses,
+FlexRay~\cite{flexray2005flexray}, and TTEthernet~\cite{steiner2008ttethernet},
+to provide latency and bandwidth guarantees~\cite{lee2018real}. When this CPS
+interacts with the public Internet and packets need to traverse the wide area
+network, the guarantees are no longer possible.
 
 \subsubsection{Swarm and Ubicomp}
 \label{sec:swarm-wsn}
