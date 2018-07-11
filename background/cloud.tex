@@ -9,51 +9,37 @@ pay-as-you-go manner, such as Amazon Web Services, Google AppEngine, and
 Microsoft Azure. In this way, the cloud offers a number of advantages over
 traditional IT approaches.
 
-\para{The cloud eliminates up-front cost and simplified resource
-  management}. Cloud users can start small and only increase their resource
-usages when the demand increases. This is also useful for specialized computing
-resources, such as GPUs, TPUs and FPGA.
+\begin{enumerate}
+\item \textbf{Cost.} The cloud eliminates up-front capital expenses and resource
+  management. Cloud users can focus on their application logic without hiring IT
+  experts to manage on-site datacenters. These time-consuming IT chores include
+  provisioning, physical configuration, hardware upgrades, software patching,
+  etc.
 
-\para{The cloud offers an illusion of infinite resources on demand}.
+\item \textbf{Elasticity.} The cloud offers an illusion of infinite resources on
+  demand. It allows cloud users to start small and increase their resources with
+  the demand growth. Cloud users do not need to plan far ahead for provisioning
+  and can request the right amount of resources when they are needed. They can
+  also request specialized hardware resources, such as FPGA, GPU, and TPU.
 
-This eliminates the need for cloud users to plan far ahead for provisioning. The
-elimination of an up-front commitment by Cloud users, thereby allowing companies
-to start small and increase hardware resources only when there is an increase in
-their needs.
+\item \textbf{Utilization.} The pay-as-you-go model incentives users to release
+  the resources that are no longer needed. As a result, these resources can be
+  reused. Taking advantage of statistical multiplexing, the cloud can greatly
+  improve resource utilization.
 
-\para{Pay-as-you-go model benefits both users and providers}.  Users are
-rewarded to release the resources that are no longer needed. As a result, the
-cloud provider can reuse the resources, improving the utilization.
+\item \textbf{Availability.} The cloud facilitates data availability and
+  sharing. All end users can access the services ``anytime, anywhere'', making
+  collaboration seamless. In addition, the cloud keeps the data safe and durable
+  (with backups, disaster recovery).
 
-\para{The cloud facilitates data availability and sharing.} End users can access
-the service ``anytime, anywhere'', share data and collaborate more easily, and
-keep their data stored safely in the infrastructure
+\end{enumerate}
 
-Because of the aforementioned benefits, cloud computing has shaped the software
-industry and made the development and deployment of web services easier than
-ever. It has become the \textit{de facto} central piece around which modern web
-applications are constructed. The trend of migrating computation, storage and
-services to the cloud is evident. Taking Amazon S3 as an example, over two
-trillion objects were reported stored in the system back as of April
-2013~\cite{barr2013amazon}.
-
-Riding on this popularity of the cloud, many of today's IoT solutions arise by
-connecting embedded platforms to the cloud as a universal computation and
-storage backend. This approach has been taken by both industrial efforts (such
-as Carriots~\cite{carriots}, GroveStreams~\cite{grovestreams}, SAMI~\cite{sami},
-Xively~\cite{xively}) and academic research~\cite{gupta2014bolt,
-  zachariah1001internet}. For example, Bolt~\cite{gupta2014bolt} provides data
-management for the Lab of Things (LoT)~\cite{brush2013lab} and uses Amazon S3 or
-Azure for data storage. Such direct connections often require an application
-gateway~\cite{zachariah1001internet} to support low-power wireless
-communications such as Z-Wave or Bluetooth Low Energy (BLE).
-
-The IoT industry has benefited hugely from the economic model of the cloud.
-With little investment in infrastructure, even novice users can start collecting
-sensor data and streaming it back to the cloud~\cite{armbrust2010view}.  Several
-IoT cloud platforms~\cite{carriots, grovestreams, xively, sami} have gone
-further by offering easy-to-use APIs, data processing, visualization, and sample
-code for various hardware platforms.
+Because of these benefits, cloud computing has shaped the software industry and
+made the development and deployment of web services easier than ever. It has
+become the \textit{de facto} central piece around which modern web applications
+are constructed. The trend of migrating computation, storage and services to the
+cloud is evident. Taking Amazon S3 as an example, over two trillion objects were
+reported stored in the system back as of April 2013~\cite{barr2013amazon}.
 
 %%% Local Variables:
 %%% mode: latex

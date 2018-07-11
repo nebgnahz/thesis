@@ -1,21 +1,31 @@
 \section{The Cloud is Not Enough}
 \label{sec:cloud-not-enough}
 
-On the ``thing'' side, hardware platforms such as Arduino~\cite{arduino},
-Raspberry Pi~\cite{rpi}, and BeagleBone Black~\cite{bbb} have allowed easy and
-cheap prototyping for customized IoT applications.  Companies~\cite{ninja,
-  smartthings, wink} in this space offer complete solutions including hardware
-gateways, smartphone applications, web portals and cloud storage.
+Riding on this popularity of the cloud, many of today's IoT solutions arise by
+connecting embedded platforms to the cloud as a universal computation and
+storage backend. This approach has been taken by both industrial efforts (such
+as Carriots~\cite{carriots}, GroveStreams~\cite{grovestreams}, SAMI~\cite{sami},
+Xively~\cite{xively}) and academic research~\cite{gupta2014bolt,
+  zachariah1001internet}. For example, Bolt~\cite{gupta2014bolt} provides data
+management for the Lab of Things (LoT)~\cite{brush2013lab} and uses Amazon S3 or
+Azure for data storage. Such direct connections often require an application
+gateway~\cite{zachariah1001internet} to support low-power wireless
+communications such as Z-Wave or Bluetooth Low Energy (BLE).
 
-With this blizzard of activity, the current trend seems to be that all
-peripherals, including sensors and actuators, communicate directly with the
-cloud and interact with each other through web services~\cite{lee2014swarm}.  At
-first glance, this seems to be a natural architecture for IoT applications.
-However, several significant problems with this approach are revealed on closer
-inspection, including issues with privacy, security, scalability, latency,
-bandwidth and availability.  While these problems are not new to typical web
-applications, they are exacerbated in the IoT space because of fundamental
-differences between IoT and web services. The reasoning is as follows:
+The IoT industry has benefited hugely from the economic model of the cloud.
+With little investment in infrastructure, even novice users can start collecting
+sensor data and streaming it back to the cloud~\cite{armbrust2010view}.  Several
+IoT cloud platforms~\cite{carriots, grovestreams, xively, sami} have gone
+further by offering easy-to-use APIs, data processing, visualization, and sample
+code for various hardware platforms.
+
+At first glance, directly using the cloud seems to be a natural architecture for
+swarm applications. However, several significant problems with this approach are
+revealed on closer inspection, including issues with privacy, security,
+scalability, latency, bandwidth and availability.  While these problems are not
+new to typical web applications, they are exacerbated in the swarm space because
+of fundamental differences between swarm and web services. Our reasoning is as
+follows:
 
 \begin{table}
   \centering
