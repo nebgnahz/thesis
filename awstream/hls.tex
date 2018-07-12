@@ -62,7 +62,8 @@ plays/computes. In \awstream{}, the client generates videos and pushes frames to
 the server; the server performs video analytics.
 
 \vspace{0.5em}
-\para{Why HLS/DASH is a poor match for video analytics?} It's hard to achieve
+
+\para{Why HLS/DASH is a poor match for video analytics?} It is hard to achieve
 ultra low latency using HLS/DASH: (1) HLS/DASH is pull-based: the client keeps
 requesting for new chunks; (2) HLS/DASH uses chunking: shorter chunks enable a
 lower latency, but induce a larger number of requests, and the chunk has to be

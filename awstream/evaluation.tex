@@ -23,6 +23,15 @@ as follows.
 \subsection{Application Profiles}
 \label{sec:application-profiles}
 
+We run offline profiling using the training dataset described
+in~\autoref{tab:apps} and show the learned profiles in
+\autoref{fig:all-profiles}. In each figure, the cross dots represent the
+bandwidth demand and application accuracy for one configuration. We highlight
+the Pareto-optimal boundary $\mathbb{P}$ with blue dashed lines. To understand
+each dimension's impact on the degradation, we highlight configurations from
+tuning only \textit{one} dimension. From these profiles, we make the following
+observations:
+
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.45\textwidth}
@@ -52,15 +61,6 @@ as follows.
     x-axis is in log scale.}
   \label{fig:all-profiles}
 \end{figure}
-
-We run offline profiling using the training dataset described
-in~\autoref{tab:apps} and show the learned profiles in
-\autoref{fig:all-profiles}. In each figure, the cross dots represent the
-bandwidth demand and application accuracy for one configuration. We highlight
-the Pareto-optimal boundary $\mathbb{P}$ with blue dashed lines. To understand
-each dimension's impact on the degradation, we highlight configurations from
-tuning only \textit{one} dimension. From these profiles, we make the following
-observations:
 
 \para{Large bandwidth variation.} For all three applications, The bandwidth
 requirements of all three applications have two to three orders of magnitude of
@@ -171,29 +171,29 @@ profiling less often (only two full profiling). It is an 8.7$\times$ gain.
 
 \begin{figure}
   \centering
-  \begin{subfigure}[t]{0.45\columnwidth}
+  \begin{subfigure}[t]{0.5\columnwidth}
     \centering
-    \includegraphics[width=\textwidth]{figures/online1.pdf}
+    \includegraphics[width=0.85\textwidth]{figures/online1.pdf}
     \caption{Offline only}
     \label{fig:offline}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.45\columnwidth}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\columnwidth}
     \centering
-    \includegraphics[width=\textwidth]{figures/online2.pdf}
+    \includegraphics[width=0.85\textwidth]{figures/online2.pdf}
     \caption{Online (continuous)}
     \label{fig:online}
   \end{subfigure}
   \\
   \vspace{0.5em}
-  \begin{subfigure}[t]{0.45\columnwidth}
-    \includegraphics[width=\textwidth]{figures/online3.pdf}
+  \begin{subfigure}[t]{0.5\columnwidth}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/online3.pdf}
     \caption{Partial data}
     \label{fig:online-partial}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.45\columnwidth}
-    \includegraphics[width=\textwidth]{figures/online4.pdf}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\columnwidth}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/online4.pdf}
     \caption{Partial configurations}
     \label{fig:online-trigger}
   \end{subfigure}
@@ -205,7 +205,6 @@ profiling less often (only two full profiling). It is an 8.7$\times$ gain.
     predictions since in all schemes \awstream{} finds configurations that
     achieve similarly high accuracy (\textasciitilde 90\%).  }
   \label{fig:online-tricks}
-  \vspace{-0.5em}
 \end{figure}
 
 \begin{table}[t]
@@ -243,29 +242,6 @@ profiling techniques.
 
 \subsection{Runtime Adaptation}
 \label{sec:runtime-adaptation}
-
-\begin{figure}
-  \begin{subfigure}[t]{\textwidth}
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/runtime_darknet-timeseries.pdf}
-    \caption{Time-series plot of the runtime behaviors: throughput (top),
-      showing the effect of bandwidth shaping; latency (middle) in log scale;
-      and accuracy (bottom). Overlapped lines may be hard to read; we present
-      the same results in \autoref{fig:ar-runtime-boxplot} for clarity.}
-    \label{fig:ar-runtime-timeseries}
-  \end{subfigure}
-  \vspace{1em}
-  \\
-  \begin{subfigure}[t]{\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/runtime_darknet-boxplot.pdf}
-    \caption{Latency and accuracy during the traffic shaping (t=200s--440s).}
-    \label{fig:ar-runtime-boxplot}
-  \end{subfigure}
-  \caption{For AR, \awstream{} simultaneously achieves low latency and high
-    accuracy (accuracy has a smaller variation).}
-  \label{fig:ar-runtime}
-\end{figure}
 
 In this section, we evaluate the runtime performance by controlling bandwidth
 across geo-distributed sites and compare \awstream{} with baselines including
@@ -331,6 +307,33 @@ configuration to match available bandwidth while JetStream employs a
 latency-based measure of capacity ratio; $(ii)$ \awstream{} has an explicit probe
 phase while JetStream changes its policy immediately after capacity ratio
 changes.
+
+
+\captionsetup[subfigure]{justification=justified, singlelinecheck=true}
+
+\begin{figure}
+  \begin{subfigure}[t]{\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/runtime_darknet-timeseries.pdf}
+    \caption{Time-series plot of the runtime behaviors: throughput (top),
+      showing the effect of bandwidth shaping; latency (middle) in log scale;
+      and accuracy (bottom). Overlapped lines may be hard to read; we present
+      the same results in \autoref{fig:ar-runtime-boxplot} for clarity.}
+    \label{fig:ar-runtime-timeseries}
+  \end{subfigure}
+  \vspace{2em}
+  \\
+  \begin{subfigure}[t]{\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/runtime_darknet-boxplot.pdf}
+    \caption{Latency and accuracy during the traffic shaping (t=200s--440s).}
+    \label{fig:ar-runtime-boxplot}
+  \end{subfigure}
+  \caption{For AR, \awstream{} simultaneously achieves low latency and high
+    accuracy (accuracy has a smaller variation in comparison with other
+    baselines).}
+  \label{fig:ar-runtime}
+\end{figure}
 
 \para{Results.} \autoref{fig:ar-runtime-timeseries} shows the runtime behavior
 of \awstream{} and all baselines in time series. \autoref{fig:ar-runtime-boxplot}
@@ -440,8 +443,7 @@ between fidelity and freshness.\footnote{We obtain \autoref{fig:intro}'s
 
 \begin{figure}
   \centering
-  \begin{subfigure}[t]{\textwidth}
-    \captionsetup[subfigure]{aboveskip=-1em}
+  \begin{subfigure}[t]{0.85\textwidth}
     \includegraphics[width=\textwidth]{figures/runtime_mot-boxplot.pdf}
     \begin{picture}(0,0)
       \put(-10, 150){\parbox{2cm}{\centering \caption{PD}\label{fig:pd-runtime}}}
@@ -449,17 +451,15 @@ between fidelity and freshness.\footnote{We obtain \autoref{fig:intro}'s
   \end{subfigure}
   \\
   \vspace{1em}
-  \begin{subfigure}[t]{\textwidth}
+  \begin{subfigure}[t]{0.85\textwidth}
     \includegraphics[width=\textwidth]{figures/runtime_tk-boxplot.pdf}
     \begin{picture}(0,0)
       \put(-10, 90){\parbox{2cm}{\centering \caption{TK}\label{fig:tk-runtime}}}
     \end{picture}
   \end{subfigure}
-  \vspace{-1em}
   \caption{PD and TK performance summary. Box plot shows latency and accuracy
     during the traffic shaping (i.e.,~t=200s-440s).}
   \label{fig:pd-tk}
-  \vspace{-1em}
 \end{figure}
 
 % \begin{figure}[t]
@@ -553,7 +553,8 @@ distribution where the variation is 10\% (e.g.,~$250\pm 25\text{ms}$).
 
 \begin{figure}
   \centering
-  \includegraphics[width=.8\columnwidth]{figures/runtime_darknet-bench.pdf}
+  \includegraphics[width=.7\columnwidth]{figures/runtime_darknet-bench.pdf}
+  \vspace{0.5em}
   \caption{\awstream{} maintains low latency and high accuracy under different
     network delay conditions.}
   \label{fig:ar-rtt}
