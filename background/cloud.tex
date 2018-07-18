@@ -12,34 +12,43 @@ traditional IT approaches.
 \begin{enumerate}
 \item \textbf{Cost.} The cloud eliminates up-front capital expenses and resource
   management. Cloud users can focus on their application logic without hiring IT
-  experts to manage on-site datacenters. These time-consuming IT chores include
-  provisioning, physical configuration, hardware upgrades, software patching,
-  etc.
+  experts to manage on-site datacenters. It saves cloud users many
+  time-consuming IT chores, including provisioning, physical configuration,
+  hardware upgrades, software patching, etc.
 
 \item \textbf{Elasticity.} The cloud offers an illusion of infinite resources on
-  demand. It allows cloud users to start small and increase their resources with
-  the demand growth. Cloud users do not need to plan far ahead for provisioning
-  and can request the right amount of resources when they are needed. They can
-  also request specialized hardware resources, such as FPGA, GPU, and TPU.
+  demand. It allows cloud users to start small without planning far ahead. Cloud
+  users can increase their resources when the demand grows and decrease to
+  reduce costs. They can also request specialized hardware resources, such as
+  FPGA, GPU, and TPU~\cite{abadi2016tensorflow}.
 
 \item \textbf{Utilization.} The pay-as-you-go model incentives users to release
   the resources that are no longer needed. As a result, these resources can be
-  reused. Taking advantage of statistical multiplexing, the cloud can greatly
-  improve resource utilization.
+  reused by cloud providers. Taking advantage of statistical multiplexing, the
+  cloud can greatly improve resource utilization.
 
 \item \textbf{Availability.} The cloud facilitates data availability and
   sharing. All end users can access the services ``anytime, anywhere'', making
   collaboration seamless. In addition, the cloud keeps the data safe and durable
-  (with backups, disaster recovery).
+  (with backups and disaster recovery).
 
 \end{enumerate}
 
 Because of these benefits, cloud computing has shaped the software industry and
 made the development and deployment of web services easier than ever. It has
 become the \textit{de facto} central piece around which modern web applications
-are constructed. The trend of migrating computation, storage and services to the
-cloud is evident. Taking Amazon S3 as an example, over two trillion objects were
-reported stored in the system back as of April 2013~\cite{barr2013amazon}.
+are constructed.
+
+Riding on this popularity of the cloud, many of today's solutions for the swarm
+and IoT arise by connecting embedded platforms to the cloud as a universal
+computation and storage backend. Many companies have taken this approach, such
+as Carriots~\cite{carriots}, GroveStreams~\cite{grovestreams}, SAMI~\cite{sami},
+Xively~\cite{xively}. They offer easy-to-use APIs, data processing,
+visualization, and sample code for various hardware platforms. On the other
+hand, academic research also explores what the cloud can
+offer~\cite{gupta2014bolt, zachariah1001internet}.  For example,
+Bolt~\cite{gupta2014bolt} provides data management for the Lab of Things
+(LoT)~\cite{brush2013lab} and uses Amazon S3 or Azure for data storage.
 
 %%% Local Variables:
 %%% mode: latex

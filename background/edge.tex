@@ -2,11 +2,12 @@
 \label{sec:edge-computing}
 
 The edge represents a new tier of infrastructure envisioned to address some of
-the pitfalls with the cloud for IoT applications. Cisco named it ``the fog''
-because the fog is a cloud close to the ground~\cite{bonomi2012fog}. CMU chose
-``cloudlet'' to indicate this small-scale cloud datacenter~\cite{ha2014towards,
-  satyanarayanan2009case}. At Berkeley, we use ``swarmbox'' to name the hardware
-platform that accompanies swarm devices. Both Smartphones and Mini PCs mentioned
+the pitfalls with the cloud for IoT applications. Cisco named it \textit{the
+  fog} because the fog is a cloud close to the ground~\cite{bonomi2012fog}. CMU
+chose \textit{cloudlet} to indicate this small-scale cloud
+datacenter~\cite{ha2014towards, satyanarayanan2009case}. At Berkeley, we use
+\textit{swarmbox} to name the hardware platform that accompanies swarm
+devices. Both Smartphones and Mini PCs mentioned
 in~\autoref{sec:swarm-platforms} can act as edge computing platforms. Other edge
 computing infrastructure may be provided by carriers, hosted in central
 offices\footnote{Often, a central office is defined as a building used to house
@@ -15,10 +16,10 @@ offices\footnote{Often, a central office is defined as a building used to house
 
 One common form of the edge computers are gateways. Many gateways provide
 application-specific connectivity for IoT devices to interact with the Internet,
-bridging low-power communication protocols such as BLE, 802.15.4 to IP. Even
-when devices can utilize more standard communication protocols such as WiFi, the
+bridging low-power communication protocols such as BLE/802.15.4 to IP. Even when
+devices can utilize more standard communication protocols such as WiFi, the
 gateways still exist as downloadable applications that run on cellphones or
-computers, providing services or user interfaces.
+computers, providing custom services or user interfaces.
 
 \begin{figure}
   \centering
@@ -30,10 +31,11 @@ computers, providing services or user interfaces.
 \autoref{fig:edge} illustrates the characteristics of the three-tier
 architecture. The edge is much more powerful than end devices but less so
 compared with the highly-centralized cloud. The edge serves a local area, such
-as homes, buildings, or a city, therefore, it has some moderate workload. The
-main benefit comes from the location of edge computers: it sits in the middle
+as homes, buildings, or a city. As a result, it has moderate workload. The main
+benefit of edge computers comes from the prime location: it sits in the middle
 between IoT/mobile devices and the cloud. Applications built with the edge can
-reduce network latency, keeps data local, and tolerate cloud service outage.
+reduce network latency, keep data/information local, and tolerate cloud service
+outage.
 
 Researcher have begun to explore the benefit of edge platforms. For example, Kim
 proposes an approach that leverages the edge computers as locally centralized
@@ -59,6 +61,10 @@ heterogeneous capabilities. The cloud, with its elasticity, offers the illusion
 of infinite compute resources. The edge, on the other hand, can be limited. and
 there are practical issues such as the budget. As we mentioned in
 \autoref{tab:embedded}, the swarm has a wide spectrum of devices.
+
+the edge is resource constrained and it is unclear what capabilities we can
+expect from the edge. As a result, swarm applications relying on the edge need
+to take the heterogeneous landscape into account.
 
 % Researchers adopt a similar approach (e.g., HomeHub for the
 % LoT~\cite{brush2013lab}).

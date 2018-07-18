@@ -23,34 +23,34 @@ Smart devices are everywhere: \href{http://ilumi.co/}{light bulb},
   vehicle}, and
 \href{http://www.samsung.com/us/appliances/refrigerators/RF28HMELBSR/AA}{refrigerator}.\footnote{Courtesy
   of Prof.\,Randy Katz.} Capable of computation and communication, they monitor
-and interact with the physical world.  The growth of number of devices is
+and interact with the physical world.  The growth of the number of devices is
 staggering: analysts predicted 26 billion devices by 2020 and trillion by
 2022~\cite{middleton2013forecast}.
 
 We refer to the collection of sensors and actuators installed in our environment
-as the ``Swarm'', a term coined by Jan Rabaey during a keynote talk at ASPDAC
+as the ``swarm'', a term coined by Jan Rabaey in a keynote talk at ASPDAC
 2008~\cite{rabaey2008brand}. This term well characterizes where the potentials
 lie: it is not in the individual components, but rather the scale and the number
-of interconnected devices, a shift from Moore's Law\footnote{The number of
-  transistors on a chip doubles about every two years at the same cost.} to
+of interconnected devices. This is a shift from Moore's Law\footnote{The number
+  of transistors on a chip doubles about every two years at the same cost.} to
 Metcalfe's Law.\footnote{The effect of a telecommunications network is
   proportional to the square of the number of connected users of the system,
   i.e., $n^2$.}
 
 At Berkeley, the Qualcomm Ubiquitous Swarm Lab~\cite{swarmlab} and Terraswarm
 Research Center~\cite{terraswarm} were launched to address the huge potentials
-and challenges for Swarm systems in December 2011 and January 2013,
+and challenges for swarm applications in December 2011 and January 2013,
 respectively. Outside of Berkeley, this trend is also gaining attraction,
-although the names can be different: Internet of Things
+although the names are different: Internet of Things
 (IoT)~\cite{atzori2010internet}, Internet of Everything
 (IoE)~\cite{bradley2013internet}, Industry 4.0~\cite{lasi2014industry}, The
 Industrial Internet~\cite{eigner2018industrial}, Trillion Sensors
 (TSensors)~\cite{bogue2014towards}, Machine to Machine
 (M2M)~\cite{anton2014machine}, Smarter Planet~\cite{palmisano2008smarter}, etc.
 
-Due to the widespread use of ``IoT'' outside of Berkeley, we use ``IoT'' and
-``swarm'' interchangeably throughout this thesis. However, ``swarm'' is
-preferred, because, quoting Lee~\cite{lee2016iot},
+Due to the widespread use of ``IoT'', we use ``IoT'' and ``swarm''
+interchangeably in this manuscript. However, ``swarm'' is preferred as Lee puts
+it~\cite{lee2016iot},
 
 \begin{displayquote}
   The term ``IoT'' includes the technical solution ``Internet technology'' in
@@ -61,14 +61,15 @@ preferred, because, quoting Lee~\cite{lee2016iot},
 \label{sec:swarm-applications}
 
 With billions of devices interconnected, the swarm makes a large number of
-applications possible. A previous survey by Atzori et al.\, groups applications
-based on their domains: 1) transportation and logistics; 2) health-care domain;
-3) smart environment (home, office, plant); 4) personal and
-social~\cite{atzori2010internet}. We characterize the applications based on the
-usage pattern. In this way, it is easier to analyze application requirements and
-understand implications for system support. We characterize swarm applications
-into two general categories.\footnote{Note that these two categories are not
-  exclusive to each other. Some applications may fall into both.}
+applications possible. A previous survey by Atzori et
+al.~\cite{atzori2010internet} groups applications based on their domains: 1)
+transportation and logistics; 2) health care; 3) smart environment (home,
+office, plant); 4) personal and social. We characterize the applications based
+on the usage pattern. In this way, it is easier to analyze application
+requirements and understand implications for the underlying system support. We
+group swarm applications into two general categories.\footnote{Note that these
+  two categories are not exclusive to each other. Some applications may fall
+  into both.}
 
 \subsubsection{Ambient Data Collection and Analytics}
 \label{sec:ambi-data-coll}
@@ -80,28 +81,29 @@ homes~\cite{hnat2011hitchhiker}, and individuals (also referred to as Quantified
 Self)~\cite{fitbit, swan2013quantified}. Because of the close interaction with
 our environment, these applications often have a direct impact on our everyday
 life and can help solve societal-scale problems. For example, in metropolitan
-cities in developing countries, such as Beijing, the air quality has
+cities of developing countries, such as Beijing, the air quality has
 deteriorated significantly. Air quality monitoring with fine granularity can
 advise people with appropriate actions such as wearing masks or stay at
 home~\cite{cheng2014aircloud}.
 
 Many environmental sensors are collecting data about physical properties that
 are intrinsically slow-changing, such as the occupancy, temperature, humidity,
-etc. As a result, these sensors sample at low frequency (millihertz, i.e.,
-slower than 1 Hz). For example, in a campus-wide building instrumentation that
-aims to reduce energy usage~\cite{krioukov2012building}, there are 2,151
-\href{http://www.keti.re.kr/}{KETI Motes}---463 \ce{CO2} sensors, 466 humidity
+etc. As a result, these sensors sample at a low frequency, often millihertz,
+i.e., slower than 1 Hz. For example, in a campus-wide building instrumentation
+that aims to reduce energy usage~\cite{krioukov2012building}, there are 2,151
+\href{http://www.keti.re.kr/}{KETI Motes}: 463 \ce{CO2} sensors, 466 humidity
 sensors, 26 illumination sensors, 440 light sensors, 290 PIR (passive infrared)
-sensor, and 466 temperature sensors---configured to report data every five
-seconds. For the air quality monitoring mentioned
+sensor, and 466 temperature sensors. Despite the large scale, they are
+configured to report data only every five seconds, yielding low bandwidth
+traffic. For the air quality monitoring mentioned
 above~\cite{cheng2014aircloud}, the sensors only sample once a minute.
 
 On the other hand, we are seeing high-frequency, high-precision sensors being
-deployed at scale as technology evolves and applications' requirement
-changes. For example, energy disaggregation takes a whole building's aggregated
+deployed at scale as technology evolves and applications' requirements
+change. For example, energy disaggregation takes a whole building's aggregated
 energy signal and separates it into appliance-specific data. Recent works start
 to sample at 15 kHz or higher to analyze the harmonics to identify type of
-electrical circuitry in appliance~\cite{kolter2011redd} with a higher
+electrical circuitry in appliance~\cite{kolter2011redd} for a higher
 accuracy. This contrasts with prior approaches using low sampling rates and only
 relying on state changes~\cite{hart1992nonintrusive}.
 
@@ -117,7 +119,7 @@ existing ways of data storage and analysis. For example, microsynchophasors, or
 uPMUs, monitor the electrical grid with a network of 1000 devices; each produces
 12 streams of 120 Hz high-precision values accurate to 100 ns. This amounts to
 1.4 million points per second and requires specialized storage systems for
-time-series analysis~\cite{andersen2016btrdb}.
+efficient time-series analysis~\cite{andersen2016btrdb}.
 
 At last, because the collected data can be related with personal health or
 manufacture's operation status, many of these applications have serious privacy
@@ -127,7 +129,7 @@ implications.
 \label{sec:inter-low-latency}
 
 Interactive applications that involve humans in the loop require a low latency
-response to engage the users. For example, Wearable cognitive
+response to engage the users. For example, wearable cognitive
 assistant~\cite{chen2018application} uses wearable devices, such as Google
 Glass, for deep cognitive assistance (e.g., offering hints for social
 interaction via real-time scene analysis). A general rule of thumb for systems
@@ -137,24 +139,25 @@ ms~\cite{miller1968response, nielsen1994usability}.
 In autonomous systems where humans are not involved, a tight control over
 latency is important for proper and deterministic
 behavior~\cite{eidson2012distributed}, especially when it involves a group or
-feedback control. Schulz et al.~\cite{schulz2017latency} summarizes several
+feedback control. Schulz et al.~\cite{schulz2017latency} have summarized several
 latency critical uses, including factory automation, smart grids, intelligent
 transport systems, etc.
 
 Satisfying applications' tight latency requirements is challenging. Timing
 behavior in software execution emerges from implementations rather than
-specifications~\cite{lee2018real}. The goal for timing is often to speed up some
-execution, but not to provide guaranteed and repeatable timing. Similarly, the
-Internet provides ``best-effort'' service and fails to provide quality of
-service (QoS) guarantees~\cite{shenker1995fundamental}. The situation is
-becoming worse as swarm applications become more complex and generate large
-amount of data.
+specifications~\cite{lee2018real}. The goal for timing in general software
+development is often to speed up some execution, rather than providing
+guaranteed and repeatable timing. When it comes to the network, the Internet
+provides ``best-effort'' service and has little quality of service (QoS)
+guarantees~\cite{shenker1995fundamental}. The situation can become worse as
+swarm applications become more complex and generate large amount of data.
 
 \subsection{Heterogeneous Swarm Platforms}
 \label{sec:swarm-platforms}
 
 There has been a dizzying array of embedded platforms, from powerful computing
-units to low-power microcontrollers (see \autoref{tab:embedded}).
+units to low-power microcontrollers (see \autoref{tab:embedded}). We discuss
+three categories below.
 
 \subsubsection{Microcontrollers}
 
@@ -164,8 +167,8 @@ platforms appear on crowdfunding websites~\cite{kickstarter}.  With an
 ecosystems featuring great support and libraries (e.g., Adafruit Online
 Tutorials~\cite{adafruit}), people can easily add new sensors/actuators and
 develop applications. These platforms have unleashed the creativity of millions
-in building smart and interactive devices, spawning the Maker
-Movement~\cite{dougherty2012maker}.
+in building smart and interactive devices, spawning the \textit{Maker
+  Movement}~\cite{dougherty2012maker}.
 
 \subsubsection{Smartphones}
 
@@ -173,7 +176,7 @@ As a key enabler for mobile computing, smartphones have become ubiquitous. They
 are equipped with an impressive set of sensors, including accelerometer,
 gyroscope, proximity sensor, camera, microphone, etc. The processors and
 displays on smartphones keep upgrading. In addition to use smartphones alone,
-many companies (like Fitbit~\cite{fitbit} or Automatic~\cite{automatic}) use
+many companies, such as Fitbit~\cite{fitbit} and Automatic~\cite{automatic}, use
 smartphones as gateways to connect low-power devices to the Internet via
 Bluetooth. Creative use of smartphones is also a hot topic in research,
 including reusing discarded smartphones~\cite{challen2014mote}, writing new
@@ -183,8 +186,8 @@ applications~\cite{hong2014smartphone}.
 \subsubsection{Mini PCs}
 
 Ranging from powerful Intel Next Unit of Computing (NUC) to inexpensive
-Raspberry Pi, BeagleBone Black, these devices typically run various versions of
-Linux to simplify application deployment. Many companies~\cite{ninja,
+Raspberry Pi and BeagleBone Black, these devices typically run various versions
+of Linux to simplify application deployment. Many companies~\cite{ninja,
   smartthings, wink} adopt these mini PCs with all kinds of networking
 capabilities---802.15.4, Bluetooth, WiFi, Ethernet---as their gateway devices.
 In contrast to using smartphones as gateways, mini PCs serve as nearby
@@ -198,7 +201,7 @@ always-available infrastructure---the ``immobiles.''~\cite{swarmbox}.
     \midrule
     Intel NUC & 1.3 GHz & 16 GB & \texttildelow\$300 \\
     Typical Phones & 2 GHz & 2 GB & \texttildelow\$300 \\
-    Discarded Phones\tablefootnote{This data is from \cite{challen2014mote}, where the
+    Discarded Phones\tablefootnote{This data is from Challen et al.~\cite{challen2014mote}, where the
     original authors noted ``Customer buyback price quoted by Sprint for a
     smartphone in good condition.''}
            & 1 GHz & 512 MB & \texttildelow\$22 \\
@@ -235,25 +238,26 @@ At first glance, the swarm may seem similar to other concepts such as wireless
 sensor network (WSN), cyber-physical systems (CPS), and ubiquitous computing
 (Ubicomp). These concepts all reflect a vision of how technology can affect our
 lives if they become deeply connected to the physical world: through large scale
-sensing, sense-compute-actuate, and pervasive computing. In this section, we
-will show the difference with side-by-side comparisons. We argue that the swarm
+sensing (WSN), sense-compute-actuate (CPS), and pervasive computing
+(Ubicomp). In this section, we will show the difference and argue that the swarm
 has its fundamental differences and new challenges to address.
 
 \subsubsection{Swarm and WSN}
 \label{sec:swarm-wsn}
 
-In the 1990s, ``Smart Dust''~\cite{kahn1999next} envisions wireless sensor nodes
-with a volume of one cubic millimeter that can sense, communicate and
+In the 1990s, \textit{Smart Dust}~\cite{kahn1999next} envisions wireless sensor
+nodes with a volume of one cubic millimeter that can sense, communicate and
 compute. Being so small, these devices can then be spread through our
 environment and enhance our interaction with the physical world. This vision
 quickly leads to deploying a group of spatially dispersed and dedicated wireless
-sensors---a wireless sensor network---to monitor and record the physical
-conditions of the environment
+sensors to form a network, monitoring and recording the physical conditions of
+the environment.
 
-WSNs offer the potential to dramatically advance scientific fields or extracting
-engineering insights with dense temporal and spatial measurements. Without
-exhaustively listing the rich literature~\cite{akyildiz2002wireless,
-  zhao2009wireless}, we show a few notable deployments as follows,
+Such wireless sensor networks (WSNs) offer the potential to dramatically advance
+scientific fields or extracting engineering insights with dense temporal and
+spatial measurements. Without exhaustively listing the rich
+literature~\cite{akyildiz2002wireless, zhao2009wireless}, we show a few notable
+deployments as follows,
 
 \begin{itemize}[itemsep=5pt]
 \item \textbf{ZebraNet}~\cite{zhang2005habitat}. Zhang et al.\, deployed 7 nodes
@@ -340,14 +344,17 @@ environment. As a result, the swarm also needs to address timing and concurrency
 issues related with physical processes.
 
 While the swarm can reuse technologies and methodologies developed from decades
-of CPS research, its open architecture and the interoperability requirement with
-third-party services have made the challenges harder. For example, in a
-standalone CPS development, one can use specialized networks with synchronized
-clocks and time-division multiple access (TDMA), including CAN busses,
+of CPS research, its open architecture and the interoperability with third-party
+services have made the challenges more difficult. For example, in a standalone
+CPS development, one can use specialized networks with synchronized clocks and
+time-division multiple access (TDMA), including CAN busses,
 FlexRay~\cite{flexray2005flexray}, and TTEthernet~\cite{steiner2008ttethernet},
 to provide latency and bandwidth guarantees~\cite{lee2018real}. When this CPS
 interacts with the public Internet and packets need to traverse the wide area
-network, the guarantees are no longer possible.
+network, the guarantees are no longer possible. When swarm applications cannot
+change the underlying infrastructure due to its openness and interoperability,
+they can adapt to available resources. This thesis studies how to adapt swarm
+applications in depth.
 
 \subsubsection{Swarm and Ubicomp}
 \label{sec:swarm-wsn}
