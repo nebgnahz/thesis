@@ -7,17 +7,35 @@ because the fog is a cloud close to the ground~\cite{bonomi2012fog}. CMU chose
 ``cloudlet'' to indicate this small-scale cloud datacenter~\cite{ha2014towards,
   satyanarayanan2009case}. At Berkeley, we use ``swarmbox'' to name the hardware
 platform that accompanies swarm devices. Both Smartphones and Mini PCs mentioned
-in~\autoref{sec:swarm-platforms} can act as edge computing platforms. We may
-also expect compute infrastructure provided by carriers, such as central
+in~\autoref{sec:swarm-platforms} can act as edge computing platforms. Other edge
+computing infrastructure may be provided by carriers, hosted in central
 offices\footnote{Often, a central office is defined as a building used to house
   the inside plant equipment of potentially several telephone exchanges, each
-  serving a certain geographical area} or cell towers~\cite{att2017edge}.
+  serving a certain geographical area.} or cell towers~\cite{att2017edge}.
 
-As we illustrate in \autoref{fig:edge} The edge sits in the middle between
-mobile/IoT devices and the cloud in terms of compute power. It needs to handle a
-bit more workload, and incurs a slightly higher latency.
+One common form of the edge computers are gateways. Many gateways provide
+application-specific connectivity for IoT devices to interact with the Internet,
+bridging low-power communication protocols such as BLE, 802.15.4 to IP. Even
+when devices can utilize more standard communication protocols such as WiFi, the
+gateways still exist as downloadable applications that run on cellphones or
+computers, providing services or user interfaces.
 
-Researcher have begun exploring the benefit of edge platforms. For example, Kim
+\begin{figure}
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/background.pdf}
+  \caption{The characteristics of the mobile, the edge and the cloud.}
+  \label{fig:edge}
+\end{figure}
+
+\autoref{fig:edge} illustrates the characteristics of the three-tier
+architecture. The edge is much more powerful than end devices but less so
+compared with the highly-centralized cloud. The edge serves a local area, such
+as homes, buildings, or a city, therefore, it has some moderate workload. The
+main benefit comes from the location of edge computers: it sits in the middle
+between IoT/mobile devices and the cloud. Applications built with the edge can
+reduce network latency, keeps data local, and tolerate cloud service outage.
+
+Researcher have begun to explore the benefit of edge platforms. For example, Kim
 proposes an approach that leverages the edge computers as locally centralized
 points for authentication and authorization to address IoT
 security~\cite{kim2017securing}. Zhuo demonstrates how the edge infrastructure
@@ -27,27 +45,20 @@ that focuses around the distribution, preservation, and protection of
 information to address data privacy, scalability, durability,
 etc~\cite{mor2016toward}.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.85\textwidth]{figures/background.pdf}
-  \caption{Mobile, Edge and the Cloud}
-  \label{fig:edge}
-\end{figure}
-
-One form of the edge computers are gateways. Many gateways provide
-application-specific connectivity for IoT devices to the Internet, bridging
-low-power communication protocols such as BLE, 802.15.4 to IP. Even when devices
-can utilize more standard communication protocols such as WiFi, the gateways
-still exist as downloadable applications that run on cellphones or computers.
-
-While an open gateway architecture can bring the benefit of the edge
-computing~\cite{zachariah1001internet}., companies tend to provide their own
+While an open edge platform can realize these
+benefit~\cite{zachariah1001internet}, companies tend to provide their own
 gateways, such as Ninja Sphere~\cite{ninja}, SmartThings Hub~\cite{smartthings},
 Wink Hub~\cite{wink}. The fact that custom gateways are an integral part of
 swarm applications leads directly to ``stovepipe'' solutions or
 balkanization. Data and services from one company cannot be shared or utilized
 by devices from another company: connection protocols, data formats, and
 security mechanisms (when present) are proprietary and often undocumented.
+
+The other challenge that comes with the edge infrastructure is their
+heterogeneous capabilities. The cloud, with its elasticity, offers the illusion
+of infinite compute resources. The edge, on the other hand, can be limited. and
+there are practical issues such as the budget. As we mentioned in
+\autoref{tab:embedded}, the swarm has a wide spectrum of devices.
 
 % Researchers adopt a similar approach (e.g., HomeHub for the
 % LoT~\cite{brush2013lab}).
