@@ -54,20 +54,26 @@ Wink Hub~\cite{wink}. The fact that custom gateways are an integral part of
 swarm applications leads directly to ``stovepipe'' solutions or
 balkanization. Data and services from one company cannot be shared or utilized
 by devices from another company: connection protocols, data formats, and
-security mechanisms (when present) are proprietary and often undocumented.
+security mechanisms (when present) are proprietary and often undocumented. How
+to address the stovepipe issue is an active research topic. For example, Brooks
+et al. proposes a component-based software architecture named ``Accessors'',
+which proxies for services and things~\cite{brooks2018component}.
 
-The other challenge that comes with the edge infrastructure is their
-heterogeneous capabilities. The cloud, with its elasticity, offers the illusion
-of infinite compute resources. The edge, on the other hand, can be limited. and
-there are practical issues such as the budget. As we mentioned in
-\autoref{tab:embedded}, the swarm has a wide spectrum of devices.
+In addition to an open architecture, we also need to address the heterogeneous
+capabilities of the edge infrastructure. As mentioned in \autoref{tab:embedded},
+the swarm includes a wide spectrum of devices. It is unclear at development time
+about which specific device serves as the edge. It is also difficult to make
+changes to the edge, especially when it is a gateway. This is significantly from
+the cloud. With its elasticity, the cloud offers the illusion of infinite
+compute resources. Users can easily start another machine or even a GPU-enabled
+one for heavy computation instantly. For gateways, users will need to purchase
+additional devices or upgrade their existing ones: it easily takes hours or
+days.
 
-the edge is resource constrained and it is unclear what capabilities we can
-expect from the edge. As a result, swarm applications relying on the edge need
-to take the heterogeneous landscape into account.
-
-% Researchers adopt a similar approach (e.g., HomeHub for the
-% LoT~\cite{brush2013lab}).
+In summary, the edge offers a unique opportunity to compensate the
+cloud. However, to fully realize its potentials, we need to avoid stovepipe
+solutions and address challenges with the heterogeneous capabilities. This
+thesis will focus on the latter.
 
 %%% Local Variables:
 %%% mode: latex
