@@ -5,26 +5,27 @@
 \chapter{Compute Resource Adaptation}
 \label{cha:comp-reso-adapt}
 
-Many swarm applications rely on heavy computation tasks to finish within bounded
-deadlines. However, because there is a large discrepancy between the
-capabilities of swarm platforms and unpredictable network/service workload, it
-is challenging to achieve bounded response times.
+In this chapter, we focus on swarm applications that rely on heavy computation
+tasks and need to adapt to different computing resources. To create an engaging
+user experience, many swarm applications require bounded response times (e.g.,
+100 ms). However, there is a large discrepancy between the capabilities of swarm
+platforms and unpredictable network/service workload, it is challenging to
+achieve bounded response times.
 
-We observe that to achieve the same task, there are often more than one
-algorithms or the algorithm have configurable parameters. The combination of
-algorithms and parameters defines a large search space and affects the
-processing times and application accuracy.
-
-To achieve bounded response times (BRT), our stand is that applications must be
-able to adapt to available resource and select the right algorithm and the right
-parameter given the deadline.
+Our observation that to achieve the same task, there are often more than one
+options: different algorithms or different parameters for the same algorithm. To
+achieve bounded response times (BRT), we propose that applications must be able
+to adapt to available resource and select the right algorithm/parameter given
+the deadline.
 
 Achieving the adaptation is challenging due to the large parameter space and
 heterogeneous platforms with different capabilities. We address the performance
-modeling with two techniques: 1. We propose Bayesian Optimization (BO) for
-profiling. Previous approaches use random search or coordinate/greedy
-approach. 2. Heterogeneous capabilities (and not available when
-profiling). Profile transfer: refine existing Pareto-optimal points.
+modeling with two techniques: 1) For individual platform, the profiling uses
+Bayesian Optimization (BO), which, as we will demonstrate, outperforms previous
+approaches based on random search or coordinate/greedy approach. 2) To address
+heterogeneous capabilities, we use profile transfer that only refines existing
+Pareto-optimal points without doing performance modeling from scratch. We
+empirically validate our approaches with several computer vision tasks.
 
 \input{brt/intro}
 \input{brt/motivation}
