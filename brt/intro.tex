@@ -39,7 +39,7 @@ To compensate resource-constrained devices, prior work explores
 offloading~\cite{chun2011clonecloud,cuervo2010maui} to the cloud or the edge
 that hosts machine learning models and performs heavy computation. Despite their
 powerful computing capability and more available resources, e.g., special
-hardware like GPU and TPU~\cite{jouppi2017datacenter}, these platforms suffer
+hardware like GPU and TPU~\cite{jouppi2017datacenter}, these machines suffer
 from increased network latency and service overload (\autoref{fig:edge}). As a
 result, they are often unable to meet latency goals consistently.
 
@@ -58,9 +58,9 @@ result in different processing times and accuracy. If we can adapt the
 computation by choosing an option that matches the capability of the device, we
 can achieve bounded response times.
 
-The idea of adapting to platforms is illustrated in \autoref{fig:dr}. It builds
+The idea of adapting to machines is illustrated in \autoref{fig:dr}. It builds
 on top of redundancy but addresses (or leverages) the heterogeneity of swarm
-platforms.  On-device processing can use a simple algorithm if the device is
+devices.  On-device processing can use a simple algorithm if the device is
 resource constrained. The device also sends redundant requests to other servers,
 e.g., the edge and/or the cloud. Each request contains a service-level objective
 (SLO) that describes the deadline and accuracy demand. Upon receiving the
@@ -79,48 +79,44 @@ source. At last, the device would use the first response that completes.
 
 %% //////////////////////////////
 
-The key to enable adaptation, which is also the challenge, lies in building an
-accurate performance model that characterized the processing times and accuracy
-trade-off for a particular task.
+The key to enable adaptation lies in building an accurate performance model that
+characterized the processing times and accuracy trade-off for a particular
+task. We take a data-driven approach by measuring processing times and accuracy
+for a given set of training data. We call this process profiling and the
+resulting performance model is the profile.
+
+Efficient profiling is challenging given the large space formed by the
+combination of algorithms, parameters, and machines. (1) We need to profile each
+algorithms individually. (2) For the same algorithm, it may have huge parameter
+space. For example, cascading classifiers in computer vision tasks have
+configurable convolution window size, scale factor, and minimum neighbor for non
+maximum suppression. Exhaustive profiling this space is prohibitively expensive
+(see \autoref{fig:motiv-params}). (3) Profiling for all hardware platforms is
+not always feasible because of the many devices and their availability at
+development time.
+
+\todo{The rest of intro should be refined after writing the whole chapter.}
+
+In this chapter, we present \brt{}, a framework for performance modeling to
+enable compute adaptation. \brt{} uses programming language techniques to
+simplify application development and addresses the performance modeling via
+Bayesian Optimization (BO) and profile transfer.
 
 This adaptation technique is orthogonal to existing system solutions, such as
 scale-out, scale-up, caching, or batching. Because it is an application-aware
 approach, the adaptation requires knowledge from the application developer.
 
-Efficient profiling to find the performance model. In order to explore the
-trade-off space, we take a data-driven approach to learn the relationship
-between inference accuracy and processing times for each algorithm and different
-parameters for individual platforms. We call this process ``profiling'' and its
-goal is to find Pareto-optimal configurations (algorithm and parameter) as the
-performance model.
+\begin{enumerate}[leftmargin=*, topsep=5pt, itemsep=5pt]
+\item We use Bayesian Optimization (BO) for profiling on a single platform to
+  learn Pareto-optimal parameters. BO significantly outperforms previous
+  approaches, such as random search and coordinate/greedy approach.
+\item We propose to transfer profiles across machines. This is based on the
+  observation that the same algorithm and parameter will lead to the same
+  accuracy while the processing time is monotonic with the computing
+  power. Therefore, new machines only need to measure the processing times of
+  Pareto-optimal configurations.
+\end{enumerate}
 
-Profiling with an exhaustive search may not be feasible for some algorithms due
-to their large parameter space. In these cases, we use a statistical method,
-Bayesian Optimization (BO), to model the relationship as a black-box function
-and only searches for near-optimal configurations.
-
-Profiling for all hardware platforms is not feasible due to the large space and
-availability of the hardware at development time. We observe that the profile
-can be easily transferred across platforms with linear transformation.
-
-We make the following contributions in this chapter with \brt{}:
-
-\begin{itemize}
-
-\item The proposed Bayesian Optimization (BO) for profiling, significantly
-  outperforms previous approaches with random search or coordinate/greedy
-  approach.
-\item We empirically validate the profile transfer to address heterogeneous
-  capabilities across swarm platforms.
-
-\end{itemize}
-
-% \begin{figure*}
-%   \centering
-%   \includegraphics[width=\textwidth]{figures/platforms}
-%   \label{fig:options}
-%   \caption{Platforms}
-% \end{figure*}
 
 %%% Local Variables:
 %%% mode: latex
