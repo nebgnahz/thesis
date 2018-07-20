@@ -20,7 +20,7 @@ One important challenge for inference is to bound the response time, which
 affects user experience significantly in these human-in-the-loop
 systems. Previous usability studies~\cite{nielsen1994usability,
   schneiderman1998designing} have measured the effect of different end-to-end
-latency:
+latencies:
 
 \begin{itemize}[noitemsep, topsep=5pt]
 \item 100 ms gives the feeling of instantaneous response.
@@ -43,22 +43,31 @@ hardware like GPU and TPU~\cite{jouppi2017datacenter}, these platforms suffer
 from increased network latency and service overload (\autoref{fig:edge}). As a
 result, they are often unable to meet latency goals consistently.
 
-Another technique for low latency is to use redundant requests, effective for
-variability in network delays~\cite{gordon2015accelerating, vulimiri2013low} and
-slow servers (known as straggler mitigation in the cloud~\cite{dean2013tail,
-  ananthanarayanan2013effective}). Redundancy refers to initiating the multiple
-requests across a diverse set of resources and using the first result that
-completes. Existing work treats these resources equally and executes the same
-task on each platform, a poor match for the heterogeneous swarm space.
+Another technique for low latency is to use redundant requests. By initiating
+multiple requests across a diverse set of resources and using the first result
+that completes, redundancy is effective to address the variability in network
+delays~\cite{gordon2015accelerating, vulimiri2013low} and slow servers (known as
+straggler mitigation in the cloud~\cite{dean2013tail,
+  ananthanarayanan2013effective}). However, existing works treat these resources
+equally and executes the same task on each platform, a poor match for the
+heterogeneous swarm space.
 
+We make the observation that for a particular task, there are many options:
+different algorithms or tunable parameters for the same algorithm. These options
+result in different processing times and accuracy. If we can adapt the
+computation by choosing an option that matches the capability of the device, we
+can achieve bounded response times.
 
-%% //////////////////////////
-
-Our insight is that for a particular inference task, multiple algorithms or
-tunable parameters for one algorithm exist that requires different processing
-times and result in different accuracy. To accommodate the resource-constrained
-devices, one can use an algorithm or a parameter that suits the particular
-platform.
+The idea of adapting to platforms is illustrated in \autoref{fig:dr}. It builds
+on top of redundancy but addresses (or leverages) the heterogeneity of swarm
+platforms.  On-device processing can use a simple algorithm if the device is
+resource constrained. The device also sends redundant requests to other servers,
+e.g., the edge and/or the cloud. Each request contains a service-level objective
+(SLO) that describes the deadline and accuracy demand. Upon receiving the
+request, the server would admit or reject the request based on the network
+delays and its workload. Because of the redundancy, rejection is fine. This is
+different from traditional web serving where the server is the single point of
+source. At last, the device would use the first response that completes.
 
 \begin{figure}
   \centering
@@ -68,25 +77,15 @@ platform.
   \label{fig:dr}
 \end{figure}
 
-We propose to adapt the computation (as in \autoref{fig:dr}) to each individual
-platform by leveraging the choices of algorithms and parameters for a particular
-inference task. With a precise performance model that captures the tradeoff
-space between application accuracy and processing times, we can achieve such
-adaptation and then bounded response times. This adaptation technique is
-orthogonal to existing system solutions, such as scale-out, scale-up, caching,
-or batching.
+%% //////////////////////////////
 
-On the client side, it uses the configuration best suited for its particular
-hardware capability.
+The key to enable adaptation, which is also the challenge, lies in building an
+accurate performance model that characterized the processing times and accuracy
+trade-off for a particular task.
 
-On the server side, each request is annotated with a service-level objective
-(SLO) that describes the deadline and accuracy demand. Upon receiving a request,
-the server runs a real-time scheduler to meet all SLOs. $(i)$ \brt{} can adjust
-each request's serving time and quality based on the profile; $(ii)$ \brt{} is
-allowed to reject a request because of the redundancy mentioned above.
-
-Because \brt{} is application-aware, it requires knowledge from the application
-developer. And therefore a well-designed abstraction.
+This adaptation technique is orthogonal to existing system solutions, such as
+scale-out, scale-up, caching, or batching. Because it is an application-aware
+approach, the adaptation requires knowledge from the application developer.
 
 Efficient profiling to find the performance model. In order to explore the
 trade-off space, we take a data-driven approach to learn the relationship
