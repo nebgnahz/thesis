@@ -6,10 +6,10 @@ of end devices. In this chapter, we will first show the heterogeneity of swarm
 platforms for heavy computation and demonstrate that simple offloading does not
 work in the presence of network and workload variation.
 
-We then motivate adaptation by showing the trade-off between application
-accuracy and processing times in two cases: different algorithms and different
-parameters. The last subsection of our motivation summarizes the challenges
-associated with building an accurate performance model.
+We then motivate computation adaptation by showing the trade-off between
+application accuracy and processing times in two cases: different algorithms and
+different parameters. The last subsection of our motivation summarizes the
+challenges associated with building an accurate performance model.
 
 \subsection{Heterogeneous Environment}
 
@@ -39,53 +39,67 @@ associated with building an accurate performance model.
 \end{figure}
 
 Our target application environment consists of machines with large range of
-computing resources. \autoref{sec:swarm-platforms} and \autoref{tab:embedded}
-have discussed this dizzing array of machines ranging from powerful computing
-units to low-power microcontrollers.  These low-power devices, like mobile
-phones or IoT microcontrollers, are significantly limited in their processing
-capabilities. Performing ML inference easily take seconds to complete. As shown
-in \autoref{fig:capabilities}, to detect faces in a photo of the Fifth Solvay
-International Conference on Electrons and Photons,\footnote{The original image
-  (3000$\times$2171 pixels) is from Wikimedia and in the public domain.} it
-takes more than 4 seconds on a Raspberry Pi (Model B).
+computing resources. Earlier, \autoref{sec:swarm-platforms} and
+\autoref{tab:embedded} have discussed this dizzying array of machines ranging
+from powerful computing units to low-power microcontrollers.  Low-power devices,
+such as mobile phones or IoT microcontrollers, are significantly limited in
+their processing capabilities. Performing ML inference easily takes seconds to
+complete. As shown in \autoref{fig:capabilities}, to detect faces in a photo of
+the Fifth Solvay International Conference on Electrons and Photons,\footnote{The
+  original image (3000$\times$2171 pixels) is from Wikimedia and in the public
+  domain.} it takes more than 4 seconds on a Raspberry Pi (Model B).
 
-One technique is to use the edge and/or the cloud with offloading. While they
-are substantially more powerful---7.5$\times$ to 11.9$\times$ more powerful in
-the face detection task, both the edge and the cloud suffers from variable
-latency, unstable connection, and service contention. These makes it difficult
-to provide consistent response times, especially for 99\% requests. Earlier in
-\autoref{fig:edge}, we have shown the characteristics of end devices, the edge ,
-and the cloud. We then empirically validate these variation.
+One technique is to use the edge and/or the cloud for offloading. While they are
+substantially more powerful (7.5$\times$ to 11.9$\times$ in the face detection
+task), both the edge and the cloud suffer from variable latency, unstable
+connection, and service contention. These issues make it difficult to provide
+consistent response times, especially for tail performance. Earlier in
+\autoref{fig:edge}, we have shown the characteristics of end devices, the edge,
+and the cloud. We then empirically validate the network variation and workload
+variation.
 
-\para{Network Variation.} Using FCC broadband measurements, we validate the
-large variation in wide area network~(\autoref{fig:fcc-latency}). The median
-network delay increases from \SI{22}{\ms} to \SI{80}{\ms} under downstream load
-and \SI{272}{\ms} under upstream load.
+\para{Network Variation.} We use the raw data in January 2016 from FCC
+\href{https://www.fcc.gov/general/measuring-broadband-america}{Measuring
+  Broadband America Program}~\cite{fcc} to validate the large variation in wide
+area network. \autoref{fig:fcc-latency} shows the empirical cumulative
+distribution function (ECDF) of measured network latency. \textit{Ping} time refers to
+the round trip time (RTT) of ICMP echo requests from measurement devices to a
+set of target test nodes. \textit{Download} and \textit{Upload} are latency
+measured when performing downstream or upstream speed tests. From this figure,
+we can see that the latency has 2-3 orders of magnitude difference. The
+situation is worse with active traffic. The median network delay increases from
+\SI{22}{\ms} to \SI{80}{\ms} under downstream load and \SI{272}{\ms} under
+upstream load.
 
-\para{Workload Variation.} \noindent We measure TensorFlow serving's performance
-with different level of load and validate the large variation in prediction
-serving systems~(\autoref{fig:tf-latency}). With modest 1K load, the p99.9
-latency increases from \SI{3.5}{\ms} to \SI{22.5}{\ms}. With 5K load, even the
-median latency increases to \SI{21.5}{\ms}: a 22.4$\times$ increase from
-\SI{0.96}{\ms} with no load.
+\para{Workload Variation.} \noindent We measure end-to-end latency with
+TensorFlow serving~\cite{olston2017tensorflow}, a state-of-the-art serving
+system for machine learning models. Specifically, we use
+MNIST~\cite{lecun1998mnist} as a case study and study the serving performance
+with different level of background load. \autoref{fig:tf-latency} shows the ECDF
+with no load, 1K requests per second (RPS) and 5K RPS. From this figure, we can
+see that the serving latency has significantly increased when the load
+increases. With 1k load, p99.9 latency increases from \SI{3.5}{\ms} to
+\SI{22.5}{\ms}. With 5K load, even the median latency increases to
+\SI{21.5}{\ms}: a 22.4$\times$ increase from \SI{0.96}{\ms} with no load.
 
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.4\columnwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/fcc_latency.pdf}
-    \caption{Network latency variation.}
+    \caption{Broadband network latency.}
     \label{fig:fcc-latency}
   \end{subfigure}
   \hspace{2em}
   \begin{subfigure}[t]{0.4\columnwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/tf_latency.pdf}
-    \caption{Service latency variation.}
+    \caption{TensorFlow serving latency.}
     \label{fig:tf-latency}
   \end{subfigure}
-  \caption{Network latency increases during downstream and upstream speed tests
-    (left). Service time increases during load increase (right).}
+  \caption{(Left) WAN network latency has variation and the latency deteriorates
+    during downstream and upstream speed tests. (Right) Server processing
+    latency has variation and the latency deteriorates during load increase.}
 \end{figure}
 
 \subsection{Accuracy-Time Tradeoff}
