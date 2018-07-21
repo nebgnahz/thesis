@@ -136,43 +136,61 @@ exhaustive and fair manner~\cite{huang2016speed}. Because this thesis is not
 about extensive studies of neural networks, we only summarize one benchmark
 result in \autoref{fig:cnn-tradeoff}. The processing times vary from
 \SI{4.3}{\ms} to \SI{73.5}{\ms} and the accuracy\footnote{Top-5 accuracy here
-  means that the correct label is one of the top 5 predictions made by the
+  means that the correct label is one of the top five predictions made by the
   network.} varies from 80.2\% to 93.8\%.
 
-\para{Viola-Jones Face Detector.} This is an example for one algorithm with
-tunable parameters that affect processing times and application
-accuracy. Viola-Jones (VJ) cascade face detector~\cite{viola2001rapid}. The
-cascade classifier consists of a list of stages, where each stage consists of a
-list of weak learners.  The system detects objects in question by moving a
-window over the image.  Each stage of the classifier labels the specific region
-defined by the current location of the window as either positive or negative –
-positive meaning that an object was found or negative means that the specified
-object was not found in the image.  Therefore, it has three parameters,
+\para{Viola-Jones Face Detector.} This is an example of how tunable parameters
+affect processing times and application accuracy. Viola-Jones (VJ) face
+detector~\cite{viola2001rapid} detects face by moving a window over the image.
+To detect faces at different sizes, it runs over an image pyramid with
+configurable scales. After the detection, there are typically multiple
+neighboring windows with high scores close to the correct location of objects.
+A post-processing step uses non-maximum suppression (NMS) to group detection
+into a single bounding box. OpenCV~\cite{opencvlibrary} provides
+\texttt{CascadeClassifier} with the following parameters,
 
-\begin{itemize}[noitemsep, topsep=5pt]
-\item \texttt{scale}: how much image size is reduced at each image scale.
+\begin{itemize}[noitemsep, topsep=0pt]
 \item \texttt{min\_size}: minimum detectable object size.
+\item \texttt{scale}: how much image size is reduced at each image scale.
 \item \texttt{min\_neighbors}: how many neighbors each candidate rectangle should
   have to retain it.
 \end{itemize}
 
-ML algorithms have many tunable parameters. For many algorithms, processing
-times and the accuracy may exhibit \textit{non-linear} behavior with respect to
-the parameters. \autoref{fig:vj-tradeoff}.
-
 \begin{figure}[t]
   \centering
   \includegraphics[width=.8\columnwidth]{figures/exhaustive-face.pdf}
-  \caption{Complex performance model: spanning multiple dimensions and
-    exhibiting non-linear relationship.}
+  \caption{Benchmarks for Viola-Jones face detector with different
+    parameters. These parameters form a large space that make performance
+    modeling challenging.}
   \label{fig:vj-tradeoff}
 \end{figure}
+
+\autoref{fig:vj-tradeoff} shows how these parameters affect processing times and
+accuracy. We measured the performance of 4,000 different parameter
+configurations using FDDB dataset~\cite{jain2010fddb}. In the figure, each cross
+dot represents the processing time and application accuracy for one
+configuration. As we can see, there is a tradeoff space: the processing times
+vary across almost 3 orders of magnitude; the accuracy can be as low as 0\% and
+as high as 80.2\%.
+
+% scale factor: 1.01..0.05..1.46 (10)
+% min neighbors: 0..1..19
+% min size: 0..10..190
 
 \subsection{Performance Modeling Challenges}
 \label{sec:challenges}
 
 The two strawman solutions for predicting a near optimal cloud configuration are
 modeling and searching.
+
+To understand each parameter's impact, we highlight
+configurations from tuning only \textit{one} parameter. We also highlight the
+Pareto boundary, configurations that achieves the highest accuracy for any given
+time constrain.
+
+ML algorithms have many tunable parameters. For many algorithms, processing
+times and the accuracy may exhibit \textit{non-linear} behavior with respect to
+the parameters. \autoref{fig:vj-tradeoff}.
 
 \para{Exhaustive Search for Accurate Modeling is Too Expensive.} One way to
 model performance and then pick the best configuration based on this
