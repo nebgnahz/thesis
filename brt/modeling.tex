@@ -23,8 +23,8 @@ We denote this performance model as a mapping:
 
 {\small \vspace{-1em}
   \begin{equation*}
-f: (\mathbb{A} \times \mathbb{C} \times \mathbb{M}) \rightarrow
-(\mathbb{R}\times \mathbb{R})
+    f: (\mathbb{A} \times \mathbb{P} \times \mathbb{M}) \rightarrow
+    (\mathbb{R}\times \mathbb{R})
 \end{equation*}
 } where $\mathbb{A}$ is the set of all algorithms, $\mathbb{C}$ is the set of
 all possible configurations, and $\mathbb{M}$ is the set of all machines. The
@@ -79,6 +79,8 @@ compare all of them.
 
 \subsection{Modeling Parameters}
 \label{sec:single-platform}
+
+\include{brt/bo.tex}
 
 Evaluating all configurations across the large parameter space is prohibitively
 expensive. To reduce the number of samples we need, \sysname{} builds a

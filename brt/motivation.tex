@@ -1,13 +1,15 @@
 \section{Motivations}
 \label{sec:motivation}
 
-We focus on computation-heavy ML applications that is beyond the capability of
-local devices. In this chapter, we will first show the heterogeneity of swarm
-platforms for such heavy computation tasks.
+We focus on computation-heavy ML applications that are beyond the capabilities
+of end devices. In this chapter, we will first show the heterogeneity of swarm
+platforms for heavy computation and demonstrate that simple offloading does not
+work in the presence of network and workload variation.
 
-We then motivate profiling by showing the trade-off between application accuracy
-and processing times among different algorithms or different parameters for a
-given task.
+We then motivate adaptation by showing the trade-off between application
+accuracy and processing times in two cases: different algorithms and different
+parameters. The last subsection of our motivation summarizes the challenges
+associated with building an accurate performance model.
 
 \subsection{Heterogeneous Environment}
 
@@ -25,46 +27,75 @@ given task.
       & \specialcell{Macbook \\ Model A1502}
       & \specialcell{Workstation\\Xeon E5-1620} \\
       \midrule
-      4105 & 544 & 346 \\
+      4105 ms & 544 ms & 346 ms \\
       \bottomrule
     \end{tabular}
   \end{minipage}
   \caption{(Left) Face detection with a photograph of the Fifth Solvay
     International Conference on Electrons and Photons. (Right) Processing times
-    (ms) on different platforms.}
+    using Viola-Jones face detector on different machines,with default OpenCV
+    parameters.}
+  \label{fig:capabilities}
 \end{figure}
 
 Our target application environment consists of machines with large range of
-computing resources. $(i)$ End-devices, like mobile phones or IoT platforms, are
-significantly limited in their computing power. Performing ML inference often
-take seconds to complete. $(ii)$ Edge and Cloud. Both the edge and the cloud
-suffers from variable latency, unstable connection, and service contention to
-provide consistent response times, especially for 99\% requests.
+computing resources. \autoref{sec:swarm-platforms} and \autoref{tab:embedded}
+have discussed this dizzing array of machines ranging from powerful computing
+units to low-power microcontrollers.  These low-power devices, like mobile
+phones or IoT microcontrollers, are significantly limited in their processing
+capabilities. Performing ML inference easily take seconds to complete. As shown
+in \autoref{fig:capabilities}, to detect faces in a photo of the Fifth Solvay
+International Conference on Electrons and Photons,\footnote{The original image
+  (3000$\times$2171 pixels) is from Wikimedia and in the public domain.} it
+takes more than 4 seconds on a Raspberry Pi (Model B).
 
-There is a dizzying array of platforms ranging from \$5 Raspberry Pi to \$1000+
-GPU-powered workstation~\cite{zhang2015cloud}.  Even in the cloud, there are
-various VM options in the cloud: companies rent VMs based on budget or because
-of a lack of expertise.
+One technique is to use the edge and/or the cloud with offloading. While they
+are substantially more powerful---7.5$\times$ to 11.9$\times$ more powerful in
+the face detection task, both the edge and the cloud suffers from variable
+latency, unstable connection, and service contention. These makes it difficult
+to provide consistent response times, especially for 99\% requests. Earlier in
+\autoref{fig:edge}, we have shown the characteristics of end devices, the edge ,
+and the cloud. We then empirically validate these variation.
+
+\para{Network Variation.} Using FCC broadband measurements, we validate the
+large variation in wide area network~(\autoref{fig:fcc-latency}). The median
+network delay increases from \SI{22}{\ms} to \SI{80}{\ms} under downstream load
+and \SI{272}{\ms} under upstream load.
+
+\para{Workload Variation.} \noindent We measure TensorFlow serving's performance
+with different level of load and validate the large variation in prediction
+serving systems~(\autoref{fig:tf-latency}). With modest 1K load, the p99.9
+latency increases from \SI{3.5}{\ms} to \SI{22.5}{\ms}. With 5K load, even the
+median latency increases to \SI{21.5}{\ms}: a 22.4$\times$ increase from
+\SI{0.96}{\ms} with no load.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.4\columnwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/fcc_latency.pdf}
+    \caption{Network latency variation.}
+    \label{fig:fcc-latency}
+  \end{subfigure}
+  \hspace{2em}
+  \begin{subfigure}[t]{0.4\columnwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/tf_latency.pdf}
+    \caption{Service latency variation.}
+    \label{fig:tf-latency}
+  \end{subfigure}
+  \caption{Network latency increases during downstream and upstream speed tests
+    (left). Service time increases during load increase (right).}
+\end{figure}
 
 \subsection{Accuracy-Time Tradeoff}
 \label{sec:comp-perf-model}
 
-\begin{figure}
+\begin{figure}[t]
   \centering
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/motiv-functions.pdf}
-    \caption{Benchmarks for popular convolutional neural network (CNN) models.}
-    \label{fig:motiv-functions}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figures/motiv-params.pdf}
-    \caption{Benchmarks for Viola Jones face detection when changing different
-      parameters.}
-    \label{fig:motiv-params}
-  \end{subfigure}
+  \includegraphics[width=.8\columnwidth]{figures/tradeoff-cnn.pdf}
+  \caption{Benchmarks for popular convolutional neural network (CNN) models.}
+  \label{fig:motiv-functions}
 \end{figure}
 
 For many ML inference task, there exist more than one algorithm, or tunable
@@ -77,35 +108,61 @@ For example, accuracy-cost trade-offs for object detection using convolutional
 neural network (CNN)~\cite{huang2016speed}. \autoref{fig:motiv-functions} shows
 one such benchmark~\cite{cnn.benchmarks}.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=.7\columnwidth]{figures/exhaustive-face.pdf}
+  \caption{Complex performance model: spanning multiple dimensions and
+    exhibiting non-linear relationship.}
+  \label{fig:motiv-params}
+\end{figure}
+
 Many algorithms have large number of knobs to tune that will affect accuracy and
 processing cost. We use Viola-Jones (VJ) cascade face
-detector~\cite{viola2001rapid} as an example. \autoref{fig:complex-perf-model}
+detector~\cite{viola2001rapid} as an example. \autoref{fig:motiv-params}
 shows the large parameter space with respect to three parameters:
 \texttt{min\_size}, \texttt{min\_neighbors}, and \texttt{scale}.
 
-ML algorithms have many tunable parameters. For many algorithms, processing
-times and the accuracy may exhibit \textit{non-linear} behavior with respect to
-the parameters.
-
-\subsection{Challenges}
-\label{sec:challenges}
-
-Exhaustive Search is Too Expensive.
-
-\begin{itemize}
+\begin{itemize}[noitemsep, topsep=5pt]
 \item \texttt{scale}: how much image size is reduced at each image scale.
 \item \texttt{min\_size}: minimum detect-able object size.
 \item \texttt{min\_neighbors}: how many neighbors each candidate rectangle should
   have to retain it.
 \end{itemize}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=.9\columnwidth]{figures/exhaustive-face.pdf}
-  \caption{Complex performance model: spanning multiple dimensions and
-    exhibiting non-linear relationship.}
-  \label{fig:motiv-params}
-\end{figure}
+ML algorithms have many tunable parameters. For many algorithms, processing
+times and the accuracy may exhibit \textit{non-linear} behavior with respect to
+the parameters.
+
+\subsection{Performance Modeling Challenges}
+\label{sec:challenges}
+
+The two strawman solutions for predicting a near optimal cloud configuration are
+modeling and searching.
+
+\para{Exhaustive Search for Accurate Modeling is Too Expensive.} One way to
+model performance and then pick the best configuration based on this
+model. However, this methodology has poor adaptivity. Building a model that
+works for a variety of applications and cloud configura- tions can be difficult
+because the knowledge of the inter- nal structure of specific applications is
+needed to make the model effective. Moreover, building a model through human
+intervention for every new application can be tedious. Static searching for the
+best cloud configuration. An other way is to exhaustively search for the best
+cloud configuration without relying on an accurate perfor- mance model. However,
+this methodology has high over- head. With 40 instance types at Amazon EC2 and
+tens of cluster sizes for an application, if not careful, one could end up
+needing tens if not hundreds of runs to identify the best instance. In addition,
+tryinpg each cloud con- figuration multiple times to get around the dynamics in
+the cloud (due to resource multiplexing and stragglers) would exacerbate the
+problem even further.
+
+To reduce the search time and cost, one could use co- ordinate descent and
+search one dimension at a time. Co- ordinate descent could start with searching
+for the opti- mal CPU/RAM ratio, then the CPU count per machine, then cluster
+size, and finally disk type. For each dimen- sion, we could fix the other
+dimensions and search for the cheapest configuration possible. This could lead
+to suboptimal decisions if for example, because of bad ap- plication
+configuration a dimension is not fully explored or there are local minima in the
+problem space.
 
 %%% Local Variables:
 %%% mode: latex
