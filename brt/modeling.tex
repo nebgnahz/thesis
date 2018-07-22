@@ -1,9 +1,9 @@
-\section{Performance Modeling}
-\label{sec:performance-modeling}
+\section{BRT}
 
-The first step towards bounded response times is to model the relationship
-between accuracy and execution time. We then describe the formalism and our
-data-driven approach.
+In summary, Adapt computation to different platforms Challenges: 1. Large
+parameter space. Previous approaches use random search or coordinate/greedy
+approach. We propose Bayesian Optimization (BO) for profiling. Heterogeneous
+capabilities (and not available when profiling).
 
 \subsection{Problem Formulation}
 \label{sec:problem-formulation}
@@ -20,6 +20,21 @@ algorithm $a$ with a configuration $\vec{c}$ on a machine $m$ yields an
 inference with utility $u$ and processing time $t$.
 
 We denote this performance model as a mapping:
+
+that is, for any configuration $c$ in the Pareto-optimal set $\mathbb{P}$, there
+is no alternative configuration $c'$ that requires less processing times (i.e.,
+$T(c') < T(c)$) and offers a higher accuracy (i.e., $A(c') > A(c)$). Formally,
+$\mathbb{P}$ is defined as follows:
+
+{\small \vspace{-1.2em}
+  \begin{equation}
+    \mathbb{P} = \{ c \in \mathbb{C} : \{ c' \in \mathbb{C}: T(c') < T(c),
+    A(c') > A(c) \} = \varnothing\}
+  \label{eq:pareto-2}
+\end{equation}
+\vspace{-1.2em}
+}
+
 
 {\small \vspace{-1em}
   \begin{equation*}
@@ -46,7 +61,7 @@ configurations. Formally, the Pareto-optimal set is defined as follows,
 
 {\small \vspace{-1.2em}
   \begin{equation}
-    \mathbb{P} = \{ \vec{x} \in \mathbb{X} : \{ \vec{x'} \in \mathbb{X}:
+    \mathcal{P} = \{ \vec{x} \in \mathbb{X} : \{ \vec{x'} \in \mathbb{X}:
     f_t(\vec{x'}) < f_t(\vec{x}), f_u(\vec{x'}) > f_u(\vec{x}) \} = \varnothing\}
   \label{eq:pareto}
 \end{equation}
@@ -117,3 +132,8 @@ This simplifies our model transfer across platforms and makes it possible to
 derive the performance model at runtime by sampling only a few performance
 measures. In practice, a simple linear transformation suffices in giving a
 reasonably precise transfer.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../compute"
+%%% End:
