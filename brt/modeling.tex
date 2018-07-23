@@ -1,12 +1,84 @@
-\section{BRT}
+\section{Learning the Pareto-optimal Set Efficiently }
+\label{sec:learn-pareto-optim}
 
-In summary, Adapt computation to different platforms Challenges: 1. Large
-parameter space. Previous approaches use random search or coordinate/greedy
-approach. We propose Bayesian Optimization (BO) for profiling. Heterogeneous
-capabilities (and not available when profiling).
+In this section, we discuss techniques that learns the Pareto-optimal set
+efficiently. We first describe our programming abstraction and profiling
+formalism. We then focus on addressing two challenges: $(i)$ We propose to use
+Bayesian Optimization (BO) to address large parameter space with multiple
+parameters. And we show that it outperforms previous approaches (random search
+and coordinate search). $(ii)$ We propose to use profile transfer to derive the
+profile for a new device without running expensive profiling from scratch.
 
-\subsection{Problem Formulation}
-\label{sec:problem-formulation}
+\subsection{Programming Abstraction for Compute Adaptation}
+\label{sec:progr-abstr}
+
+Unlike \autoref{sec:structure-adapt}, the algorithms and parameters do not come
+from a series of chained operators. Therefore, we need new programming
+abstractions here. However, the design goal is similar: to free developers from
+specifying exact rules and allow specifications with options.
+
+We use \texttt{trait}\footnote{\texttt{trait} in Rust is similar to
+  \texttt{interface} in other languages.} to abstract each algorithm, as below:
+
+\begin{lstlisting}[xleftmargin=.1\textwidth, xrightmargin=.1\textwidth, language=Rust]
+trait Algorithm {
+    type I;
+    type O; 
+    type P;
+    fn execute(&mut self, i: &Self::I, p: &Self::P) -> Self::O;
+}
+\end{lstlisting}
+
+Each algorithm is specified by its input data type \texttt{I}, output data type
+\texttt{O}, a parameter type \texttt{P}, and its behavior function
+\texttt{execute}. For any data type \texttt{T} that implements
+\texttt{Algorithm} trait, the function \texttt{execute} can access the internal
+data structure of \texttt{T} in a mutable way: \texttt{\&mut self}. Type
+\texttt{I}, \texttt{O}, and \texttt{P} are abstract types and the implementation
+must specify the concrete types. We show an implementation of Viola-Jones in
+\autoref{fig:vj} where the input type is an image, the output type is a
+detection, and the parameter is \texttt{VJParameters}.
+
+For tunable parameters, we need to be able to specify at least three parts:
+\texttt{min}, \texttt{max}, and \texttt{step}. We extend an algorithm's
+parameter by augmenting it with annotations. In Rust, this can be implemented
+with procedural macros as a syntax extension. \autoref{fig:vj} shows these
+annotation in blue: we use \texttt{\#[derive(Adapt)]} to mark that this
+\texttt{struct} is a tunable parameter and use \texttt{\#[adapt(...)]} to mark
+its field.
+
+\begin{figure}
+  \centering
+\begin{lstlisting}[language=Rust]
+#[derive(Adapt)]
+struct VJParameters {
+    #[adapt(min = "0", max = "20", step = "1")]
+    min_neighbors: i64,
+
+    #[adapt(min = "0", max = "190", step = "10")]
+    min_size: i64,
+
+    #[adapt(min = "1.01", max = "1.5", step = "0.01")]
+    scale_factor: f64,
+}
+
+impl Algorithm for VJ {
+    type I = Image;
+    type O = Detection;
+    type P = VJParameters;
+
+    fn execute(&mut self, image: &Image, opt: &VJParameters) -> Detection {
+        // ...
+    }
+}
+\end{lstlisting}
+  \caption{Viola-Jone face detector parameters annotated with adaptation (in
+    Rust).}
+  \label{fig:vj}
+\end{figure}
+
+\subsection{Profiling Formalism}
+\label{sec:profiling-formalism}
 
 We assume there are multiple algorithms $\mathbb{A}$ available to provide the
 same inference. For each algorithm $a \in \mathbb{A}$, it has parameters tunable
