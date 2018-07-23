@@ -3,11 +3,12 @@
 
 In this section, we discuss techniques that learns the Pareto-optimal set
 efficiently. We first describe our programming abstraction and profiling
-formalism. We then focus on addressing two challenges: $(i)$ We propose to use
-Bayesian Optimization (BO) to address large parameter space with multiple
-parameters. And we show that it outperforms previous approaches (random search
-and coordinate search). $(ii)$ We propose to use profile transfer to derive the
-profile for a new device without running expensive profiling from scratch.
+formalism. We then focus on addressing two profiling challenges: the large
+parameter space and device heterogeneity. $(i)$ We propose to use Bayesian
+Optimization (BO) to address large parameter space with multiple parameters. And
+we show that it outperforms previous approaches (random search and coordinate
+search). $(ii)$ We propose to use profile transfer to derive the profile for a
+new device without running expensive profiling from scratch.
 
 \subsection{Programming Abstraction for Compute Adaptation}
 \label{sec:progr-abstr}
@@ -62,144 +63,72 @@ struct VJParameters {
     scale_factor: f64,
 }
 
+struct VJ {
+  // ... omitted ...
+}
+
 impl Algorithm for VJ {
     type I = Image;
     type O = Detection;
     type P = VJParameters;
 
     fn execute(&mut self, image: &Image, opt: &VJParameters) -> Detection {
-        // ...
+        // ... omitted ...
     }
 }
 \end{lstlisting}
-  \caption{Viola-Jone face detector parameters annotated with adaptation (in
-    Rust).}
+  \caption{Viola-Jone face detector parameters \texttt{VJParameters} annotated
+    with adaptation. \texttt{VJ} implements the \texttt{Algorithm} trait.}
   \label{fig:vj}
 \end{figure}
 
 \subsection{Profiling Formalism}
 \label{sec:profiling-formalism}
 
-We assume there are multiple algorithms $\mathbb{A}$ available to provide the
-same inference. For each algorithm $a \in \mathbb{A}$, it has parameters tunable
-to affect processing time $t$ and inference accuracy (or utility $u$). These
-parameters could be related to data, such as lowering the image resolution, or
-related to the algorithm, such as increasing the scaling factor in HOG. One
-instance of the parameters forms a configuration
-$\vec{c} = (k_1, k_2, \dots, k_n)$ with $n$ dimensions---we explicitly use the
-arrow head here to emphasize configurations' high dimensionality. Running the
-algorithm $a$ with a configuration $\vec{c}$ on a machine $m$ yields an
-inference with utility $u$ and processing time $t$.
+The goal of profiling is to build a profile that charactersizes the tradeoff
+between application accuracy and processing times such that for a running
+application, it can choose the right algorithm/parameter to meet the
+deadline. As discussed in \autoref{sec:perf-model-chall}, we are only interested
+in the Pareto-optimal set.
 
-We denote this performance model as a mapping:
-
-that is, for any configuration $c$ in the Pareto-optimal set $\mathbb{P}$, there
-is no alternative configuration $c'$ that requires less processing times (i.e.,
-$T(c') < T(c)$) and offers a higher accuracy (i.e., $A(c') > A(c)$). Formally,
+We start with defining the Pareto-optimal set for a specific algorithm with
+varying parameters. For an algorithm with $n$ parameters, e.g., $n$ is 3 for
+Viola-Jones, we call each parameter a knob and refer it as $k_i$. The
+combination of all knobs forms a parameter \textit{configuration}
+$c = [k_{1}, k_{2}, ... k_{n}]$. The set of all possible configurations
+$\mathbb{C}$ is the space that the profiling explores for this algorithm. For
+each configuration $c$, we are interested in two mappings: a mapping from $c$ to
+its processing times $T(c)$ and its accuracy measure $A(c)$.  The profiling
+looks for Pareto-optimal configurations; that is, for any configuration $c$ in
+the Pareto-optimal set $\mathbb{P}$, there is no alternative configuration $c'$
+that requires a smaller processing time and offers a higher accuracy. Formally,
 $\mathbb{P}$ is defined as follows:
 
 {\small \vspace{-1em}
-  \begin{equation*}
-    f: (\mathbb{A} \times \mathbb{P} \times \mathbb{M}) \rightarrow
-    (\mathbb{R}\times \mathbb{R})
-\end{equation*}
-} where $\mathbb{A}$ is the set of all algorithms, $\mathbb{C}$ is the set of
-all possible configurations, and $\mathbb{M}$ is the set of all machines. The
-mapping returns two real values: execution time $t \in \mathbb{R}$ and utility
-$u \in \mathbb{R}$. For convenience, we use $\vec{x}$ for the tuple $(a, c, m)$.
-Also we use $f_t$ and $f_u$ for the mapping from variables to time $t$ and
-utility $u$, respectively.
-
-Bounding the response times is trivial if application accuracy can be
-arbitrarily low. \sysname{} aims to minimize response times while maximizing
-achievable accuracy---solving a multi-objective optimization problem,
-specifically two objectives. For these problems in general, there is no single
-optimal solution that jointly minimizes multiple objectives. Instead, there is a
-collection of optimal solutions where for any solution, no objective can be
-improved without damaging one of the other objectives. The goal of our
-performance modeling is to derive such Pareto-optimal
-set~\cite{collette2013multiobjective} across all possible
-configurations. Formally, the Pareto-optimal set is defined as follows,
-
-{\small \vspace{-1.2em}
   \begin{equation}
     \mathbb{P} = \{ c \in \mathbb{C} : \{ c' \in \mathbb{C}: T(c') < T(c),
     A(c') > A(c) \} = \varnothing\}
-  \label{eq:pareto-2}
+  \label{eq:pareto2}
 \end{equation}
-\vspace{-1.2em}
-}
+}%
 
-\para{Challenge.} The Pareto-optimal set is easy if we know the mapping for all
-possible arguments. However, in practice, the argument space is prohibitively
-large, especially for configurations $\vec{c}$ that have many tunable
-parameters. It is expensive to run all combinations. Besides, it is also
-impossible because developers may not have target machines available.
+Once we have the Pareto-optimal set for one algorithm, we can compose multiple
+algorithms and merge their Pareto-optimal set by finding the global
+Pareto-optimal configurations. Both processing times and application accuracy
+are simply real numbers and can be compared, despite each algorithm's parameters
+may be completely different.
 
-\para{Solution Overview.} We tackle each dimension differently. For algorithms,
-because their differences are substantial, our profiler evaluates all available
-algorithms exhaustively. For each algorithm, to address the curse of
-dimensionality of $\vec{c}$, we use BO to reduce space search and only find
-near-optimal $c$s. For different machine $m$, because only $f_t$ depends on $p$,
-we show that the Pareto-optimal set doesn't change if the execution time $f_t$
-satisfies monotonicity. We approximate $f_t$ with a simple linear model.
+\subsection{Profiling Parameters with Bayesian Optimization}
+\label{sec:prof-param-with}
 
-\subsection{Composing Algorithms}
-\label{sec:compose-models}
-
-There are different algorithms. Different implementation for GPU and CPU.
-
-We have to profile each individual algorithm.
-
-Observation: their profile (the Pareto-optimal set) are composable by merge and
-compare all of them.
-
-\subsection{Modeling Parameters}
-\label{sec:single-platform}
-
-Evaluating all configurations across the large parameter space is prohibitively
-expensive. To reduce the number of samples we need, we build a performance model
-that is just accurate enough to allow us to distinguish near-optimal
-configurations from the rest. This is similar to recent systems, such as
-CherryPick~\cite{alipourfard2017cherrypick} and BOAT~\cite{dalibard2017boat},
-that use Bayesian optimization (BO) to improve performance across a large number
-of configurations.
-
-While previous approaches often transform the multi-objective problem into a
-single-objective problem using scalarization techniques (an approach that is
-expected to be suboptimal~\cite{knowles2006parego}.) We adopted the
-PESMO~\cite{hernandez2016predictive}, which does not transform the
-multi-objective problem into a single-objective. PESMO also has a low
-computational cost. It grows linearly with respective to the total number of
-objectives $K$.
-
-\subsubsection{Introduction to Bayesian Optimization}
-\label{sec:bo}
-
-Bayesian optimization approximate black-box functions with proxy functions and
-iteratively proposes new sample point in the large parameter space. Effective
-for,
-
-\begin{itemize}
-\item Evaluating each sample is expensive.
-\item The objective is a black-box.
-\item The evaluation can be noisy
-\end{itemize}
-
-Gaining attraction beyond ML scope. CherryPick~\cite{alipourfard2017cherrypick}
-finds the best cloud configurations for big data analytics. Google optimize
-chocolate chip cookies recipes~\cite{solnik2017bayesian}.
-
-Acquisition function evaluates the utility of candidate points for the next
-evaluation of $f$, balancing a high objective (exploitation) and high
-uncertainty (exploration)~\cite{shahriari2016taking}.
-
-Expected Improvement "ei"
-
-Figure produced with mlrMBO package~\cite{bischl2017mlrmbo} based on Alpine N. 2
-function~\cite{clerc1999swarm}.
-
-Maximum is 7.92 with a value of 2.808119.
+Bayesian Optimization (BO)~\cite{snoek2012practical} is a technique that
+approximates black-box functions with proxy functions, iteratively proposes new
+sample point to evaluate in the large parameter space, and finds the global
+maximum (or minimum). It is effective for black-box functions when evaluating
+each sample is expensive and noisy, such as tuning parameters and model
+hyperparameters in ML tasks~\cite{snoek2012practical}. A comprehensive review of
+BO is beyond the scope of this thesis. We briefly describe what BO brings using
+an example without going into the gory details.
 
 \begin{figure}
   \begin{subfigure}{\textwidth}
@@ -224,135 +153,112 @@ Maximum is 7.92 with a value of 2.808119.
   \label{fig:bo-1d}
 \end{figure}
 
+\autoref{fig:bo-1d} illustrates the process of finding the maximum point for
+1-dimension Alpine N. 2 function~\cite{clerc1999swarm} (this figure is produced
+with the mlrMBO package~\cite{bischl2017mlrmbo}). The solid line labeled $y$ is
+the target black-box function. The red dots represent samples that have been
+evaluated. BO reconstructs a function that best fits these observed samples: the
+dashed line $\hat{y}$ (yhat) along with the confidence region (in grey shade).
+BO then uses an acquisition criteria to determine how to sample the next point.
+In this example, we use expected improvement (EI, in long-dashed line) that
+balances high objective (exploitation) and high uncertainty
+(exploration)~\cite{shahriari2016taking}. The point that maximizes EI is then
+proposed as the next sample point (blue triangles). Running this process
+iteratively, BO is able to solve the maximization problem of a black-box
+function.
+
+% (2.808119, 7.92)
+
+BO recently has gain attraction beyond ML scope.
+CherryPick~\cite{alipourfard2017cherrypick} uses BO to find the near-optimal
+cloud configurations for big data analytics, i.e., minimizing the cost of
+execution. Google uses BO to optimize chocolate chip cookies
+recipes~\cite{solnik2017bayesian}, i.e., maximizes the tastiness.
+
+Our problem is more complex as we are solving multi-objective optimizations
+(MOO). Specifically, it has two objectives: application accuracy and processing
+times. It is trivial to maximize application accuracy or minimize processing
+times alone. Previous approaches often transform multiple objectives into a
+single objective using scalarization techniques: using weighted sum to combine
+different objectives. These approaches are expected to be
+suboptimal~\cite{knowles2006parego}. Recent research progress has made the
+transformation unnecessary. We can directly consider the Pareto-optimal set and
+evaluate the improvements with different acquisition criteria: $(i)$ additive
+epsilon~\cite{binoisgpareto}, $(ii)$ hypervolume~\cite{binoisgpareto}; $(iii)$
+the entropy of the posterior distribution over the Pareto-optimal
+set~\cite{hernandez2016predictive}. We illustrate the first two criteria in
+\autoref{fig:bo-2d}. We use PESMO~\cite{hernandez2016predictive} because of its
+availability and ease of use. It is available within the Spearmint
+package~\cite{snoek2016spearmint}.  PESMO also has a low computational cost: it
+grows linearly with respective to the total number of objectives $K$.
+
+\input{brt/bo-2d}
+
+We then show that BO can effectively explore the large design space and come up
+with a better Pareto-optimal set. We compare BO with two baseline approaches:
+$(i)$ random search; $(ii)$ coordinate search.
+
+For coordinate search, because it is a greedy approach, the original two
+objectives is converted into a single objective: $X(c) = A(c) - \beta T(c)$. We
+augment the basic version of the coordinate search with a few techniques: $(i)$
+to avoid starting with an expensive configuration and exploring its neighbors,
+we pick $m$ random configurations and start from the one with the highest
+$X$. VideoStorm~\cite{zhang2017live} suggests that even $m = 3$ can successfully
+avoid starting in an expensive part of the search space. $(ii)$ because $\beta$
+affects the relative impact of $T$ and $A$, we change its value once we have
+found a global maximum and still have search budget.
+
+\autoref{fig:bo} the evaluation results using Viola-Jones face detector and FDDB
+dataset. With similar search budgets, the Pareto-optimal set BO finds is better
+than the baseline approaches. We can see that coordinate search is relatively
+dense in some area as it moves slowly from one point to its neighbors. Random
+search has a better coverage of the space, but to find a better Pareto front, it
+needs more samples.
+
 \begin{figure}
   \centering
-  \begin{subfigure}{0.45\textwidth}
-    \begin{tikzpicture}
-      \pgfplotstableread{
-        0 0.1 -0.1
-        0 0.1  0.2
-        1 0.25 0.5
-        2 0.4  0.6
-        3 0.5  0.85
-        4 0.9  0.9
-        4 1.2  0.9
-      }\datatable
-      \begin{axis}[
-        width  = \textwidth,
-        xlabel = Processing Times (normalized),
-        ylabel = Accuracy,
-        axis line style = thick,
-        ymin   = 0,
-        ymax   = 1,
-        ytick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
-        xmin   = 0,
-        xmax   = 1,
-        xtick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
-        ]
-
-        \addplot+[red!50,
-        mark size=3pt, mark options={draw=red!0, fill=red!80}, const
-        plot mark left, thick] table [x index=1, y index=2]{\datatable};
-
-        \addplot[mark=triangle*, mark options={draw=blue!80, fill=blue!80},
-        mark size=3pt, fill=blue!80, only marks]
-        coordinates { (0.3, 0.7) };
-
-        \draw[-, blue, dashed] (axis cs:0.3, 0.5) -- (axis cs:0.3, 0.7);
-        \draw[-, blue, dashed] (axis cs:0.3, 0.7) -- (axis cs:0.5, 0.7);
-        \draw[<->, >=stealth, blue] (axis cs:0.45, 0.6) -- (axis cs:0.45, 0.7);
-        \draw[<->, >=stealth, blue] (axis cs:0.3, 0.55) -- (axis cs:0.4, 0.55);
-
-      \end{axis}
-    \end{tikzpicture}
-  \end{subfigure}
-  \hspace{1em}
-  \begin{subfigure}{0.45\textwidth}
-    \begin{tikzpicture}[
-      triangle/.style = {fill=blue!80, regular polygon, regular polygon sides=3}
-      ]
-
-      \pgfplotstableread{
-        0 0.1 -0.1
-        0 0.1  0.2
-        1 0.25 0.5
-        2 0.4  0.6
-        3 0.5  0.85
-        4 0.9  0.9
-        4 1.2  0.9
-      }\datatable
-      \begin{axis}[
-        width  = \textwidth,
-        xlabel = Processing Times (normalized),
-        ylabel = Accuracy,
-        axis line style = thick,
-        ymin   = 0,
-        ymax   = 1,
-        ytick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
-        xmin   = 0,
-        xmax   = 1,
-        xtick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
-        axis on top
-        ]
-
-        \addplot+[blue!50, no marks,
-        mark size=3pt, mark options={draw=blue!0, fill=blue!80},
-        % pattern=north east lines,
-        % pattern color=blue!50,
-        fill=blue!20,
-        ]
-        coordinates {(0.3, 0.5) (0.3, 0.7) (0.5, 0.7) (0.5, 0.6) (0.4, 0.6)
-          (0.4, 0.5) (0.3, 0.5)};
-
-        \addplot+[red!50, mark=*,
-        mark size=3pt, mark options={draw=red!0, fill=red!80}, const
-        plot mark left, thick,
-        pattern=north west lines,
-        pattern color=red!50]
-        table [x index=1, y
-        index=2]{\datatable} \closedcycle;
-
-        \addplot[mark=triangle*, mark options={draw=blue!80, fill=blue!80},
-        mark size=3pt, fill=blue!80, only marks]
-        coordinates { (0.3, 0.7) };
-        
-      \end{axis}
-    \end{tikzpicture}
-  \end{subfigure}
-  \caption{Comparison of additive-epsilon (left, arrows) and hypervolume (right,
-    filled areas) improvements for two possible new observations (green and
-    blue) to the current Pareto front (red points). The reference point for
-    hypervolume computations is the black crossed circle.  In terms of epsilon
-    improvement, the green point is more interesting as it is farther away from
-    the Pareto front, but the blue point is better in terms of volume
-    increment.}
+  \includegraphics[width=0.85\columnwidth]{figures/bo-eval.pdf}
+  \caption{Using Viola-Jones as an example, BO evaluates 50 configurations and
+    recommends 29 configurations as the Pareto-optimal boundary (the blue line
+    in all subfigures). Greedy and Random find sub-optimal Pareto configurations
+    with a budget of 80 evaluations (the yellow line in each figure).}
+  \label{fig:bo}
 \end{figure}
 
-We use PESMO~\cite{hernandez2016predictive} and compare it with two baselines:
-(1) greedy/coordinate search; (2) random search. PESMO chooses evaluation points
-to maximally reduce the entropy of the posterior distribution over the Pareto
-set.
-
-
-\subsection{Modeling Machines}
+\subsection{Profile Transfer Across Devices}
 \label{sec:performance-transfer}
 
-We make the observation that $f_u(a, c, m)$ doesn't depend on $m$. If we assume
-a monitonicity between $f_t(m_1)$ and $f_t(m_2)$, we can prove that the
-Pareto-set is directly transferable. The monitonicity is a condition that if on
-one platform it takes longer for one configuration,
-i.e.\,$f_t(a, \vec{c}, m_1) < f_t(a, \vec{c'}, m_1)$, then it will take longer
-on another platform, i.e.\,$f_t(a, \vec{c}, m_2) < f_t(a, \vec{c'}, m_2)$.
+The profile we learned is specific to the devices. While it seems that we need
+to profile for every device, the profiling problem can be simplified. The
+insight lies in the properties of our objectives. $A(c)$ doesn't change across
+devices. We assume $T(c)$ is monotonic across devices, that is, a slower devices
+remains slower for different configurations. Mathematically, if
+$T_1(c') < T_1(c)$, then $T_2(c') < T_2(c)$, where $T_1$ and $T_2$ are the
+mappings from configurations to processing times on two devices.
 
-Based on these two assumption, one can prove that if $\vec{x}_i$ is in the
-Pareto-optimal set $\mathbb{P}_1$ for platform $p_1$, then $\vec{x}_i$ will also
-be in the Pareto-optimal set $\mathbb{P}_2$. And the profile on $p_2$ will be a
-stretched or shrunk version for $p_1$ along the time dimension.
+As a result, it is easy to see that the same configuration $c$ remains in the
+Pareto-optimal set $\mathbb{P}_1$ regardless of what devices the algorithm runs
+on. So the whole Pareto-optimal set can be transferred. Visually, the profile on
+the second device is a stretched or shrunk version from a reference device along
+the dimension of processing times.
 
-This simplifies our model transfer across platforms and makes it possible to
-derive the performance model at runtime by sampling only a few performance
-measures. In practice, a simple linear transformation suffices in giving a
-reasonably precise transfer.
+This simplifies our performance modeling on a new device as we only need to
+measure the new processing times of the Pareto-optimal set. One can even further
+reduce the transfer effort by employing a linear transformation: we only need
+two measurements about the processing times.
+
+We empirically validate profile transfer on three devices with Viola-Jones face
+detector (\autoref{fig:transfer}).
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/serving-cross-platform.pdf}
+  \caption{(Left) Empirically, processing times follows a linear
+    approximation. (Right) Stretched/compressed profile. See paper for
+    details.}
+  \label{fig:transfer}
+\end{figure}
+
 
 %%% Local Variables:
 %%% mode: latex

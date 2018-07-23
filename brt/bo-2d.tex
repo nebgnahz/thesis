@@ -1,0 +1,108 @@
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.45\textwidth}
+    \begin{tikzpicture}
+      \pgfplotstableread{
+        0 0.1 -0.1
+        0 0.1  0.2
+        1 0.25 0.5
+        2 0.4  0.6
+        3 0.5  0.85
+        4 0.9  0.9
+        4 1.2  0.9
+      }\datatable
+      \begin{axis}[
+        width  = \textwidth,
+        xlabel = Processing Times (normalized),
+        ylabel = Accuracy,
+        axis line style = thick,
+        ymin   = 0,
+        ymax   = 1,
+        ytick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
+        xmin   = 0,
+        xmax   = 1,
+        xtick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
+        ]
+
+        \addplot+[red!50,
+        mark size=3pt, mark options={draw=red!0, fill=red!80}, const
+        plot mark left, thick] table [x index=1, y index=2]{\datatable};
+
+        \addplot[mark=triangle*, mark options={draw=blue!80, fill=blue!80},
+        mark size=3pt, fill=blue!80, only marks]
+        coordinates { (0.3, 0.7) };
+
+        \draw[-, blue, dashed] (axis cs:0.3, 0.5) -- (axis cs:0.3, 0.7);
+        \draw[-, blue, dashed] (axis cs:0.3, 0.7) -- (axis cs:0.5, 0.7);
+        \draw[<->, >=stealth, blue] (axis cs:0.45, 0.6) -- (axis cs:0.45, 0.7);
+        \draw[<->, >=stealth, blue] (axis cs:0.3, 0.55) -- (axis cs:0.4, 0.55);
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{subfigure}
+  \hspace{1em}
+  \begin{subfigure}{0.45\textwidth}
+    \begin{tikzpicture}[
+      triangle/.style = {fill=blue!80, regular polygon, regular polygon sides=3}
+      ]
+
+      \pgfplotstableread{
+        0 0.1 -0.1
+        0 0.1  0.2
+        1 0.25 0.5
+        2 0.4  0.6
+        3 0.5  0.85
+        4 0.9  0.9
+        4 1.2  0.9
+      }\datatable
+      \begin{axis}[
+        width  = \textwidth,
+        xlabel = Processing Times (normalized),
+        ylabel = Accuracy,
+        axis line style = thick,
+        ymin   = 0,
+        ymax   = 1,
+        ytick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
+        xmin   = 0,
+        xmax   = 1,
+        xtick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
+        axis on top
+        ]
+
+        \addplot+[blue!50, no marks,
+        mark size=3pt, mark options={draw=blue!0, fill=blue!80},
+        % pattern=north east lines,
+        % pattern color=blue!50,
+        fill=blue!20,
+        ]
+        coordinates {(0.3, 0.5) (0.3, 0.7) (0.5, 0.7) (0.5, 0.6) (0.4, 0.6)
+          (0.4, 0.5) (0.3, 0.5)};
+
+        \addplot+[red!50, mark=*,
+        mark size=3pt, mark options={draw=red!0, fill=red!80}, const
+        plot mark left, thick,
+        pattern=north west lines,
+        pattern color=red!50]
+        table [x index=1, y
+        index=2]{\datatable} \closedcycle;
+
+        \addplot[mark=triangle*, mark options={draw=blue!80, fill=blue!80},
+        mark size=3pt, fill=blue!80, only marks]
+        coordinates { (0.3, 0.7) };
+
+      \end{axis}
+    \end{tikzpicture}
+  \end{subfigure}
+  \caption{To find the Pareto-optimal set that maximizes accuracy while
+    minimizing processing times, the acquisition criterion can suggest new
+    samples (blue triangles) to the current Pareto-optimal set (red points) by
+    maximizing additive epsilon (left, blue arrows) or hypervolume (right, blue
+    shade area). This illustration is adapted from GPareto
+    vignette~\cite{binoisgpareto}.}
+  \label{fig:bo-2d}
+\end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../compute"
+%%% End:

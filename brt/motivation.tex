@@ -180,44 +180,48 @@ magnitude; the accuracy can be as low as 0\% and as high as 80.2\%.
 % min size: 0..10..190
 
 \subsection{Performance Modeling and Challenges}
+\label{sec:perf-model-chall}
 
-We need to build this performance model in order to exploit the tradeoff between
-accuracy and processing times. Because each algorithm is fundamentally different
-from another one, we must exhaustively evaluate all available algorithms. For
-the same algorithm with different parameters, exhaustive search can be
-prohibitively expensive as the parameters form a combinatorial
+We need to build the performance model to exploit the tradeoff between accuracy
+and processing times. Because each algorithm is fundamentally different from
+another one, we must exhaustively evaluate all available algorithms. For the
+same algorithm with different parameters, exhaustive search can be prohibitively
+expensive as the parameters form a combinatorial
 space. \autoref{fig:vj-tradeoff} shows an evaluation of 4,000 parameter
-configurations for Viola-Jones, which only have three parameters. More complex
+configurations for Viola-Jones, which only has three parameters. A more complex
 algorithm can have a staggering number of tunable parameters. For example,
 HOG~\cite{dalal2005histograms} in OpenCV has the following parameters:
-\texttt{win\_size}, \texttt{block\_size}, \texttt{block\_stride},
-\texttt{cell\_size}, \texttt{nbins}, \texttt{win\_sigma}, \texttt{nlevels},
-\texttt{hit\_threshold}, \texttt{win\_stride}, \texttt{padding},
-\texttt{group\_threshold}, \texttt{use\_meanshift\_grouping}, etc. We then
-discuss techniques to address this combinatorial space.
+\texttt{win\_size}, \texttt{win\_stride}, \texttt{block\_size},
+\texttt{block\_stride}, \texttt{cell\_size}, \texttt{nbins},
+\texttt{win\_sigma}, \texttt{nlevels}, \texttt{hit\_threshold},
+\texttt{padding}, \texttt{group\_threshold}, \texttt{use\_meanshift\_grouping},
+etc.
 
-We first remark that we do not need a comprehensive performance model for all
-parameters. Instead, we only need configurations that provide the best accuracy
-for a given processing time constrain, i.e. the Pareto-optimal
-points. \autoref{fig:vj-tradeoff} highlights the Pareto boundary in blue. We
-defer a formal definition of the Pareto-optimal set in
-\autoref{sec:problem-formulation}.
+A comprehensive performance is actually not necessary. Instead, we only need
+configurations that provide the best accuracy for a given processing time
+constrain, i.e. the Pareto-optimal points. \autoref{fig:vj-tradeoff} highlights
+the Pareto boundary in blue. We defer a formal definition of the Pareto-optimal
+set in \autoref{sec:problem-formulation}.
 
-When it comes to learn the Pareto-optimal set without searching exhaustively,
-there are two straw-man solutions: $(i)$ \textit{Random search.}  This simple
-approach samples the parameter space randomly and search/profile with a
-budget. It is obvious that as the budget increases, the coverage improves and
-the Pareto-optimal set is closer to the correct set. $(ii)$ \textit{Coordinate
-  search.} This greedy approach starts with a random configuration, moves along
-one parameter dimension if it improves, and stops when it reaches a local
-optimum. After reaching the local optimum, if we still have search budget, this
-approach repeats by picking another random configuration. Both random search and
-coordinate search have their problems. Random search needs a lot of samples to
-approximate the real Pareto boundary. Coordinate search may stuck in some local
-region and exhaust the search budget.
+In practice, we can further reduce the number of samples we need. The
+Pareto-optimal set only need to be accurate enough to distinguish near-optimal
+configurations from the rest. Previous work has used two solutions: $(i)$
+\textit{Random search.}  This simple approach samples the parameter space
+randomly and search/profile with a budget. It is obvious that as the budget
+increases, the coverage improves and the Pareto-optimal set is closer to the
+correct set. $(ii)$ \textit{Coordinate search.} This greedy approach starts with
+a random configuration, moves along one parameter dimension if it improves, and
+stops when it reaches a local optimum. After reaching the local optimum, if we
+still have search budget, this approach repeats by picking another random
+configuration.
 
-In addition, this performance model has not taken into account of the
-heterogeneous capabilities of devices. What we have shown in
+Both random search and coordinate search have their problems. Random search
+needs a lot of samples to approximate the real Pareto boundary. Coordinate
+search may stuck in some local region and exhaust the search budget. They could
+result in extremely suboptimal points in the tradeoff space.
+
+In addition, our discussion by far on performance modeling has not taken into
+account of the heterogeneous capabilities of devices. What we have shown in
 \autoref{fig:vj-tradeoff} is measured on a workstation with Xeon E5-1620 CPU;
 the performance model will be different on another device, e.g., a Raspberry Pi.
 
