@@ -148,6 +148,8 @@ Maximum is 7.92 with a value of 2.808119.
     \includegraphics[width=\textwidth]{figures/bo2.pdf}
     \caption{Second Iteration.}
   \end{subfigure}
+  \caption{Bayesian Optimization illustrated.}
+  \label{fig:bo-1d}
 \end{figure}
 
 \begin{figure}
@@ -218,6 +220,7 @@ Maximum is 7.92 with a value of 2.808119.
         xmin   = 0,
         xmax   = 1,
         xtick  = {0, 0.2, 0.4, 0.6, 0.8, 1},
+        axis on top
         ]
 
         \addplot+[blue!50, no marks,
@@ -231,7 +234,7 @@ Maximum is 7.92 with a value of 2.808119.
 
         \addplot+[red!50, mark=*,
         mark size=3pt, mark options={draw=red!0, fill=red!80}, const
-        plot mark left, thick, fill=red!5,
+        plot mark left, thick,
         pattern=north west lines,
         pattern color=red!50]
         table [x index=1, y
@@ -244,6 +247,13 @@ Maximum is 7.92 with a value of 2.808119.
       \end{axis}
     \end{tikzpicture}
   \end{subfigure}
+  \caption{Comparison of additive-epsilon (left, arrows) and hypervolume (right,
+    filled areas) improvements for two possible new observations (green and
+    blue) to the current Pareto front (red points). The reference point for
+    hypervolume computations is the black crossed circle.  In terms of epsilon
+    improvement, the green point is more interesting as it is farther away from
+    the Pareto front, but the blue point is better in terms of volume
+    increment.}
 \end{figure}
 
 We use PESMO~\cite{hernandez2016predictive} and compare it with two baselines:
