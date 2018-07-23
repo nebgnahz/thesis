@@ -248,7 +248,12 @@ reduce the transfer effort by employing a linear transformation: we only need
 two measurements about the processing times.
 
 We empirically validate profile transfer on three devices with Viola-Jones face
-detector (\autoref{fig:transfer}).
+detector (\autoref{fig:transfer}). We use the profile learned on a reference
+machine and evaluate the processing times on two target machines. The left
+figure shows that a near-linear relationship between the process times on two
+machines. The right figure shows the stretched/shrunk effect of the profile. In
+this figure, we use the average processing times by running all the data. In
+practice, a new machine only needs to evaluate a few samples.
 
 \begin{figure}
   \centering
@@ -258,7 +263,6 @@ detector (\autoref{fig:transfer}).
     details.}
   \label{fig:transfer}
 \end{figure}
-
 
 %%% Local Variables:
 %%% mode: latex
