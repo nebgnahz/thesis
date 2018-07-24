@@ -38,7 +38,10 @@ data structure of \texttt{T} in a mutable way: \texttt{\&mut self}. Type
 \texttt{I}, \texttt{O}, and \texttt{P} are abstract types and the implementation
 must specify the concrete types. We show an implementation of Viola-Jones in
 \autoref{fig:vj} where the input type is an image, the output type is a
-detection, and the parameter is \texttt{VJParameters}.
+detection, and the parameter is \texttt{VJParameters}. When composing
+algorithms, their input data type and output data type must match. This type
+constrain is used to validate that two algorithms are performing the same
+task. The algorithms' parameters can be different.
 
 For tunable parameters, we need to be able to specify at least three parts:
 \texttt{min}, \texttt{max}, and \texttt{step}. We extend an algorithm's

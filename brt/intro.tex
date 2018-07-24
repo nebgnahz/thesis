@@ -1,16 +1,17 @@
 \section{Introduction}
 \label{sec:introduction}
 
-An increasing number of swarm applications rely on heavy computation tasks, such
-machine learning (ML). For example, Microsoft SeeingAI~\cite{seeingai} is a
-talking camera for the blind and low vision community that describes nearby
-people, text, objects. Wearable cognitive assistant~\cite{ha2014towards} uses
-wearable devices, such as Google Glass, for deep cognitive assistance, e.g.,
-offering hints for social interaction via real-time scene analysis.
+An increasing number of swarm applications rely on heavy computation tasks,
+notably machine learning (ML) applications. For example, Microsoft
+SeeingAI~\cite{seeingai} is a talking camera for the blind and low vision
+community that describes nearby people, text, objects, etc. Wearable cognitive
+assistant~\cite{ha2014towards} uses wearable devices, such as Google Glass, for
+deep cognitive assistance, e.g., offering hints for social interaction via
+real-time scene analysis.
 
 While there is a staggering collection of research focusing on model
 \textit{training} for these tasks, for swarm applications, they perform the
-\textit{inference} step of machine learning: use trained models to make a
+\textit{inference} step of machine learning: it uses a trained model to make a
 prediction given an input, such as visual~\cite{googlelens, ha2014towards,
   seeingai}, audio~\cite{alexa, applesiri, cortana}, and sensory
 information~\cite{laput2017synthetic, lu2010jigsaw}. Inference has received
@@ -20,7 +21,7 @@ One important challenge for inference is to bound the response time, which
 affects user experience significantly in these human-in-the-loop
 systems. Previous usability studies~\cite{nielsen1994usability,
   schneiderman1998designing} have measured the effect of different end-to-end
-latencies:
+response times:
 
 \begin{itemize}[noitemsep, topsep=0pt]
 \item 100 ms gives the feeling of instantaneous response.
@@ -30,9 +31,9 @@ latencies:
 
 Achieving bounded response times (BRT) on swarm devices has remained
 challenging. Swarm devices are extremely heterogeneous and many are resource
-constrained (see \autoref{tab:embedded}). Many heavy computations are simply
-beyond the capabilities of cheap end devices. State-of-the-art computer vision
-algorithms, such as object detection, easily take several seconds on modern
+constrained (see \autoref{tab:embedded}). Heavy computations can be simply
+beyond the capabilities of cheap end devices. For example, state-of-the-art
+object detection algorithm easily takes several seconds on modern
 smartphones~\cite{chen2015glimpse}.
 
 To compensate resource-constrained devices, prior work explores
@@ -41,7 +42,7 @@ that hosts machine learning models and performs heavy computation. Despite their
 powerful computing capability and more available resources, e.g., special
 hardware like GPU and TPU~\cite{jouppi2017datacenter}, these machines suffer
 from increased network latency and service overload (\autoref{fig:edge}). As a
-result, they are often unable to meet latency goals consistently.
+result, they are often unable to meet response time goals consistently.
 
 Another technique for low latency is to use redundant requests. By initiating
 multiple requests across a diverse set of resources and using the first result
@@ -49,18 +50,18 @@ that completes, redundancy is effective to address the variability in network
 delays~\cite{gordon2015accelerating, vulimiri2013low} and slow servers (known as
 straggler mitigation in the cloud~\cite{dean2013tail,
   ananthanarayanan2013effective}). However, existing works treat these resources
-equally and executes the same task on each platform, a poor match for the
+equally and execute the same task on each platform, a poor match for the
 heterogeneous swarm space.
 
 We make the observation that for a particular task, there are many options:
 different algorithms or tunable parameters for the same algorithm. These options
-result in different processing times and accuracy. If we can adapt the
-computation by choosing an option that matches the capability of the device, we
-can achieve bounded response times.
+result in different processing times and application accuracy. If we can adapt
+the computation by choosing an option that matches the capability of the device
+or satisfy the deadline requirement, we can achieve bounded response times.
 
 The idea of adapting to machines is illustrated in \autoref{fig:dr}. It builds
-on top of redundancy but addresses (or leverages) the heterogeneity of swarm
-devices.  On-device processing can use a simple algorithm if the device is
+on top of redundancy but addresses, or rather leverages, the heterogeneity of
+swarm devices.  On-device processing can use a simple algorithm if the device is
 resource constrained. The device also sends redundant requests to other servers,
 e.g., the edge and/or the cloud. Each request contains a service-level objective
 (SLO) that describes the deadline and accuracy demand. Upon receiving the
@@ -72,12 +73,10 @@ source. At last, the device would use the first response that completes.
 \begin{figure}
   \centering
   \includegraphics[width=0.8\columnwidth]{figures/dr.pdf}
-  \caption{Illustration of offloading, redundant requests and differential
-    redundancy.}
+  \caption{Illustration of offloading, redundant requests and compute
+    adaptation.}
   \label{fig:dr}
 \end{figure}
-
-%% //////////////////////////////
 
 The key to enable adaptation lies in building an accurate performance model that
 characterized the processing times and accuracy trade-off for a particular
@@ -86,37 +85,32 @@ for a given set of training data. We call this process profiling and the
 resulting performance model is the profile.
 
 Efficient profiling is challenging given the large space formed by the
-combination of algorithms, parameters, and machines. (1) We need to profile each
-algorithms individually. (2) For the same algorithm, it may have huge parameter
+combination of algorithms, parameters, and machines. We need to profile each
+algorithms individually. For a single algorithm, it may have a huge parameter
 space. For example, cascading classifiers in computer vision tasks have
 configurable convolution window size, scale factor, and minimum neighbor for non
 maximum suppression. Exhaustive profiling this space is prohibitively expensive
-(see \autoref{fig:vj-tradeoff}). (3) Profiling for all hardware platforms is
-not always feasible because of the many devices and their availability at
-development time.
+(see \autoref{fig:vj-tradeoff}). Because processing times depend on the devices,
+the profile is different across devices. It is infeasible to profile all
+hardware platforms because of the staggering number of devices and their
+availability at development time.
 
-\todo{The rest of intro should be refined after writing the whole chapter.}
+In this chapter, we discuss techniques to efficiently build the performance
+model for compute adaptation in an automated, data-driven way. We first describe
+our programming language abstractions that allow developers to specify different
+algorithms and their parameters. We then build the profiler. \todo{more.}
 
-In this chapter, we present \brt{}, a framework for performance modeling to
-enable compute adaptation. \brt{} uses programming language techniques to
-simplify application development and addresses the performance modeling via
-Bayesian Optimization (BO) and profile transfer.
+This chapter make the following contributions regarding performance modeling:
 
-This adaptation technique is orthogonal to existing system solutions, such as
-scale-out, scale-up, caching, or batching. Because it is an application-aware
-approach, the adaptation requires knowledge from the application developer.
-
-\begin{enumerate}[leftmargin=*, topsep=5pt, itemsep=5pt]
-\item We use Bayesian Optimization (BO) for profiling on a single platform to
-  learn Pareto-optimal parameters. BO significantly outperforms previous
-  approaches, such as random search and coordinate/greedy approach.
-\item We propose to transfer profiles across machines. This is based on the
-  observation that the same algorithm and parameter will lead to the same
-  accuracy while the processing time is monotonic with the computing
-  power. Therefore, new machines only need to measure the processing times of
-  Pareto-optimal configurations.
+\begin{enumerate}[noitemsep, topsep=0pt]
+\item To address the large parameter space, we use Bayesian Optimization (BO)
+  for profiling to learn the Pareto-optimal set of parameters. We show that BO
+  outperforms baseline approaches, including random search and coordinate
+  search.
+\item We propose to transfer profiles across devices without running the
+  profiling again. New machines only need to sample a fraction of the
+  Pareto-optimal set and measure the processing times only.
 \end{enumerate}
-
 
 %%% Local Variables:
 %%% mode: latex
