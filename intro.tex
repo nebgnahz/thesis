@@ -8,38 +8,36 @@ Over the past two decades, we have seen a growing number of networked sensors
 and actuators installed in our connected world. These sensors and actuators
 offer an unprecedented ability to monitor and act. Because of the enormous
 potentials in solving societal-scale problems, this trend has gained significant
-attraction, as demonstrated by its many names: Internet of Things
+attraction, as demonstrated by many parallel efforts: Internet of Things
 (IoT)~\cite{atzori2010internet}, Internet of Everything
 (IoE)~\cite{bradley2013internet}, Industry 4.0~\cite{lasi2014industry}, The
 Industrial Internet~\cite{eigner2018industrial}, TSensors (Trillion
 Sensors)~\cite{bogue2014towards}, Machine to Machine
 (M2M)~\cite{anton2014machine}, Smarter Planet~\cite{palmisano2008smarter},
-etc. In this thesis, we use the term ``swarm''---as called by Jan Rabaey in a
-keynote talk at ASPDAC 2008~\cite{rabaey2008brand}---to refer to the vast
-collection of networked sensors and actuators.
+etc. In this thesis, we refer to this trend as the swarm because it well
+characterizes where the potentials lie: the number and the scale of
+interconnected devices.
 
 Swarm applications generate, transport, distill, and process large streams of
-data across the wide area in real time. For example, large cities such as London
-and Beijing have deployed millions of cameras for surveillance and traffic
+data across the wide area. For example, large cities such as London and Beijing
+have deployed millions of cameras for surveillance and traffic
 control~\cite{skynet, london.surveillance}. Buildings are increasingly equipped
 with a wide variety of sensors to improve energy efficiency and occupant
-comfort~\cite{dawson2010smap, krioukov2012building}.
+comfort~\cite{dawson2010smap, krioukov2012building}. Interactive applications
+that involve humans in the loop require a low latency response to engage the
+users.
 
-Riding on the popularity of the cloud infrastructure, swarm application
-developers have adopted the cloud as a universal computation resource and a
-storage backend~\cite{carriots, grovestreams, sami, xively, gupta2014bolt,
-  zachariah1001internet}. This trend is understandable given the economic
-benefits and simplified management.
-
-Privacy, Security, Availability, Latency, Bandwidth, etc. However, due to
-fundamental differences and unique characteristics of swarm applications, it is
-not the best long-term approach. Large data: Swarm systems rely on vast numbers
-of sensors that are generating massive amounts of data. Swarms and swarmlets
-that dynamically recruit resources will compete for those resources.
+Riding on the popularity of the cloud infrastructure, swarm applications have
+adopted the cloud as a universal computation resource and a storage
+backend~\cite{carriots, grovestreams, sami, xively, gupta2014bolt,
+  zachariah1001internet}. While this trend is understandable given the economic
+benefits and simplified management of the cloud, it is not the best long term
+approach. We will discuss issues related with privacy, security, availability,
+latency, bandwidth, etc.
 
 To compensate the cloud, new infrastructure focusing edge computing appear, such
-as fog~\cite{bonomi2012fog, bar2013fog}, cloudlet~\cite{ha2014towards,
-  satyanarayanan2009case, chen2018application}, and Swarmbox. While reducing the
+as the fog~\cite{bonomi2012fog, bar2013fog}, cloudlet~\cite{ha2014towards,
+  satyanarayanan2009case, chen2018application}, and swarmbox. While reducing the
 distance, these further increase the heterogeneous landscape: swarm components
 are of various types, requiring interfacing and interoperability across multiple
 platforms and models of computation.
@@ -50,11 +48,12 @@ potential of swarm applications is to allow applications to adapt to environment
 changes. Manual adaptation or exhaustive explore the design space are not
 feasible given the scale and large problem space.
 
-In this thesis, we propose to provide adaptation as a core abstraction in
-application development. In this way, we can build tools to automatically learn
-the effect of adaptation and apply adaptation strategies accordingly. We
-demonstrate this methodology with two systems focusing on network resources and
-compute resources for swarm applications.
+To reduce developer efforts, we propose a three-stage development framework:
+API, profiling and runtime use. In this thesis, we propose to provide adaptation
+as a core abstraction in application development. In this way, we can build
+tools to automatically learn the effect of adaptation and apply adaptation
+strategies accordingly. We demonstrate this methodology with two systems
+focusing on network resources and compute resources for swarm applications.
 
 \vspace{1em}
 
@@ -137,25 +136,44 @@ performance modeling and improve the efficiency. Unique challenges:
 
 The remainder of this thesis is organized as follows:
 
-\begin{itemize}
-\item In Chapter 2, I first describe the landscape development for swarm
-  applications. This overview, discussion is based on joint work with Nitesh
-  Mor, John Kolb, Douglas S. Chan, Nikhil Goyal Ken Lutz, Eric Allman, John
-  Wawrzynek, Edward A. Lee, John Kubiatowicz, Shuhei Emoto and Edward
-  A. Lee~\cite{zhang2015cloud}.
-\item In Chapter 3, I present the adaptation on network resources. The chapter
-  is based on joint work with Xin Jin, Sylvia Ratnasamy, John Wawrzynek, and
-  Edward A. Lee~\cite{zhang2018awstream}.
-\item In Chapter 4, I present the adaptation on compute resources. The chapter
-  is based on joint work with Xin Jin, and Edward A. Lee.
-\item Chapter 5 discusses related research and industrial efforts related to
-  adaptation.
+\begin{itemize}[topsep=5pt]
+\item \autoref{cha:background} covers the background for swarm applications. I
+  first summarize the landscape of the emerging swarm applications and show that
+  they have fundamental differences from previous related concepts.  Many swarm
+  applications are constructed using a cloud-centric approach. I then argue
+  against it by discussing the pitfalls including security, privacy,
+  scalability, latency, etc. A new tier of computing infrastructure, the edge,
+  arises to accompany the cloud. While it reduces network latency and provides
+  more resource, the edge has its own challenges, such as increased
+  heterogeneity. The swarm landscape and the argument against the cloud are
+  based on joint work with Nitesh Mor, John Kolb, Douglas S. Chan, Nikhil Goyal,
+  Ken Lutz, Eric Allman, John Wawrzynek, Edward A. Lee, and John
+  Kubiatowicz~\cite{zhang2015cloud}.
+\item In \autoref{cha:netw-reso-adapt}, I present adapting swarm applications to
+  network resources. Many swarm applications that transport large streams of
+  data across the wide area faces challenges with the scarce and variable
+  bandwidth. This chapter focus on \awstream{} that integrates application
+  adaptation as a first-class programming abstraction and automatically learns
+  an accurate profile that models accuracy and bandwidth trade-off. Using the
+  profile to guide application adaptation at runtime, we demonstrate that
+  \awstream{} achieves sub-second latency with only nominal accuracy drop
+  (2-6\%).  The chapter is based on joint work with Xin Jin, Sylvia Ratnasamy,
+  John Wawrzynek, and Edward A. Lee~\cite{zhang2018awstream}.
+\item In \autoref{cha:comp-reso-adapt}, I present adapting swarm applications to
+  compute resources. Due to the heterogeneous capabilities of end devices and
+  variable network/serving latency, it is challenging to provide a consistent
+  bounded response times for swarm applications. I propose to build a
+  performance model that characterizes accuracy and processing time trade-off to
+  guide the execution. This chapter focuses on efficient profiling: using
+  Bayesian Optimization (BO) to address the large parameter space and profile
+  transfer to address heterogeneous capabilities of different devices.
+\item Chapter 5 discusses related research and industrial efforts.
 \item Finally, I conclude this thesis and identify important research directions
   for future work.
 \end{itemize}
 
 The research presented in this thesis is supported in part by Berkeley
-Ubiquitous SwarmLab~\cite{swarmlab} the TerraSwarm Research
+Ubiquitous SwarmLab~\cite{swarmlab} and the TerraSwarm Research
 Center~\cite{terraswarm}, one of six centers supported by the STARnet phase of
 the Focus Center Research Program (FCRP) a Semiconductor Research Corporation
 program sponsored by MARCO and DARPA.
