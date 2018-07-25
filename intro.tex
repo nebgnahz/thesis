@@ -14,46 +14,53 @@ attraction, as demonstrated by many parallel efforts: Internet of Things
 Industrial Internet~\cite{eigner2018industrial}, TSensors (Trillion
 Sensors)~\cite{bogue2014towards}, Machine to Machine
 (M2M)~\cite{anton2014machine}, Smarter Planet~\cite{palmisano2008smarter},
-etc. In this thesis, we refer to this trend as the swarm because it well
-characterizes where the potentials lie: the number and the scale of
+etc. In this thesis, we refer to this trend as \textit{the swarm} because it
+well characterizes where the potentials lie: the number and the scale of
 interconnected devices.
 
 Swarm applications generate, transport, distill, and process large streams of
-data across the wide area. For example, large cities such as London and Beijing
-have deployed millions of cameras for surveillance and traffic
-control~\cite{skynet, london.surveillance}. Buildings are increasingly equipped
-with a wide variety of sensors to improve energy efficiency and occupant
-comfort~\cite{dawson2010smap, krioukov2012building}. Interactive applications
-that involve humans in the loop require a low latency response to engage the
-users.
+data across the wide area, often in real time. For example, large cities such as
+London and Beijing have deployed millions of cameras for surveillance and
+traffic control~\cite{skynet, london.surveillance}. Buildings are increasingly
+equipped with a wide variety of sensors to improve energy efficiency and
+occupant comfort~\cite{dawson2010smap, krioukov2012building}.
 
 Riding on the popularity of the cloud infrastructure, swarm applications have
 adopted the cloud as a universal computation resource and a storage
 backend~\cite{carriots, grovestreams, sami, xively, gupta2014bolt,
-  zachariah1001internet}. While this trend is understandable given the economic
-benefits and simplified management of the cloud, it is not the best long term
-approach. We will discuss issues related with privacy, security, availability,
-latency, bandwidth, etc.
+  zachariah1001internet}. This trend, while understandable given the economic
+benefits and simplified management of the cloud, is not the best long term
+approach. I will summarize issues privacy, security, availability, quality of
+service, etc.
 
-To compensate the cloud, new infrastructure focusing edge computing appear, such
-as the fog~\cite{bonomi2012fog, bar2013fog}, cloudlet~\cite{ha2014towards,
-  satyanarayanan2009case, chen2018application}, and swarmbox. While reducing the
-distance, these further increase the heterogeneous landscape: swarm components
-are of various types, requiring interfacing and interoperability across multiple
-platforms and models of computation.
+To compensate the cloud, a new infrastructure, the edge, has appeared, such as
+the fog~\cite{bonomi2012fog, bar2013fog}, cloudlet~\cite{ha2014towards,
+  satyanarayanan2009case, chen2018application}, and swarmbox. While the edge
+reduces communication distances, it introduces more levels of heterogeneous.
 
-We recognize the challenges in developing swarm applications: constrained
-resource and heterogeneous environment. We argue that the key to unfold the
-potential of swarm applications is to allow applications to adapt to environment
-changes. Manual adaptation or exhaustive explore the design space are not
-feasible given the scale and large problem space.
+When developing swarm applications, one must address these challenges with
+limited and varying resources and the heterogeneity. For example, the wide-area
+network (WAN) bandwidth is scarce and variable. Take network resource as an
+example, when facing situations where the bandwidth is not sufficient,
+applications deployed today either choose a conservative setting (e.g.\,only
+delivering 360p videos) or leave their fate to the underlying transport layer:
+(1) in the case of TCP, the sender will be blocked and data are backlogged,
+leading to severe delay; (2) in the case of UDP, uncontrolled packet loss
+occurs, leading to application performance drop. Instead of ``suffering'' from a
+degraded network, applications can act proactively by adjusting their behavior:
+reducing the data rate to ensure that important data are delivered in time.
 
-To reduce developer efforts, we propose a three-stage development framework:
-API, profiling and runtime use. In this thesis, we propose to provide adaptation
-as a core abstraction in application development. In this way, we can build
-tools to automatically learn the effect of adaptation and apply adaptation
-strategies accordingly. We demonstrate this methodology with two systems
-focusing on network resources and compute resources for swarm applications.
+We argue that the key to unfold the potential of swarm applications is to allow
+applications to adapt to environment changes. And given the scale of swarm
+development, manual adaptation is not feasible.
+
+In this thesis, we propose to adapt swarm applications, in systematic and
+quantitative approach. The key is to programming abstraction that developers can
+use to embed adaptation and then build tools that automatically adapt. to
+provide adaptation as a core abstraction in application development. In this
+way, we can build tools to automatically learn the effect of adaptation and
+apply adaptation strategies according to resource availability and environment
+change.
 
 \vspace{1em}
 
@@ -68,68 +75,66 @@ focusing on network resources and compute resources for swarm applications.
 
 We identify the following challenges that are unique to swarm applications:
 
-\para{Limited Resource.} Swarm systems rely on vast numbers of heterogeneous
-sensors that are generating massive amounts of data.
+\para{Constrained Resource.} Swarm systems rely on vast numbers of
+heterogeneous sensors that are generating massive amounts of data.
+
+\para{Heterogeneous Devices.} The swarm has a wide spectrum of devices with
+heterogeneous computing capabilities.
 
 \para{Ad-hoc Development.} Developers strive to make the application working due
 to many moving pieces.
 
-\para{Huge Design Space.} Many devices. Choices of sensors, algorithms, data
-quality.
+\para{Large Design Space.} Many devices. Algorithm tuning. Choices of sensors,
+algorithms, data quality.
 
-\para{Heterogeneous Platforms.} Ranging from cheap low power platforms to
-powerful workstation.
-
-These challenges are hard to overcome.
-
-\section{Adaptation as a First-class Citizen}
+\section{Systematic and Quantitative Adaptation}
 \label{sec:adaptation}
 
-\para{API.} To encode adaption and allow tools to be built in a systematic way.
-Such API can be reused both for development and for execution: with a effective
-runtime.
+\para{Programming Abstractions.} We propose to introduces new programming
+abstractions by which a developer expresses \emph{what} adaptations are
+available. Importantly, developers do not have to specify exactly when and how
+different adaptations are to be used which is instead left to the underlying
+framework.
 
-\para{Automatic Profiling and Optimization.} Free developer from manual tuning
-knobs or struggle to explore a huge parameter space.
+\para{Data-driven Automatic Profiling.} Rather than rely on manual policies, we
+can build tools that automatically \emph{learns} adaptation policy that are
+Pareto optimal. This learning process can be both offline and online, exploiting
+parallelism, sampling or statistical approaches to efficiently explore the
+configuration space. This network-adaptation profile remains the same across
+devices.When we apply the same principle to compute resource, in Chapter 3, we
+focus on performance modeling and improve the efficiency. Unique challenges:
 
-Take network resource as an example, when facing situations where the bandwidth
-is not sufficient, applications deployed today either choose a conservative
-setting (e.g.\,only delivering 360p videos) or leave their fate to the
-underlying transport layer: (1) in the case of TCP, the sender will be blocked
-and data are backlogged, leading to severe delay; (2) in the case of UDP,
-uncontrolled packet loss occurs, leading to application performance
-drop. Instead of ``suffering'' from a degraded network, applications can act
-proactively by adjusting their behavior: reducing the data rate to ensure that
-important data are delivered in time.
-
-This network-adaptation profile remains the same across devices.
-
-When we apply the same principle to compute resource, in Chapter 3, we focus on
-performance modeling and improve the efficiency. Unique challenges:
+We also demonstrate how such strategy can be employed in running systems and
+adapt to resource changes. For example, \sysname{} matches the streaming data
+rate to the measured available bandwidth. Upon encountering network congestion,
+it increases the degradation level to reduce the data rate, such that no
+persistent queue builds up. To recover, it progressively decreases the
+degradation level after probing for more available bandwidth. Our experiments
+show that \sysname{} achieves sub-second latency with only nominal accuracy drop
+(2-6\%).
 
 \section{Summary of Results}
 \label{sec:summary-results-1}
 
-\begin{enumerate}
-\item We propose to introduces new programming abstractions by which a developer
-  expresses \emph{what} adaptations are available. Importantly, developers do
-  not have to specify exactly when and how different adaptations are to be used
-  which is instead left to the underlying framework.
+We implement \awstream{} and use it to prototype three streaming applications:
+augmented reality (AR), pedestrian detection (PD), and distributed Top-K
+(TK). We use real-world data to profile these applications and evaluate their
+runtime performance on a geo-distributed public cloud.  We show that
+\awstream{}'s data-driven approach generates accurate profiles and that our
+parallelism and sampling techniques can speed up profiling by up to 29$\times$
+and 8.7$\times$ respectively.
 
-\item Rather than rely on manual policies, we can build tools that automatically
-  \emph{learns} adaptation policy that are Pareto optimal. This learning process
-  can be both offline and online, exploiting parallelism, sampling or
-  statistical approaches to efficiently explore the configuration space.
-
-\item We also demonstrate how such strategy can be employed in running systems
-  and adapt to resource changes. For example, \sysname{} matches the streaming
-  data rate to the measured available bandwidth. Upon encountering network
-  congestion, it increases the degradation level to reduce the data rate, such
-  that no persistent queue builds up. To recover, it progressively decreases the
-  degradation level after probing for more available bandwidth. Our experiments
-  show that \sysname{} achieves sub-second latency with only nominal accuracy
-  drop (2-6\%).
-\end{enumerate}
+With the combination of \awstream{}'s ability to learn better policies and its
+well-designed runtime, our evaluation shows that \awstream{} significantly
+outperforms non-adaptive applications: achieving a 40--100$\times$ reduction in
+packet delivery times relative to applications built over TCP, or an over
+45--88\% improvement in data fidelity (application accuracy) relative to
+applications built over UDP. We also compare \awstream{} to
+JetStream~\cite{rabkin2014aggregation}, a state-of-the-art system for building
+adaptive streaming analytics that is based on manual policies. Our results show
+that besides the benefit of generating optimal policies \textit{automatically},
+\awstream{} achieves a 15-20$\times$ reduction in latency and 1-5\% improvement
+in accuracy simultaneously relative to JetStream.
 
 \section{Thesis Organization}
 \label{sec:thesis-organization}
