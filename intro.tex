@@ -23,50 +23,52 @@ data across the wide area, often in real time. For example, large cities such as
 London and Beijing have deployed millions of cameras for surveillance and
 traffic control~\cite{skynet, london.surveillance}. Buildings are increasingly
 equipped with a wide variety of sensors to improve energy efficiency and
-occupant comfort~\cite{dawson2010smap, krioukov2012building}.
+occupant comfort~\cite{dawson2010smap, krioukov2012building}. With billions,
+potentially trillions, of devices interconnected~\cite{middleton2013forecast},
+the swarm will become an enormous challenge to the underlying infrastructure.
 
-Riding on the popularity of the cloud infrastructure, swarm applications have
-adopted the cloud as a universal computation resource and a storage
-backend~\cite{carriots, grovestreams, sami, xively, gupta2014bolt,
-  zachariah1001internet}. This trend, while understandable given the economic
-benefits and simplified management of the cloud, is not the best long term
-approach. I will summarize issues privacy, security, availability, quality of
-service, etc.
+In the past few years, swarm applications has adopted the cloud as a universal
+computation resource and a storage backend~\cite{carriots, grovestreams, sami,
+  xively, gupta2014bolt, zachariah1001internet}. Despite the illusion of
+unlimited resources, economic benefits, and simplified management of the cloud,
+this trend is not the best long term approach. Among all the pitfalls that I
+will discuss in this thesis, swarm applications using the cloud must address the
+scarce and variable wide-area network (WAN) bandwidth.
 
-To compensate the cloud, a new infrastructure, the edge, has appeared, such as
+A new infrastructure, the edge, has appeared to accompany the cloud---such as
 the fog~\cite{bonomi2012fog, bar2013fog}, cloudlet~\cite{ha2014towards,
-  satyanarayanan2009case, chen2018application}, and swarmbox. While the edge
-reduces communication distances, it introduces more levels of heterogeneous.
+  satyanarayanan2009case, chen2018application}, and swarmbox. Many gateway
+devices and smartphone apps today are effectively acting as the edge for swarm
+applications already. While it can effectively reduce communication distances,
+the edge is not a panacea. Edge devices are still limited in their processing
+capabilities.
 
-When developing swarm applications, one must address these challenges with
-limited and varying resources and the heterogeneity. For example, the wide-area
-network (WAN) bandwidth is scarce and variable. Take network resource as an
+The success of swarm applications requires us to address the gap between growing
+application demand and constrained resources. Take network resource as an
 example, when facing situations where the bandwidth is not sufficient,
 applications deployed today either choose a conservative setting (e.g.\,only
 delivering 360p videos) or leave their fate to the underlying transport layer:
 (1) in the case of TCP, the sender will be blocked and data are backlogged,
 leading to severe delay; (2) in the case of UDP, uncontrolled packet loss
-occurs, leading to application performance drop. Instead of ``suffering'' from a
-degraded network, applications can act proactively by adjusting their behavior:
-reducing the data rate to ensure that important data are delivered in time.
+occurs, leading to application performance drop. Instead, applications can act
+proactively by adjusting their behavior, e.g., trading application accuracy for
+timeliness. We argue that the key to unfold the potential of swarm applications
+is to allow applications to adapt to environment changes.
 
-We argue that the key to unfold the potential of swarm applications is to allow
-applications to adapt to environment changes. And given the scale of swarm
-development, manual adaptation is not feasible.
+Developing adaptive applications is not hard. Manual policies. However they are
+often sub-optimal and do not scale given the scale of swarm development.
 
-In this thesis, we propose to adapt swarm applications, in systematic and
-quantitative approach. The key is to programming abstraction that developers can
-use to embed adaptation and then build tools that automatically adapt. to
-provide adaptation as a core abstraction in application development. In this
-way, we can build tools to automatically learn the effect of adaptation and
-apply adaptation strategies according to resource availability and environment
-change.
+In this thesis, we propose to adapt swarm applications, in a systematic and
+quantitative approach. By ``systematic'', I mean programming abstractions that
+allow developers to embed adaptation options; by ``quantitative'', I mean an
+automatic profiling tool that learns the adaptation strategy in a data-driven
+approach.
 
 \vspace{1em}
 
-\noindent\textbf{Thesis Statement}: \textit{Providing adaptation as a programming
-  abstraction allows for resilient swarm applications with less developer
-  effort.}
+\noindent\textbf{Thesis Statement} \newline
+\textit{Systematic adaptation and quantitative profiling are the key to
+  a resilient swarm.}
 
 \vspace{1em}
 
@@ -75,17 +77,18 @@ change.
 
 We identify the following challenges that are unique to swarm applications:
 
-\para{Constrained Resource.} Swarm systems rely on vast numbers of
-heterogeneous sensors that are generating massive amounts of data.
+\para{Constrained Resource.} Swarm systems are composed of vast numbers of
+heterogeneous sensors that generate a massive amount of data to be transported
+and processed.
 
 \para{Heterogeneous Devices.} The swarm has a wide spectrum of devices with
 heterogeneous computing capabilities.
 
-\para{Ad-hoc Development.} Developers strive to make the application working due
-to many moving pieces.
-
 \para{Large Design Space.} Many devices. Algorithm tuning. Choices of sensors,
 algorithms, data quality.
+
+\para{Ad-hoc Development and Manual Efforts.} Developers strive to make the
+application working due to many moving pieces.
 
 \section{Systematic and Quantitative Adaptation}
 \label{sec:adaptation}
