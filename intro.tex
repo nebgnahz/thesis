@@ -23,39 +23,43 @@ data across the wide area, often in real time. For example, large cities such as
 London and Beijing have deployed millions of cameras for surveillance and
 traffic control~\cite{skynet, london.surveillance}. Buildings are increasingly
 equipped with a wide variety of sensors to improve energy efficiency and
-occupant comfort~\cite{dawson2010smap, krioukov2012building}. With billions,
-potentially trillions~\cite{middleton2013forecast}, of devices interconnected,
-the swarm will become an enormous challenge to the underlying infrastructure.
+occupant comfort~\cite{dawson2010smap, krioukov2012building}.
 
-In the past few years, swarm applications have adopted the cloud as a universal
-computation resource and a storage backend~\cite{carriots, grovestreams, sami,
-  xively, gupta2014bolt, zachariah1001internet}. Despite the illusion of
-unlimited resources, economic benefits, and simplified management of the cloud,
-applications must address the scarce and variable wide-area network (WAN)
-bandwidth. In addition to the cloud, swarm applications can use the edge---such
-as the fog~\cite{bonomi2012fog, bar2013fog}, cloudlet~\cite{ha2014towards,
-  satyanarayanan2009case, chen2018application}, and swarmbox---that reduces
-communication distances and provides more resources. However, edge devices are
-inherently heterogeneous: some are quite limited in their processing
-capabilities and some may be overloaded by service requests.
+With billions, potentially trillions~\cite{middleton2013forecast}, of devices
+interconnected, the swarm will become an enormous challenge to the underlying
+communication, computation, and storage infrastructure. For example, many swarm
+applications have adopted the cloud as a universal computation resource and a
+storage backend~\cite{carriots, sami, gupta2014bolt, zachariah1001internet}
+because of the unlimited-resource illusion, economic benefits, and simplified
+management. However, transmitting data from sensors to the cloud requires
+traversing the wide-area network (WAN), which has scarce and variable
+bandwidth. Edge infrastructure---the fog~\cite{bonomi2012fog, bar2013fog},
+cloudlet~\cite{ha2014towards, satyanarayanan2009case, chen2018application}, and
+swarmbox---can accompany the cloud by its reduced communication distances and
+extra resources. However, edge devices are extremely heterogeneous: some have
+limited processing capabilities while others can be overloaded by service
+requests.
 
-The success of swarm applications requires us to address the gap between the
-growing application demand and constrained resources. Take network resources as
-an example, when facing situations when the bandwidth is not sufficient,
-applications deployed today either choose a conservative setting (e.g.\,only
-delivering low resolution videos) or leave their fate to the underlying
-transport layer: (1) in the case of TCP, the sender will be blocked and data are
-backlogged, leading to severe delays; (2) in the case of UDP, uncontrolled
-packet loss occurs, leading to application performance drop. Instead,
-applications can act proactively by adjusting their behavior, e.g., trading
-application accuracy (fidelity) for a timely delivery (freshness).
+The success of the swarm relies on addressing the gap between the growing
+application demand and scarce/variable resources. Facing insufficient resources,
+swarm applications that do not adapt will suffer. Take network resources as an
+example, when there is not enough bandwidth, an application may incur large
+latency if it uses TCP that causes backlogged data, or devastated data quality
+if it uses UDP that causes uncontrollable packet loss. These are extreme design
+points in the trade-off space between data fidelity and data freshness
+(\autoref{fig:intro}). In order to be resilient to resource availability and
+changes, swarm applications can adapt its behaviors and hence its resource
+demand, just as video streaming dynamically adjusts its bitrate to the available
+bandwidth~\cite{michalos2012dynamic}.
 
-Making an application adaptive is not challenging. Developers can easily write
-some rules that modify application behaviors under certain
-circumstances. However, such manual policies are often sub-optimal unless the
-developers have invested a substantial amount of time studying the effect of the
-crafted manual policies. With the scale of swarm development, writing manual
-policies is not a viable approach.
+While enabling adaptation is easy, it is challenging to come up with accurate
+adaptation policies that governs the application behavior in an optimal
+way. Developers often quickly come up with some heuristics. Although such manual
+policies are already a step forward compared to non-adaptive applications, they
+lack quantitative measurements to back up. Accurate adaptation policies often
+require extensive domain expertise or considerable effort. In addition, at a
+swarm scale, each application has its own trade-off space and it is not viable
+to study each individual application extensively.
 
 In this thesis, we propose to adapt swarm applications, in a systematic and
 quantitative approach. By ``systematic'', I mean programming abstractions that
@@ -65,9 +69,8 @@ approach.
 
 \vspace{1em}
 
-\noindent\textbf{Thesis Statement} \newline
-\textit{Systematic adaptation and quantitative profiling are the key to
-  a resilient swarm.}
+\noindent\textbf{Thesis Statement:} \textit{Systematic adaptation and
+  quantitative profiling are the key to a resilient swarm.}
 
 \vspace{1em}
 
@@ -79,25 +82,40 @@ of the thesis.
 \section{Challenges with Developing Swarm Applications}
 \label{sec:chall-with-exist}
 
-\fixme{Rewrite.}
+We identify the following challenges that we need to address for a prosperity of
+the swarm,
 
-We identify the following challenges that are unique to swarm applications,
+\begin{itemize}[topsep=5pt, itemsep=2pt]
 
-\para{Constrained Resources.} Both network resources and compute resources in
-the swarm are limited. WAN bandwidth growth has been decelerating for many years
-while traffic demands are growing at a staggering rate. Low-power devices.
+\item \textbf{Constrained Resources.} The swarm, with its scale, creates a large
+application demand that the infrastructure will fail to meet. In terms of
+network resources, the WAN bandwidth is unable to keep up with the pace of data
+generated by all different types of sensors. In terms of compute resources, end
+devices, especially low-power microcontrollers, cannot fulfill many
+computation-heavy tasks, e.g., machine learning (ML) inference.
 
-\para{Heterogeneous Devices.} The swarm has a wide spectrum of devices with
+\item \textbf{Heterogeneous Devices.} The swarm has a wide spectrum of devices with
 heterogeneous computing capabilities, ranging from powerful computing units with
-specialized resources (such as GPU/TPU) to low-power microcontrollers.
+specialized resources (such as GPU/TPU) to low-power
+microcontrollers. Applications that work on one platform will end up with
+completely different performances on another platform.
 
-Challenges with developing adaptation strategies:
+\end{itemize}
 
-\para{Large Design Space.} Many swarm applications have tunable parameters with
-many knobs. And these knobs form a combinatorial space.
+A key approach to address the above mentioned issues is to employ adaptation. If
+we can adapt the application behavior to match the available and varying
+resource, swarm applications would become resilient. However, enabling
+adaptation has the following challenges,
 
-\para{Ad-hoc Development and Manual Efforts.} Developers strive to make the
-application working due to many moving pieces.
+\begin{itemize}[topsep=5pt, itemsep=2pt]
+
+\item \textbf{Large Design Space.} Many swarm applications have tunable
+  parameters with many knobs. And these knobs form a combinatorial space.
+
+\item \textbf{Ad-hoc Development and Manual Efforts.} Developers strive to make
+  the application working due to many moving pieces.
+
+\end{itemize}
 
 \section{Systematic and Quantitative Adaptation}
 \label{sec:adaptation}
