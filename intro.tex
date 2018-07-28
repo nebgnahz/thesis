@@ -109,66 +109,72 @@ adaptation has the following challenges,
 
 \begin{itemize}[topsep=5pt, itemsep=2pt]
 
-\item \textbf{Large Design Space.} Many swarm applications have tunable
-  parameters with many knobs. And these knobs form a combinatorial space.
+\item \textbf{Large Design Space.} Swarm applications often have multiple
+  adjustable stages or use a complex algorithm with many tunable
+  parameters. While these adjustable stages or tunable parameters provide
+  flexibility in constructing swarm applications, when developing adaptation
+  strategies, they form a large combinatorial design space.
 
-\item \textbf{Ad-hoc Development and Manual Efforts.} Developers strive to make
-  the application working due to many moving pieces.
+\item \textbf{Ad-hoc Development and Manual Efforts.} Developers often come up
+  with manual policies based on heuristics. These policies are not accurate and
+  lead to sub-optimal performance.
 
 \end{itemize}
 
 \section{Systematic and Quantitative Adaptation}
 \label{sec:adaptation}
 
-\fixme{Rewrite.}
+We propose to incorporate adaptation as a first-class programming abstraction
+(systematic), automatically learn the adaptation strategy, the profile, with a
+data-driven approach (quantitative). In this way, swarm applications can use the
+profile to guide its adaptation at runtime. This approach has three stages,
 
-\para{Programming Abstractions.} We propose to introduces new programming
-abstractions by which a developer expresses \emph{what} adaptations are
-available. Importantly, developers do not have to specify exactly when and how
-different adaptations are to be used which is instead left to the underlying
-framework.
+\para{Programming Abstractions.} We propose to introduce programming
+abstractions that are declarative instead of procedural. Developers do not need
+to express exactly \emph{when} and \emph{how} the application will
+adapt. Instead, they only specify \emph{what} adaptations are available. In this
+thesis, we demonstrate two such programming abstractions: \maybe{} for stream
+processing in network resource adaptation and macros for algorithm parameters in
+compute resource adaptation.
 
-\para{Data-driven Automatic Profiling.} Rather than rely on manual policies, we
-can build tools that automatically \emph{learns} adaptation policy that are
-Pareto optimal. This learning process can be both offline and online, exploiting
-parallelism, sampling or statistical approaches to efficiently explore the
-configuration space. This network-adaptation profile remains the same across
-devices.When we apply the same principle to compute resource, in Chapter 3, we
-focus on performance modeling and improve the efficiency. Unique challenges:
+\para{Data-driven Automatic Profiling.} Based on the available adaptation
+options specified by developers, we can build tools that automatically
+\emph{learns} Pareto-optimal adaptation policies. To handle the large design
+space, we can use system techniques or statistical techniques. In this thesis,
+we demonstrate how parallelism speeds up profiling for stream processing in
+network resource adaptation and how statistical approaches, specifically
+Bayesian Optimization, learns near-optimal sets with substantially few number of
+samples.
 
-We also demonstrate how such strategy can be employed in running systems and
-adapt to resource changes. For example, \sysname{} matches the streaming data
-rate to the measured available bandwidth. Upon encountering network congestion,
-it increases the degradation level to reduce the data rate, such that no
-persistent queue builds up. To recover, it progressively decreases the
-degradation level after probing for more available bandwidth. Our experiments
-show that \sysname{} achieves sub-second latency with only nominal accuracy drop
-(2-6\%).
+\para{Runtime Adaptation.} Once the profile is learned, it is used in running
+systems to guide the adaptation: matching application demand to available
+resources. For example, \sysname{} matches the streaming data rate to the
+measured available bandwidth. Upon encountering network congestion, it looks up
+the profile for a configuration that maximizes the achievable application
+accuracy while satisfying the network bandwidth constrain.
 
 \section{Summary of Results}
 \label{sec:summary-results-1}
 
-\fixme{Rewrite.}
+We have demonstrated the systemic and quantitative approach towards adaptation
+for network resources and compute resources. In both cases, we show our
+programming abstractions and demonstrate that the data-driven approach generates
+accurate profiles. For network resources, we use parallelism and sampling
+techniques to speed up the profiling by up to 29$\times$ and 8.7$\times$
+respectively. For compute resources, we have significantly reduced the number of
+profiling points, by more than 50$\times$.
 
-We implement \awstream{} and use it to prototype three streaming applications:
-augmented reality (AR), pedestrian detection (PD), and distributed Top-K
-(TK). We use real-world data to profile these applications and evaluate their
-runtime performance on a geo-distributed public cloud.  We show that
-\awstream{}'s data-driven approach generates accurate profiles and that our
-parallelism and sampling techniques can speed up profiling by up to 29$\times$
-and 8.7$\times$ respectively.
-
-With the combination of \awstream{}'s ability to learn better policies and its
-well-designed runtime, our evaluation shows that \awstream{} significantly
-outperforms non-adaptive applications: achieving a 40--100$\times$ reduction in
-packet delivery times relative to applications built over TCP, or an over
-45--88\% improvement in data fidelity (application accuracy) relative to
-applications built over UDP. We also compare \awstream{} to
-JetStream~\cite{rabkin2014aggregation}, a state-of-the-art system for building
-adaptive streaming analytics that is based on manual policies. Our results show
-that besides the benefit of generating optimal policies \textit{automatically},
-\awstream{} achieves a 15-20$\times$ reduction in latency and 1-5\% improvement
-in accuracy simultaneously relative to JetStream.
+For \awstream{}, we have built three real-world applications and evaluated it
+extensively by comparing with several baselines.  Our evaluation shows that
+\awstream{} significantly outperforms non-adaptive applications: achieving a
+40--100$\times$ reduction in packet delivery times relative to applications
+built over TCP, or an over 45--88\% improvement in data fidelity (application
+accuracy) relative to applications built over UDP. We also compare \awstream{}
+to JetStream~\cite{rabkin2014aggregation}, a state-of-the-art system for
+building adaptive streaming analytics that is based on manual policies. Our
+results show that besides the benefit of generating optimal policies
+\textit{automatically}, \awstream{} achieves a 15-20$\times$ reduction in
+latency and 1-5\% improvement in accuracy simultaneously relative to JetStream.
 
 \section{Thesis Organization}
 \label{sec:thesis-organization}
