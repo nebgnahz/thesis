@@ -8,7 +8,7 @@ Over the past two decades, we have seen a growing number of networked sensors
 and actuators installed in our connected world. These sensors and actuators
 offer an unprecedented ability to monitor and act. Because of the enormous
 potential in solving societal-scale problems, this trend has gained significant
-attraction, as demonstrated by many parallel efforts: Internet of Things
+attention, as demonstrated by many parallel efforts: Internet of Things
 (IoT)~\cite{atzori2010internet}, Internet of Everything
 (IoE)~\cite{bradley2013internet}, Industry 4.0~\cite{lasi2014industry}, The
 Industrial Internet~\cite{eigner2018industrial}, TSensors (Trillion
@@ -28,44 +28,43 @@ occupant comfort~\cite{dawson2010smap, krioukov2012building}.
 With billions, potentially trillions~\cite{middleton2013forecast}, of devices
 interconnected, the swarm will become an enormous challenge to the underlying
 communication, computation, and storage infrastructure. For example, many swarm
-applications have adopted the cloud as a universal computation resource and a
+applications have adopted the cloud as a universal computation resource and
 storage backend~\cite{carriots, sami, gupta2014bolt, zachariah1001internet}
-because of the unlimited-resource illusion, economic benefits, and simplified
+because of its elasticity, economic benefits, and simplified
 management. However, transmitting data from sensors to the cloud requires
 traversing the wide-area network (WAN), which has scarce and variable
 bandwidth. Edge infrastructure---the fog~\cite{bonomi2012fog, bar2013fog},
 cloudlet~\cite{ha2014towards, satyanarayanan2009case, chen2018application}, and
-swarmbox---can accompany the cloud by its reduced communication distances and
-extra resources. However, edge devices are extremely heterogeneous: some have
-limited processing capabilities while others can be overloaded by service
-requests.
+swarmbox---can accompany the cloud as it reduces communication distances and
+provides extra resources. However, edge devices are extremely heterogeneous:
+some have limited processing capabilities while others can be overloaded by
+service requests.
 
 The success of the swarm relies on addressing the gap between the growing
 application demand and scarce/variable resources. Facing insufficient resources,
 swarm applications that do not adapt will suffer. Take network resources as an
 example, when there is not enough bandwidth, an application may incur large
 latency if it uses TCP that causes backlogged data, or devastated data quality
-if it uses UDP that causes uncontrollable packet loss. These are extreme design
+if it uses UDP that has uncontrollable packet loss. These are extreme design
 points in the trade-off space between data fidelity and data freshness
 (\autoref{fig:intro}). In order to be resilient to resource availability and
-changes, swarm applications can adapt its behaviors and hence its resource
+changes, swarm applications can adapt its behaviors to change the resource
 demand, just as video streaming dynamically adjusts its bitrate to the available
 bandwidth~\cite{michalos2012dynamic}.
 
 While enabling adaptation is easy, it is challenging to come up with accurate
-adaptation policies that governs the application behavior in an optimal
-way. Developers often quickly come up with some heuristics. Although such manual
-policies are already a step forward compared to non-adaptive applications, they
-lack quantitative measurements to back up. Accurate adaptation policies often
-require extensive domain expertise or considerable effort. In addition, at a
-swarm scale, each application has its own trade-off space and it is not viable
-to study each individual application extensively.
+adaptation policies that govern the application behavior in an optimal
+way. Developers often quickly develop manual policies based on heuristics. While
+such manual policies are already a step forward compared to non-adaptive
+applications, they lack quantitative measurements to back up. Accurate
+adaptation policies often require extensive domain expertise or considerable
+effort. In addition, at a swarm scale, each application has its own trade-off
+space and it is not viable to study each individual application extensively.
 
 In this thesis, we propose to adapt swarm applications, in a systematic and
 quantitative approach. By ``systematic'', I mean programming abstractions that
-allow developers to embed adaptation options; by ``quantitative'', I mean an
-automatic profiling tool that learns the adaptation strategy in a data-driven
-approach.
+allow developers to embed adaptation options; by ``quantitative'', I am refering
+to a data-driven automatic profiling tool that learns the adaptation strategy.
 
 \vspace{1em}
 
@@ -85,29 +84,29 @@ of the thesis.
 We identify the following challenges that we need to address for a prosperity of
 the swarm,
 
-\begin{itemize}[topsep=5pt, itemsep=2pt]
+\begin{itemize}[topsep=5pt, itemsep=2pt, leftmargin=10pt]
 
 \item \textbf{Constrained Resources.} The swarm, with its scale, creates a large
-application demand that the infrastructure will fail to meet. In terms of
-network resources, the WAN bandwidth is unable to keep up with the pace of data
-generated by all different types of sensors. In terms of compute resources, end
-devices, especially low-power microcontrollers, cannot fulfill many
-computation-heavy tasks, e.g., machine learning (ML) inference.
+  application demand that the infrastructure will fail to meet. In terms of
+  network resources, the WAN bandwidth is unable to keep up with the pace of
+  data generated by all different types of sensors. In terms of compute
+  resources, end devices, especially low-power microcontrollers, cannot fulfill
+  many computation-heavy tasks, e.g., machine learning (ML) inference.
 
-\item \textbf{Heterogeneous Devices.} The swarm has a wide spectrum of devices with
-heterogeneous computing capabilities, ranging from powerful computing units with
-specialized resources (such as GPU/TPU) to low-power
-microcontrollers. Applications that work on one platform will end up with
-completely different performances on another platform.
+\item \textbf{Heterogeneous Devices.} The swarm has a wide spectrum of devices
+  with heterogeneous computing capabilities, ranging from powerful computing
+  units with specialized resources (such as GPU/TPU) to low-power
+  microcontrollers. Applications that work on one platform will end up with a
+  completely different performance on another platform.
 
 \end{itemize}
 
-A key approach to address the above mentioned issues is to employ adaptation. If
-we can adapt the application behavior to match the available and varying
-resource, swarm applications would become resilient. However, enabling
-adaptation has the following challenges,
+A key approach to address the above challenges is to employ adaptation. If we
+can adapt the application behavior to match the available and varying resource,
+swarm applications would become resilient. However, to enable adaptation, we
+need to address the following challenges,
 
-\begin{itemize}[topsep=5pt, itemsep=2pt]
+\begin{itemize}[topsep=5pt, itemsep=2pt, leftmargin=10pt]
 
 \item \textbf{Large Design Space.} Swarm applications often have multiple
   adjustable stages or use a complex algorithm with many tunable
@@ -115,9 +114,10 @@ adaptation has the following challenges,
   flexibility in constructing swarm applications, when developing adaptation
   strategies, they form a large combinatorial design space.
 
-\item \textbf{Ad-hoc Development and Manual Efforts.} Developers often come up
-  with manual policies based on heuristics. These policies are not accurate and
-  lead to sub-optimal performance.
+\item \textbf{Ad-hoc Development and Manual Efforts.} Existing approaches that
+  allow adaptation require developers to write manual policies, often based on
+  heuristics rather than quantitative analysis. These policies are not accurate,
+  prone to human errors, and lead to sub-optimal performance.
 
 \end{itemize}
 
@@ -125,56 +125,52 @@ adaptation has the following challenges,
 \label{sec:adaptation}
 
 We propose to incorporate adaptation as a first-class programming abstraction
-(systematic), automatically learn the adaptation strategy, the profile, with a
-data-driven approach (quantitative). In this way, swarm applications can use the
-profile to guide its adaptation at runtime. This approach has three stages,
+(systematic) and automatically learn the adaptation strategy, the profile, with
+a data-driven approach (quantitative). In this way, swarm applications can use
+the profile to guide its adaptation at runtime. This approach has three stages,
 
 \para{Programming Abstractions.} We propose to introduce programming
 abstractions that are declarative instead of procedural. Developers do not need
 to express exactly \emph{when} and \emph{how} the application will
 adapt. Instead, they only specify \emph{what} adaptations are available. In this
 thesis, we demonstrate two such programming abstractions: \maybe{} for stream
-processing in network resource adaptation and macros for algorithm parameters in
-compute resource adaptation.
+processing in network resource adaptation and macro annotations for algorithm
+parameters in compute resource adaptation.
 
 \para{Data-driven Automatic Profiling.} Based on the available adaptation
 options specified by developers, we can build tools that automatically
 \emph{learns} Pareto-optimal adaptation policies. To handle the large design
-space, we can use system techniques or statistical techniques. In this thesis,
-we demonstrate how parallelism speeds up profiling for stream processing in
-network resource adaptation and how statistical approaches, specifically
-Bayesian Optimization, learns near-optimal sets with substantially few number of
-samples.
+space, we use both system techniques and statistical techniques. In this thesis,
+we demonstrate how parallelism and sampling speed up profiling for stream
+processing in network resource adaptation and how Bayesian Optimization learns
+near-optimal sets with substantially few number of samples.
 
-\para{Runtime Adaptation.} Once the profile is learned, it is used in running
-systems to guide the adaptation: matching application demand to available
-resources. For example, \sysname{} matches the streaming data rate to the
-measured available bandwidth. Upon encountering network congestion, it looks up
-the profile for a configuration that maximizes the achievable application
-accuracy while satisfying the network bandwidth constrain.
+\para{Runtime Adaptation.} Once the profile is learned, it is used at
+\emph{runtime} to guide how application adaptation: matching application demand
+to available resources. For example, \awstream{} matches the streaming data rate
+to the estimated available bandwidth. By avoiding congestion with a
+Pareto-optimal configuration from the profile, \awstream{} achieves sub-second
+latency while maximizing the application accuracy.
 
 \section{Summary of Results}
 \label{sec:summary-results-1}
 
-We have demonstrated the systemic and quantitative approach towards adaptation
-for network resources and compute resources. In both cases, we show our
-programming abstractions and demonstrate that the data-driven approach generates
-accurate profiles. For network resources, we use parallelism and sampling
-techniques to speed up the profiling by up to 29$\times$ and 8.7$\times$
-respectively. For compute resources, we have significantly reduced the number of
-profiling points, by more than 50$\times$.
+In this thesis, we demonstrate the systemic and quantitative approach towards
+adaptation for network resources and compute resources. In both cases, we
+describe our programming abstraction design and demonstrate that the data-driven
+approach generates accurate profiles. For network resources, we use parallelism
+and sampling techniques to speed up the profiling by up to 29$\times$ and
+8.7$\times$ respectively. For compute resources, we have significantly reduced
+the number of profiling points, by more than 50$\times$.
 
-For \awstream{}, we have built three real-world applications and evaluated it
-extensively by comparing with several baselines.  Our evaluation shows that
-\awstream{} significantly outperforms non-adaptive applications: achieving a
-40--100$\times$ reduction in packet delivery times relative to applications
-built over TCP, or an over 45--88\% improvement in data fidelity (application
-accuracy) relative to applications built over UDP. We also compare \awstream{}
-to JetStream~\cite{rabkin2014aggregation}, a state-of-the-art system for
-building adaptive streaming analytics that is based on manual policies. Our
-results show that besides the benefit of generating optimal policies
-\textit{automatically}, \awstream{} achieves a 15-20$\times$ reduction in
-latency and 1-5\% improvement in accuracy simultaneously relative to JetStream.
+To demonstrate the effectiveness of the learned profile, we built \awstream{}
+for network resource adaptation and evaluate it with three real-world
+applications. Compared with non-adaptive applications, \awstream{} achieves a
+40--100$\times$ reduction in latency relative to applications using TCP, and a
+45--88\% improvement in application accuracy relative to applications using
+UDP. Compared with manual policies using a state-of-the-art system
+JetStream~\cite{rabkin2014aggregation}, \awstream{} achieves a 15-20$\times$
+reduction in latency and 1-5\% improvement in accuracy simultaneously.
 
 \section{Thesis Organization}
 \label{sec:thesis-organization}
@@ -212,9 +208,10 @@ The remainder of this thesis is organized as follows:
   guide the execution. This chapter focuses on efficient profiling: using
   Bayesian Optimization (BO) to address the large parameter space and profile
   transfer to address heterogeneous capabilities of different devices.
-\item Chapter 5 discusses related research and industrial efforts.
-\item Finally, I conclude this thesis and identify important research directions
-  for future work.
+\item \autoref{cha:related-work} surveys related research and industrial
+  efforts.
+\item Finally, in \autoref{cha:concl-future-work} I conclude this thesis and
+  identify important research directions for future work.
 \end{itemize}
 
 The research presented in this thesis is supported in part by Berkeley
@@ -222,8 +219,6 @@ Ubiquitous SwarmLab~\cite{swarmlab} and the TerraSwarm Research
 Center~\cite{terraswarm}, one of six centers supported by the STARnet phase of
 the Focus Center Research Program (FCRP) a Semiconductor Research Corporation
 program sponsored by MARCO and DARPA.
-
-
 
 \end{document}
 
