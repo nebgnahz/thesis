@@ -1,25 +1,20 @@
 \section{Chapter Summary}
 \label{sec:chap-summary}
 
-In this chapter, we present a study that allows bounded response times for wide
-area prediction serving.
+We have presented our study of enabling adaptation toward compute resources in
+the swarm space. Because end devices are limited in compute power, the
+edge/cloud suffer from variable network delays and service requests, it is
+essential to be able to adapt computation on different platform to meet response
+time deadlines.
 
-The central goal is to adapt computation to different platforms: end devices are
-limited in compute power; the edge/cloud suffer from variable network delays and
-
-Performance modelling is challenging due to the large parameter space. Previous
-approaches use random search or coordinate/greedy approach • We propose Bayesian
-Optimization (BO) for profiling 2. Heterogeneous capabilities (and not available
-when profiling) • Profile transfer: refine existing Pareto-optimal points
-
-One can view our approach as an extended version of the original ``CAP''
-theorem. Consistency, as a form of correctness, is relaxed to be accuracy
-ranging from 0 to 1. Availability is relaxed to be the response times. Under
-network partition, traditional systems choose either consistency or
-availability. Here we explore the direction of maximizing application accuracy
-(correctness) with given availability guarantee.
+To allow the adaptation, we need a performance model that characterizes the
+trade-off between application accuracy and processing times. Performance is
+challenging: for the large parameter space, previous approaches use random
+search or coordinate/greedy approach. and we propose Bayesian Optimization (BO)
+for profiling; (2) for heterogeneous computing capabilities and not available
+when profiling, we use profile transfer: refine existing Pareto-optimal points.
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../thesis"
+%%% TeX-master: "../compute"
 %%% End:

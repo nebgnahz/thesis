@@ -4,12 +4,11 @@
 We focus on computation-heavy ML applications that are beyond the capabilities
 of end devices. In this chapter, we will first show the heterogeneity of swarm
 platforms for heavy computation and demonstrate that simple offloading does not
-work in the presence of network and workload variation.
-
-We then motivate computation adaptation by showing the trade-off between
-application accuracy and processing times in two cases: different algorithms and
-different parameters. The last subsection of our motivation summarizes the
-challenges associated with building an accurate performance model.
+provide consistent response times in the presence of network and workload
+variation. We then motivate computation adaptation by showing the trade-off
+between application accuracy and processing times in two cases: different
+algorithms and different parameters. At last, we summarize the challenges
+associated with building an accurate performance model.
 
 \subsection{Heterogeneous Environment}
 
@@ -53,10 +52,10 @@ One technique is to use the edge and/or the cloud for offloading. While they are
 substantially more powerful (7.5$\times$ to 11.9$\times$ in the face detection
 task), both the edge and the cloud suffer from variable latency, unstable
 connection, and service contention. These issues make it difficult to provide
-consistent response times, especially for tail performance. We have shown the
-characteristics of end devices, the edge, and the cloud in
-\autoref{fig:edge}. We then empirically validate the network variation and
-workload variation (\autoref{fig:variation}).
+consistent response times, especially for tail performance. \autoref{fig:edge}
+shows the characteristics of end devices, the edge, and the cloud. We then
+empirically validate the network variation and workload variation
+(\autoref{fig:variation}).
 
 \para{Network Variation.} We use the raw data in January 2016 from FCC
 \href{https://www.fcc.gov/general/measuring-broadband-america}{Measuring
@@ -78,7 +77,7 @@ MNIST~\cite{lecun1998mnist} as a case study and study the serving performance
 with different level of background load. \autoref{fig:tf-latency} shows the ECDF
 with no load, 1K requests per second (RPS) and 5K RPS. From this figure, we can
 see that the serving latency has significantly increased when the load
-increases. With 1k load, p99.9 latency increases from \SI{3.5}{\ms} to
+increases. With 1k load, 99.9 percentile latency increases from \SI{3.5}{\ms} to
 \SI{22.5}{\ms}. With 5K load, even the median latency increases to
 \SI{21.5}{\ms}: a 22.4$\times$ increase from \SI{0.96}{\ms} with no load.
 
@@ -118,13 +117,13 @@ increases. With 1k load, p99.9 latency increases from \SI{3.5}{\ms} to
 \end{figure}
 
 Many tasks, especially ML inference, have multiple algorithms, or tunable
-parameters for the same algorithm. These options lead to different application
+parameters for the same algorithm. These options result in different application
 accuracy and processing times. As a result, we can speed up a computation task
-by sacrificing accuracy. In this way, many tasks become tractable on end devices
-and servers can also tune their computation to accommodate network delays or
-address heavy load. Below we show two examples.
+by sacrificing accuracy. In this way, many tasks become tractable on end
+devices. Servers can also tune their computation to accommodate network delays
+or address heavy load. Below we show two examples.
 
-\para{Convolutional neural networks (CNN)}. For the past few years, deep
+\para{Convolutional Neural Networks (CNN)}. For the past few years, deep
 learning and neural networks have gained attention in performing complex machine
 learning tasks~\cite{goodfellow2016deep}. Convolutional neural networks (CNNs)
 are particularly powerful for computer vision tasks, such as object detection
@@ -132,18 +131,18 @@ and image classification. There are many networks available:
 AlexNet~\cite{krizhevsky2012imagenet}, Inception~\cite{szegedy2015going},
 VGG~\cite{simonyan2014very}, ResNet~\cite{he2016deep}, etc. Huang et al. have
 observed the speed/accuracy trade-off and explored this trade-off in an
-exhaustive and fair manner~\cite{huang2016speed}. Because this thesis is not
-about extensive studies of neural networks, we only summarize one benchmark
-result in \autoref{fig:cnn-tradeoff}. The processing times vary from
-\SI{4.3}{\ms} to \SI{73.5}{\ms} and the accuracy\footnote{Top-5 accuracy here
-  means that the correct label is one of the top five predictions made by the
-  network.} varies from 80.2\% to 93.8\%.
+exhaustive and fair manner~\cite{huang2016speed}. Because this thesis is not an
+extensive study of neural networks, we only summarize one benchmark result in
+\autoref{fig:cnn-tradeoff}. The processing times vary from \SI{4.3}{\ms} to
+\SI{73.5}{\ms} and the accuracy\footnote{Top-5 accuracy here means that the
+  correct label is one of the top five predictions made by the network.} varies
+from 80.2\% to 93.8\%.
 
 \para{Viola-Jones Face Detector.} This is an example of how tunable parameters
 affect processing times and application accuracy. Viola-Jones (VJ) face
 detector~\cite{viola2001rapid} detects face by moving a window over the image.
-To detect faces at different sizes, it runs over an image pyramid with
-configurable scales. After the detection, there are typically multiple
+To detect faces at different sizes, it runs over an image pyramid with a
+configurable scale. After the detection, there are typically multiple
 neighboring windows with high scores close to the correct location of objects.
 A post-processing step uses non-maximum suppression (NMS) to group detection
 into a single bounding box. OpenCV~\cite{opencvlibrary} provides
@@ -197,30 +196,31 @@ HOG~\cite{dalal2005histograms} in OpenCV has the following parameters:
 \texttt{padding}, \texttt{group\_threshold}, \texttt{use\_meanshift\_grouping},
 etc.
 
-A comprehensive performance is actually not necessary. Instead, we only need
-configurations that provide the best accuracy for a given processing time
-constrain, i.e. the Pareto-optimal points. \autoref{fig:vj-tradeoff} highlights
+A comprehensive performance modeling is actually not necessary. Instead, we only
+need configurations that provide the best accuracy for a given processing time
+constrain, i.e., the Pareto-optimal points. \autoref{fig:vj-tradeoff} highlights
 the Pareto boundary in blue. We defer a formal definition of the Pareto-optimal
 set in \autoref{sec:problem-formulation}.
 
-In practice, we can further reduce the number of samples we need. The
-Pareto-optimal set only need to be accurate enough to distinguish near-optimal
-configurations from the rest. Previous work has used two solutions: $(i)$
-\textit{Random search.}  This simple approach samples the parameter space
-randomly and search/profile with a budget. It is obvious that as the budget
-increases, the coverage improves and the Pareto-optimal set is closer to the
-correct set. $(ii)$ \textit{Coordinate search.} This greedy approach starts with
-a random configuration, moves along one parameter dimension if it improves, and
-stops when it reaches a local optimum. After reaching the local optimum, if we
-still have search budget, this approach repeats by picking another random
+In practice, we can reduce the number of samples further. The Pareto-optimal set
+only needs to be accurate enough to distinguish near-optimal configurations from
+the rest. Previous work has used two solutions: $(i)$ \textit{Random search.}
+This simple approach samples the parameter space randomly and search/profile
+with a budget. It is obvious that as the budget increases, the coverage improves
+and the Pareto-optimal set is closer to the correct set. $(ii)$
+\textit{Coordinate search.} This greedy approach starts with a random
+configuration, moves along one parameter dimension if it improves, and stops
+when it reaches a local optimum. After reaching the local optimum, if we still
+have search budget, this approach repeats by picking another random
 configuration.
 
 Both random search and coordinate search have their problems. Random search
 needs a lot of samples to approximate the real Pareto boundary. Coordinate
-search may stuck in some local region and exhaust the search budget. They could
-result in extremely suboptimal points in the tradeoff space.
+search may stuck in some local region and exhaust the search budget. As a
+result, with a limit budget, both approaches could return sub-optimal points in
+the trade-off space.
 
-In addition, our discussion by far on performance modeling has not taken into
+In addition, our discussion on performance modeling by far has not taken into
 account of the heterogeneous capabilities of devices. What we have shown in
 \autoref{fig:vj-tradeoff} is measured on a workstation with Xeon E5-1620 CPU;
 the performance model will be different on another device, e.g., a Raspberry Pi.

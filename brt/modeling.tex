@@ -15,7 +15,7 @@ new device without running expensive profiling from scratch.
 
 Unlike \autoref{sec:structure-adapt}, the algorithms and parameters do not come
 from a series of chained operators. Therefore, we need new programming
-abstractions here. However, the design goal is similar: to free developers from
+abstractions. However, the design goal is similar: to free developers from
 specifying exact rules and allow specifications with options.
 
 We use \texttt{trait}\footnote{\texttt{trait} in Rust is similar to
@@ -24,7 +24,7 @@ We use \texttt{trait}\footnote{\texttt{trait} in Rust is similar to
 \begin{lstlisting}[xleftmargin=.1\textwidth, xrightmargin=.1\textwidth, language=Rust]
 trait Algorithm {
     type I;
-    type O; 
+    type O;
     type P;
     fn execute(&mut self, i: &Self::I, p: &Self::P) -> Self::O;
 }
@@ -41,13 +41,13 @@ must specify the concrete types. We show an implementation of Viola-Jones in
 detection, and the parameter is \texttt{VJParameters}. When composing
 algorithms, their input data type and output data type must match. This type
 constrain is used to validate that two algorithms are performing the same
-task. The algorithms' parameters can be different.
+task. Their parameters can be different.
 
 For tunable parameters, we need to be able to specify at least three parts:
 \texttt{min}, \texttt{max}, and \texttt{step}. We extend an algorithm's
-parameter by augmenting it with annotations. In Rust, this can be implemented
-with procedural macros as a syntax extension. \autoref{fig:vj} shows these
-annotation in blue: we use \texttt{\#[derive(Adapt)]} to mark that this
+parameter by augmenting it with macros annotations. In Rust, this can be
+implemented with procedural macros as a syntax extension. \autoref{fig:vj} shows
+these annotation in blue: we use \texttt{\#[derive(Adapt)]} to mark that this
 \texttt{struct} is a tunable parameter and use \texttt{\#[adapt(...)]} to mark
 its field.
 
@@ -118,7 +118,7 @@ $\mathbb{P}$ is defined as follows:
 Once we have the Pareto-optimal set for one algorithm, we can compose multiple
 algorithms and merge their Pareto-optimal set by finding the global
 Pareto-optimal configurations. Both processing times and application accuracy
-are simply real numbers and can be compared, despite each algorithm's parameters
+are simply real numbers and can be compared, although each algorithm's parameter
 may be completely different.
 
 \subsection{Profiling Parameters with Bayesian Optimization}
@@ -156,23 +156,22 @@ an example without going into the gory details.
   \label{fig:bo-1d}
 \end{figure}
 
-\autoref{fig:bo-1d} illustrates the process of finding the maximum point for
-1-dimension Alpine N. 2 function~\cite{clerc1999swarm} (this figure is produced
-with the mlrMBO package~\cite{bischl2017mlrmbo}). The solid line labeled $y$ is
-the target black-box function. The red dots represent samples that have been
-evaluated. BO reconstructs a function that best fits these observed samples: the
-dashed line $\hat{y}$ (yhat) along with the confidence region (in grey shade).
-BO then uses an acquisition criteria to determine how to sample the next point.
-In this example, we use expected improvement (EI, in long-dashed line) that
-balances high objective (exploitation) and high uncertainty
-(exploration)~\cite{shahriari2016taking}. The point that maximizes EI is then
-proposed as the next sample point (blue triangles). Running this process
-iteratively, BO is able to solve the maximization problem of a black-box
-function.
+\autoref{fig:bo-1d}, produced with the mlrMBO package~\cite{bischl2017mlrmbo},
+illustrates the process of finding the maximum point for 1-dimension Alpine N. 2
+function~\cite{clerc1999swarm}. The solid line labeled $y$ is the target
+black-box function. The red dots represent samples that have been evaluated. BO
+reconstructs a function that best fits these observed samples: the dashed line
+$\hat{y}$ (yhat) along with the confidence region (in grey shade).  BO then uses
+an acquisition criteria to determine how to sample the next point.  In this
+example, it uses expected improvement (EI, in long-dashed line) that balances
+high objective (exploitation) and high uncertainty
+(exploration)~\cite{shahriari2016taking}. The next proposed sample is the point
+that maximizes EI (blue triangles). Running this process iteratively, BO is able
+to solve the maximization problem of a black-box function.
 
 % (2.808119, 7.92)
 
-BO recently has gain attraction beyond ML scope.
+BO recently has been used beyond ML scope.
 CherryPick~\cite{alipourfard2017cherrypick} uses BO to find the near-optimal
 cloud configurations for big data analytics, i.e., minimizing the cost of
 execution. Google uses BO to optimize chocolate chip cookies
@@ -202,21 +201,22 @@ with a better Pareto-optimal set. We compare BO with two baseline approaches:
 $(i)$ random search; $(ii)$ coordinate search.
 
 For coordinate search, because it is a greedy approach, the original two
-objectives is converted into a single objective: $X(c) = A(c) - \beta T(c)$. We
-augment the basic version of the coordinate search with a few techniques: $(i)$
-to avoid starting with an expensive configuration and exploring its neighbors,
-we pick $m$ random configurations and start from the one with the highest
-$X$. VideoStorm~\cite{zhang2017live} suggests that even $m = 3$ can successfully
-avoid starting in an expensive part of the search space. $(ii)$ because $\beta$
-affects the relative impact of $T$ and $A$, we change its value once we have
-found a global maximum and still have search budget.
+objectives is converted into one single objective: $X(c) = A(c) - \beta
+T(c)$. We augment the basic version of the coordinate search with a few
+techniques: $(i)$ to avoid starting with an expensive configuration and
+exploring its neighbors, we pick $m$ random configurations and start from the
+one with the highest $X$. VideoStorm~\cite{zhang2017live} suggests that even
+$m = 3$ can successfully avoid starting in an expensive part of the search
+space. $(ii)$ because $\beta$ affects the relative impact of $T$ and $A$, we
+change its value once we have found a global maximum and still have search
+budget.
 
-\autoref{fig:bo} the evaluation results using Viola-Jones face detector and FDDB
-dataset. With similar search budgets, the Pareto-optimal set BO finds is better
-than the baseline approaches. We can see that coordinate search is relatively
-dense in some area as it moves slowly from one point to its neighbors. Random
-search has a better coverage of the space, but to find a better Pareto front, it
-needs more samples.
+\autoref{fig:bo} shows the evaluation results using Viola-Jones face detector
+and FDDB dataset. With similar search budgets, the Pareto-optimal set BO finds
+is better than the baseline approaches. We can see that coordinate search is
+relatively dense in some area as it moves slowly from one point to its
+neighbors. Random search has a better coverage of the space, but to find a
+better Pareto front, it needs more samples.
 
 \begin{figure}
   \centering
@@ -235,20 +235,24 @@ The profile we learned is specific to the devices. While it seems that we need
 to profile for every device, the profiling problem can be simplified. The
 insight lies in the properties of our objectives. $A(c)$ doesn't change across
 devices. We assume $T(c)$ is monotonic across devices, that is, a slower devices
-remains slower for different configurations. Mathematically, if
-$T_1(c') < T_1(c)$, then $T_2(c') < T_2(c)$, where $T_1$ and $T_2$ are the
-mappings from configurations to processing times on two devices.
+remains slower for different configurations. Mathematically, if $T_1$ and $T_2$
+are the mappings from configurations to processing times on two devices, the
+monotonic property means that if $T_1(c') < T_1(c)$, then $T_2(c') < T_2(c)$.
 
 As a result, it is easy to see that the same configuration $c$ remains in the
-Pareto-optimal set $\mathbb{P}_1$ regardless of what devices the algorithm runs
+Pareto-optimal set $\mathbb{P}$ regardless of what devices the algorithm runs
 on. So the whole Pareto-optimal set can be transferred. Visually, the profile on
 the second device is a stretched or shrunk version from a reference device along
 the dimension of processing times.
 
-This simplifies our performance modeling on a new device as we only need to
-measure the new processing times of the Pareto-optimal set. One can even further
-reduce the transfer effort by employing a linear transformation: we only need
-two measurements about the processing times.
+This simplifies our performance modeling on a new device. We only need to
+measure processing times of the Pareto-optimal set. And measuring processing
+times is significantly easier than measuring accuracy. One do not need to gather
+all the training data, run the algorithm, compare it with the ground-truth, and
+calculate the accuracy. The transfer can be further simplified if we use a
+linear transformation to approximate the relationship between processing times
+on two platforms. In this way, we only need to measure processing times from two
+configurations.
 
 We empirically validate profile transfer on three devices with Viola-Jones face
 detector (\autoref{fig:transfer}). We use the profile learned on a reference

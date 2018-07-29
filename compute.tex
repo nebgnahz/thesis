@@ -5,35 +5,35 @@
 \chapter{Compute Resource Adaptation}
 \label{cha:comp-reso-adapt}
 
-In this chapter, we focus on swarm applications that rely on heavy computation,
+In this chapter, we focus on swarm applications with computation-heavy tasks,
 such as machine learning (ML) inference. To create an engaging user experience,
 these applications need to offer bounded response times (e.g., 100 ms or
-sub-second). However, swarm platforms have a large discrepancy of computing
-capabilities and end devices are often now powerful enough to run an algorithm
-as is. If the application offloads computation to other resources such as the
-edge or the cloud, it faces the challenge of unpredictable network delays and
-service workload. To meet the response time requirement, we propose to adapt the
-computation to each platform in specific contexts.
+sub-second). However, end devices are often not powerful enough to run an
+algorithm as is. While applications can offload computation to other resources
+such as the edge or the cloud, swarm platforms have a large discrepancy of
+computing capabilities. In addition, the edge/cloud faces the challenge of
+unpredictable network delays and service overload. To meet the response time
+requirement, we propose to adapt the computation to each platform in specific
+contexts.
 
-The ability to adapt comes from our observation that to achieve the same task,
-there are often more than one options: different algorithms or different
-parameters for the same algorithm. These options result in different processing
-times and application accuracy. If we can build a performance model that
-characterizes the options' impact, the application can choose the right
-algorithm/parameter adaptively depending on its compute power and the deadline.
+Swarm applications can adapt, because to achieve the same task, there are often
+more than one options: different algorithms or different parameters for the same
+algorithm. These options result in different processing times and application
+accuracy. If we can build a performance model that characterizes the impact of
+each option, the application can choose the right algorithm/parameter adaptively
+depending on the available compute power and the deadline.
 
-Achieving compute resource adaptation with performance modeling is
-challenging. In contrast to the profiling discussed in
-\autoref{cha:netw-reso-adapt}, we are facing a much larger parameter space where
-exhaustive search (despite we can use parallelism) is not feasible. In addition,
-the bandwidth-accuracy profile remains the same across platforms while the
-processing times vary depending on the compute platforms. The swarm has a wide
-spectrum of devices with heterogeneous computing capabilities.
+Building this performance model for adaptation is more challenging than the
+profiling discussed in \autoref{cha:netw-reso-adapt}, because of two issues:
+$(i)$ a much larger parameter space means that exhaustive search, even with
+parallelism, is not feasible; $(ii)$ the profile is platform-dependent because
+processing times vary across devices.
 
 This chapter is step further in refining our profiling techniques. Specifically,
-we address the large parameter space with Bayesian Optimization (BO) and address
-the heterogeneous capabilities with profile transfer. We empirically validate
-our approaches using Viola-Jones face detector as the primary case study.
+we address the issue with a large parameter space by employing Bayesian
+Optimization (BO), and we address the heterogeneous capabilities with profile
+transfer. This chapter empirically validates our approach using Viola-Jones face
+detector as the primary case study.
 
 \input{brt/intro}
 \input{brt/motivation}

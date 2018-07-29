@@ -1,10 +1,19 @@
 \section{Limitations and Future Work}
 \label{sec:limitations}
 
-More case studies. We have used face detection as the primary example (figures
-shown in \autoref{fig:bo} \autoref{fig:transfer}).
+\para{More case studies.} This chapter demonstrates the effectiveness of BO
+(\autoref{fig:bo}) and profile transfer (\autoref{fig:transfer}). Our evaluation
+uses Viola-Jones face detector, a popular computer vision algorithm, as the
+primary case study. We have also applied our profiling to
+HOG~\cite{dalal2005histograms} and the results are similar (hence omitted from
+this thesis). In the future, we expect to conduct more case studies with diverse
+algorithms.
 
-Incorporate the profile into the scheduler of a running server.
+\para{Server scheduling.} Our current use of the profile is simple: we find the
+algorithm/parameter that maximizes application accuracy given a processing time
+deadline. We envision that in a model serving system that handles a large number
+of requests, the profile can help with scheduling, e.g., the server tune
+processing times for some requests in order to maximize throughput.
 
 %%% Local Variables:
 %%% mode: latex
