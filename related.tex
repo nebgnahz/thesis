@@ -1,72 +1,90 @@
 \documentclass[thesis.tex]{subfiles}
+\bibliography{thesis}
 
 \begin{document}
 
 \chapter{Related Work}
 \label{cha:related-work}
 
-In this chapter, we survey related work wide-area streaming systems,
+In this chapter, we survey research projects and industrial effort related to
+this thesis. I first summarize the use of approximation and adaptation in
+diverse contexts.
 
 \section{Approximation and Adaptation}
 \label{sec:appr-adapt}
 
-Many recent systems have explored the idea of degrading computation fidelity for
-responsiveness.  For SQL queries, BlinkDB~\cite{agarwal2013blinkdb} enables
-interactive queries over massive data by allowing users to trade-off query
-accuracy. For cloud analytics, GRASS~\cite{ananthanarayanan2014grass}, For
-real-time computing, MEANTIME~\cite{farrell2016meantime} exploits application
-approximation to provide both hard real-time guarantees and energy
-efficiency. VideoStorm~\cite{zhang2017live} scales to processing thousands of
-video streams in large cluster with a resource scheduler that adapts the
-processing quality. They employ techniques such as programming language
-support~\cite{sampson2011enerj}, sampling~\cite{garofalakis2001approximate},
-sketches~\cite{cormode2011sketch}, and online
-aggregation~\cite{hellerstein1997online}. This thesis targets at swarm
-applications, an emerging domain with its own unique challenges: constrained
-resources and heterogeneous capabilities.
+The idea of using approximation to trade application accuracy for response times
+has been explore in a number of contexts. Hellerstein et al.\, describes an
+online aggregation interface~\cite{hellerstein1997online} that provide
+approximate answers which are constantly refined as during
+execution. BlinkDB~\cite{agarwal2013blinkdb} enables interactive queries over
+massive data by allowing users to trade-off query
+accuracy. MEANTIME~\cite{farrell2016meantime} uses approximate computing to
+achieve both hard real-time guarantees and energy
+efficiency. EnerJ~\cite{sampson2011enerj} exploits energy-accuracy trade-offs
+and with programming language level support, it isolates parts of the program
+that must be precise from those that can be approximated. In these applications,
+partial or approximate results are more useful than late results. This thesis
+targets at swarm applications, an emerging domain with its own unique
+challenges: constrained resources and heterogeneous capabilities.
 
-The closest system to our \awstream{} is JetStream~\cite{rabkin2014aggregation},
-the first to use degradation to reduce latency for wide-area streaming
-analytics. Compared to JetStream, \sysname{} makes five major contributions:
-$(1)$~a novel API design to specify degradation in a simple and composable way;
-$(2)$~automatic offline profiling to search for Pareto-optimal configurations;
-$(3)$~online profiling to address model drift; $(4)$~an improved runtime system
-achieving sub-second latency (comparison in \autoref{sec:runtime-adaptation});
-$(5)$~support for different resource allocation policies for multiple
-applications.
+% sampling~\cite{garofalakis2001approximate}, sketches~\cite{cormode2011sketch}
 
-\para{(Adaptive) Video Streaming.} Multimedia streaming protocols
-(e.g.,~RTP~\cite{schulzrinne2006rtp}) aim to be fast instead of reliable. While
-they can achieve low latency, their accuracy can be poor under congestion.
-Recent work has moved towards HTTP-based protocols and focused on designing
-adaptation strategy to improve QoE, as in research~\cite{mao2017neural,
-  sun2016cs2p, yin2015control} and industry (HLS~\cite{pantos2016http},
-DASH~\cite{michalos2012dynamic, sodagar2011mpeg}). These adaptation strategies
-are often pull-based: client keeps checking the index file for changes. And
-clients have to wait for the next chunk (typically 2-10 seconds). In addition,
-as we have shown in \autoref{sec:runtime-adaptation}, their adaptation is a poor
-match for analytics that rely on image details (e.g.,~6\% accuracy for PD). In
-contrast we propose to learn an adaptation strategy for each application (also
-not limited to video analytics); and in our network resource adaptation,
-\awstream{}'s runtime is optimized for low latency.
+Among these approaches, BlinkDB uses an error-latency profile heuristic to
+efficiently choose the sample that will best satisfy the user-specified error or
+time bounds.
+
+For network resource adaptation, the closest system to our \awstream{} is
+JetStream~\cite{rabkin2014aggregation}. JetStream use degradation to reduce
+latency for wide-area streaming analytics. Compared to JetStream, \awstream{}
+makes five major contributions: $(1)$~a novel API design to specify degradation
+in a simple and composable way; $(2)$~automatic offline profiling to search for
+Pareto-optimal configurations; $(3)$~online profiling to address model drift;
+$(4)$~an improved runtime system achieving sub-second latency (comparison in
+\autoref{sec:runtime-adaptation}); $(5)$~support for different resource
+allocation policies for multiple applications.
+
+For compute resource adaptation, the closest system is
+VideoStorm~\cite{zhang2017live}, which scales to processing thousands of video
+streams in large clusters. It has a resource scheduler that considers
+resource-quality profile and lag tolerance, and trades off between
+them. Compared to VideoStorm, our compute adaptation framework makes two major
+contributions: $(1)$~our proposed BO outperforms coordinate search approach used
+in VideoStorm; $(2)$~we handle heterogeneous devices while VideoStorm considered
+homogeneous machines in clusters.
+
+Another domain of network resource adaptation is adaptive video
+streaming. Multimedia streaming protocols (e.g.,~RTP~\cite{schulzrinne2006rtp})
+aim to be fast instead of reliable. While they can achieve low latency, their
+accuracy can be poor under congestion.  Recent work has moved towards HTTP-based
+protocols and focused on designing adaptation strategy to improve QoE, as in
+research~\cite{mao2017neural, sun2016cs2p, yin2015control} and industry
+(HLS~\cite{pantos2016http}, DASH~\cite{michalos2012dynamic,
+  sodagar2011mpeg}). These adaptation strategies are often pull-based: client
+keeps checking the index file for changes. And clients have to wait for the next
+chunk (typically 2-10 seconds). In addition, as we have shown in
+\autoref{sec:runtime-adaptation}, their adaptation is a poor match for analytics
+that rely on image details (e.g.,~6\% accuracy for PD). In contrast we propose
+to \emph{learn} the adaptation strategy for each application (also not limited
+to video analytics).
 
 \section{Quality of Service}
 \label{sec:quality-service}
 
-Most QoS work~\cite{ferrari1990scheme, shenker1994integrated,
-  shenker1995fundamental} in the 1990s focuses on network-layer solutions that
-are not widely deployable. \sysname{} adopts an end-host application-layer
-approach ready today for WAN. For other application-layer
-approaches~\cite{vandalore2001survey}, \sysname{}'s API can incorporate their
-techniques, such as encoding the number of layers as a knob to realize the
-layered approach in Rejaie et al~\cite{rejaie2000layered}. Fundamentally,
-\sysname{} does not provide hard QoS guarantees; instead \sysname{} maximizes
-achievable accuracy (application performance) and minimizes latency (system
-performance) with respect to bandwidth constraints: a multidimensional
-optimization.
+When it comes to quality of service for computer networks, most network QoS
+work~\cite{ferrari1990scheme, shenker1994integrated, shenker1995fundamental} in
+the 1990s focuses on network-layer solutions that are not widely deployable. In
+\awstream{}, we adopt an end-host application-layer approach ready today for
+WAN. For other application-layer approaches~\cite{vandalore2001survey},
+\awstream{}'s API can incorporate their techniques, such as encoding the number
+of layers as a knob to realize the layered approach in Rejaie et
+al~\cite{rejaie2000layered}. Fundamentally, \awstream{} does not provide hard
+QoS guarantees; instead \awstream{} maximizes achievable accuracy (application
+performance) and minimizes latency (system performance) with respect to
+bandwidth constraints: a multidimensional optimization.
 
-\para{SLO-awareness.} MittOS~\cite{hao2017mittos} advocates the return of
-\texttt{EBUSY} for IO operations to bound IO requests.
+% \para{SLO-awareness.} MittOS~\cite{hao2017mittos} advocates the return of
+% \texttt{EBUSY} for IO operations to bound IO requests.
 
 %% TCP, for example, adapts to available bandwidth by controlling the congestion
 %% window with AIMD~\cite{jacobson1988congestion}.  Previous work has proposed
@@ -107,37 +125,37 @@ bandwidth. While some systems assume the network can prioritize a small amount
 of critical data under congestion~\cite{cho2012surviving}, most systems reduce
 data sizes in the first place to avoid congestion
 (e.g.,~LBFS~\cite{muthitacharoen2001low}). Over the past two years, we have seen
-a plethora of geo-distributed analytical
-frameworks~\cite{vulimiri2015wananlytics, vulimiri2015global, pu2015low,
-  kloudas2015pixida, viswanathan2016clarinet} that incorporate heterogeneous
-wide-area bandwidth into query optimization to minimize data movement. While
-effective in speeding up analytics, these systems focus on batch tasks such as
-MapReduce jobs or SQL queries. Such tasks are often executed infrequently and
-without real time constrain. In contrast, \sysname{} processes streams
-continuously in real time.
+a plethora of geo-distributed analytical frameworks that incorporate
+heterogeneous wide-area bandwidth into query optimization to minimize data
+movement,
 
-\begin{itemize}
+\begin{itemize}[topsep=5pt, leftmargin=14pt, itemsep=2pt]
+
 \item Pixida~\cite{kloudas2015pixida} minimizes data movement across inter-DC
   links by solving a traffic minimization problem in data analytics.
 
 \item Iridium~\cite{pu2015low} optimizes data and task placement jointly to
   achieve an overall low latency goal.
 
-\item Clarinet~\cite{viswanathan2016clarinet} incorporate bandwidth information
-  into query optimizer to reduce data transfer.
-
 \item Geode~\cite{vulimiri2015global} develops input data movement and join
   algorithm selection strategies to minimize WAN bandwidth usage.
 
-\item WANalytics~\cite{vulimiri2015wananlytics} focuses on batch analytics.
+\item WANalytics~\cite{vulimiri2015wananlytics} pushes computation to edge data
+  centers, automatically optimizing workflow execution plans and replicating
+  data only necessary.
 
-\item SWAG~\cite{hung2015scheduling} coordinates compute task scheduling across
-  DCs.
+\item Clarinet~\cite{viswanathan2016clarinet} incorporate bandwidth information
+  into its query optimizer to reduce data transfer.
 
-\item \cite{heintz2015towards} discusses the complex trade-offs involved in
-  wide-area analytics.
+% \item SWAG~\cite{hung2015scheduling} coordinates compute task scheduling across
+%   DCs.
 
 \end{itemize}
+
+While effective in speeding up analytics, these systems focus on batch tasks
+such as MapReduce jobs or SQL queries. Such tasks are often executed
+infrequently and without real time constrain. In contrast, \sysname{} processes
+streams continuously in real time.
 
 \subsection{Heterogeneous Computing Capabilities}
 \label{sec:heter-proc-capab}
@@ -146,8 +164,9 @@ Prior offloading framework, such as MAUI~\cite{cuervo2010maui},
 CloneCloud~\cite{chun2011clonecloud}, Gabriel~\cite{ha2014towards}, and
 Tango~\cite{gordon2015accelerating}, runs the same algorithm (with the same
 configurations) across different machines: a poor match for the future
-heterogeneous mobile-edge-cloud (MEC) environment. \sysname{} explicitly models
-performance and select the appropriate algorithm and configuration at runtime.
+heterogeneous swarm environment. Our proposed compute resource adaptation
+explicitly models performance and select the appropriate algorithm and
+configuration at runtime.
 
 \para{Low Latency via Redundancy.} The idea of initiating redundant operations
 across diverse resources and using the first result which completes has been
@@ -194,6 +213,7 @@ throughput. While Clipper allows ensemble of models, the purpose is to improve
 accuracy at the cost of resources. Both frameworks have poor performance when
 under overload.
 
+\printbibliography
 \end{document}
 
 %%% Local Variables:
