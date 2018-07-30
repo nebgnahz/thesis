@@ -6,82 +6,75 @@
 \chapter{Related Work}
 \label{cha:related-work}
 
-In this chapter, we survey research projects and industrial effort related to
-this thesis. I first summarize the use of approximation and adaptation in
-diverse contexts.
+In this thesis, we propose to use systematic adaptation and quantitative
+profiling to develop resilient swarm applications. We have summarized the trend
+of the emerging swarm in \autoref{cha:background}. In this chapter, we focus on
+research projects and industrial effort related to our techniques. We group
+related work into four categories: approximation and adaptation, taming
+constrained resources, efficient profiling, and other software systems.
 
 \section{Approximation and Adaptation}
 \label{sec:appr-adapt}
 
-The idea of using approximation to trade application accuracy for response times
-has been explore in a number of contexts. Hellerstein et al.\, describes an
-online aggregation interface~\cite{hellerstein1997online} that provide
-approximate answers which are constantly refined as during
-execution. BlinkDB~\cite{agarwal2013blinkdb} enables interactive queries over
-massive data by allowing users to trade-off query
-accuracy. MEANTIME~\cite{farrell2016meantime} uses approximate computing to
-achieve both hard real-time guarantees and energy
-efficiency. EnerJ~\cite{sampson2011enerj} exploits energy-accuracy trade-offs
-and with programming language level support, it isolates parts of the program
-that must be precise from those that can be approximated. In these applications,
-partial or approximate results are more useful than late results. This thesis
-targets at swarm applications, an emerging domain with its own unique
-challenges: constrained resources and heterogeneous capabilities.
+The idea of using approximation to trade application performance (such as
+accuracy) for system performance (such as response times) has been explore in a
+number of contexts.  Hellerstein et al.~\cite{hellerstein1997online} describes
+an online aggregation interface that provides approximate answers which are
+constantly refined as during execution. BlinkDB~\cite{agarwal2013blinkdb}
+enables interactive queries over massive data by allowing users to trade-off
+query accuracy. MEANTIME~\cite{farrell2016meantime} uses approximate computing
+to achieve both hard real-time guarantees and energy efficiency. In these
+applications, partial or approximate results are more useful than late
+results. In addition to response times, some systems optimize for energy
+consumption. For example, EnerJ~\cite{sampson2011enerj} uses programming
+language support to isolate parts of the program that must be precise from those
+that can be approximated to trade accuracy for energy. In this thesis, our
+research is along the same line: many swarm applications can reduce data
+fidelity or algorithm complexity, trading application accuracy for low latency.
 
+% In 1990s, Odyssey~\cite{noble1995programming} has proposed
+% \emph{application-aware adaptation} for mobile computing and explored data
+% fidelity.
 % sampling~\cite{garofalakis2001approximate}, sketches~\cite{cormode2011sketch}
 
-Among these approaches, BlinkDB uses an error-latency profile heuristic to
-efficiently choose the sample that will best satisfy the user-specified error or
-time bounds.
+For our work on network resource adaptation, the closest system to \awstream{}
+is JetStream~\cite{rabkin2014aggregation}. JetStream is the first to use
+degradation to reduce latency for wide-area streaming analytics. However,
+JetStream relies on manual policies that are sub-optimal. \awstream{} instead
+proposes a novel API design to specify degradation and supports automatic
+profiling to search for Pareto-optimal configurations. \awstream{} also makes
+the following additional contributions: $(1)$~online profiling to address model
+drift; $(2)$~an improved runtime system achieving sub-second latency;
+$(3)$~support for different resource allocation policies for multiple
+applications.
 
-For network resource adaptation, the closest system to our \awstream{} is
-JetStream~\cite{rabkin2014aggregation}. JetStream use degradation to reduce
-latency for wide-area streaming analytics. Compared to JetStream, \awstream{}
-makes five major contributions: $(1)$~a novel API design to specify degradation
-in a simple and composable way; $(2)$~automatic offline profiling to search for
-Pareto-optimal configurations; $(3)$~online profiling to address model drift;
-$(4)$~an improved runtime system achieving sub-second latency (comparison in
-\autoref{sec:runtime-adaptation}); $(5)$~support for different resource
-allocation policies for multiple applications.
+Adaptive video streaming is another domain in which network resource adaptation
+has been extensively studied. Multimedia streaming protocols
+(e.g.,~RTP~\cite{schulzrinne2006rtp}) aim to be fast instead of reliable. While
+they can achieve low latency, their accuracy can be poor under congestion.
+Recent work has moved towards HTTP-based protocols and focused on designing
+adaptation strategy to improve QoE, as in research~\cite{mao2017neural,
+  sun2016cs2p, yin2015control} and industry (HLS~\cite{pantos2016http},
+DASH~\cite{michalos2012dynamic, sodagar2011mpeg}). These adaptation strategies
+are often pull-based: client keeps checking the index file for changes. And
+clients have to wait for the next chunk (typically 2-10 seconds). In addition,
+as we have shown in \autoref{sec:runtime-adaptation}, their adaptation is a poor
+match for analytics that rely on image details (e.g.,~6\% accuracy for PD). In
+contrast we propose to \emph{learn} the adaptation strategy for each application
+(also not limited to video analytics).
 
-For compute resource adaptation, the closest system is
-VideoStorm~\cite{zhang2017live}, which scales to processing thousands of video
-streams in large clusters. It has a resource scheduler that considers
-resource-quality profile and lag tolerance, and trades off between
-them. Compared to VideoStorm, our compute adaptation framework makes two major
-contributions: $(1)$~our proposed BO outperforms coordinate search approach used
-in VideoStorm; $(2)$~we handle heterogeneous devices while VideoStorm considered
-homogeneous machines in clusters.
-
-Another domain of network resource adaptation is adaptive video
-streaming. Multimedia streaming protocols (e.g.,~RTP~\cite{schulzrinne2006rtp})
-aim to be fast instead of reliable. While they can achieve low latency, their
-accuracy can be poor under congestion.  Recent work has moved towards HTTP-based
-protocols and focused on designing adaptation strategy to improve QoE, as in
-research~\cite{mao2017neural, sun2016cs2p, yin2015control} and industry
-(HLS~\cite{pantos2016http}, DASH~\cite{michalos2012dynamic,
-  sodagar2011mpeg}). These adaptation strategies are often pull-based: client
-keeps checking the index file for changes. And clients have to wait for the next
-chunk (typically 2-10 seconds). In addition, as we have shown in
-\autoref{sec:runtime-adaptation}, their adaptation is a poor match for analytics
-that rely on image details (e.g.,~6\% accuracy for PD). In contrast we propose
-to \emph{learn} the adaptation strategy for each application (also not limited
-to video analytics).
-
-\section{Quality of Service}
-\label{sec:quality-service}
-
-When it comes to quality of service for computer networks, most network QoS
-work~\cite{ferrari1990scheme, shenker1994integrated, shenker1995fundamental} in
-the 1990s focuses on network-layer solutions that are not widely deployable. In
-\awstream{}, we adopt an end-host application-layer approach ready today for
-WAN. For other application-layer approaches~\cite{vandalore2001survey},
-\awstream{}'s API can incorporate their techniques, such as encoding the number
-of layers as a knob to realize the layered approach in Rejaie et
-al~\cite{rejaie2000layered}. Fundamentally, \awstream{} does not provide hard
-QoS guarantees; instead \awstream{} maximizes achievable accuracy (application
-performance) and minimizes latency (system performance) with respect to
-bandwidth constraints: a multidimensional optimization.
+The use of adaptation is not to provide hard Quality of Service (QoS)
+guarantees. In \awstream{}, we maximize application accuracy and minimizes
+bandwidth requirement: a multi-dimensional optimization. And when the available
+bandwidth meets application requirement, we achieve low latency streaming.  In
+addition, \awstream{} adopts an end-host application-layer approach ready today
+for WAN, while many network QoS work~\cite{ferrari1990scheme,
+  shenker1994integrated, shenker1995fundamental} in the 1990s focuses on
+network-layer solutions that are not widely deployable. Our proposed APIs are
+extensible. As a result, for other application-layer
+approaches~\cite{vandalore2001survey}, \awstream{}'s API can incorporate their
+techniques, such as encoding the number of layers as a knob to realize the
+layered approach in Rejaie et al.~\cite{rejaie2000layered}.
 
 % \para{SLO-awareness.} MittOS~\cite{hao2017mittos} advocates the return of
 % \texttt{EBUSY} for IO operations to bound IO requests.
@@ -113,23 +106,22 @@ bandwidth constraints: a multidimensional optimization.
 \section{Taming Constrained Resources}
 \label{sec:taming-constr-reso}
 
-In this thesis, we have addressed two types of constrained resources: network
-resources, i.e. scarce and variable WAN bandwidth, and compute resources,
-i.e. heterogeneous swarm devices. We group related work into these two types.
+In this thesis, we have addressed different types of constrained resources:
+network resources, i.e. scarce and variable WAN bandwidth; compute resources,
+i.e. heterogeneous swarm devices. We also studied the impact of variability,
+both network delays and service overload, in heavy-computation tasks. We discuss
+related work into these three categories..
 
-\subsection{Scarce and Variable WAN Bandwidth}
-\label{sec:scarce-variable-wan}
+\para{Scarce and Variable WAN Bandwidth}. Geo-distributed systems need to cope
+with high latency and limited bandwidth in the wide area. While some systems
+assume the network can prioritize a small amount of critical data under
+congestion~\cite{cho2012surviving}, most systems reduce data sizes in the first
+place to avoid congestion (e.g.,~LBFS~\cite{muthitacharoen2001low}). Over the
+past few years, we have seen a plethora of geo-distributed analytical frameworks
+that incorporate heterogeneous wide-area bandwidth into query optimization to
+minimize data movement, as follows.
 
-Geo-distributed systems need to cope with high latency and limited
-bandwidth. While some systems assume the network can prioritize a small amount
-of critical data under congestion~\cite{cho2012surviving}, most systems reduce
-data sizes in the first place to avoid congestion
-(e.g.,~LBFS~\cite{muthitacharoen2001low}). Over the past two years, we have seen
-a plethora of geo-distributed analytical frameworks that incorporate
-heterogeneous wide-area bandwidth into query optimization to minimize data
-movement,
-
-\begin{itemize}[topsep=5pt, leftmargin=14pt, itemsep=2pt]
+\begin{itemize}[topsep=5pt, leftmargin=20pt, itemsep=2pt]
 
 \item Pixida~\cite{kloudas2015pixida} minimizes data movement across inter-DC
   links by solving a traffic minimization problem in data analytics.
@@ -154,44 +146,85 @@ movement,
 
 While effective in speeding up analytics, these systems focus on batch tasks
 such as MapReduce jobs or SQL queries. Such tasks are often executed
-infrequently and without real time constrain. In contrast, \sysname{} processes
-streams continuously in real time.
+infrequently and without real time constrain. In contrast, many swarm
+applications processes streams of sensor data continuously in real time.
 
-\subsection{Heterogeneous Computing Capabilities}
-\label{sec:heter-proc-capab}
+\para{Offloading Augments Mobile Devices.} To improve application performance
+and extend battery life for mobile devices, research has explored offloading
+heavy-computation tasks to remote servers. Satyanarayanan used the word ``cyber
+foraging'' to refer to dynamically augmenting the computing resources of a
+wireless mobile computer by exploiting wired hardware
+infrastructure~\cite{satyanarayanan2001pervasive, satyanarayanan2015brief}.
 
-Prior offloading framework, such as MAUI~\cite{cuervo2010maui},
-CloneCloud~\cite{chun2011clonecloud}, Gabriel~\cite{ha2014towards}, and
-Tango~\cite{gordon2015accelerating}, runs the same algorithm (with the same
-configurations) across different machines: a poor match for the future
-heterogeneous swarm environment. Our proposed compute resource adaptation
-explicitly models performance and select the appropriate algorithm and
-configuration at runtime.
+Offloading receives much attention, especially after mobile computing took off
+since 2010. MAUI~\cite{cuervo2010maui} supports fine-grained code offloading by
+exploiting the managed code environment. Developers annotate candidate methods
+to offload as \texttt{Remoteable}. MAUI then uses an optimization engine to
+decide which method to offload dynamically. CloneCloud~\cite{chun2011clonecloud}
+is a step further that partitions applications without developer annotation. In
+both MAUI and CloneCloud, the code either runs on a mobile device or on a
+server. Tango~\cite{gordon2015accelerating} explores the use of replication: the
+application executes on both the mobile device and the server. It allows either
+to lead the execution and uses flip-flop replication to allow leadership to
+float between replicas.
 
-\para{Low Latency via Redundancy.} The idea of initiating redundant operations
-across diverse resources and using the first result which completes has been
-explored in many contexts, such as cloud
-computing~\cite{ananthanarayanan2013effective}, cloud
-service~\cite{dean2013tail}, wide-area network service~\cite{vulimiri2013low},
-and mobile applications~\cite{gordon2015accelerating}. We extends the redundancy
-and offer a variety of policies for combining results from multiple services.
+\para{Redundancy Tackles Latency Variability.} The idea of initiating redundant
+operations across diverse resources and using the first result which completes
+has been explored in many contexts. For mobile computing, we have mentioned
+Tango~\cite{gordon2015accelerating} that replicates execution on both mobile
+devices and the server. Cloud computing often has straggler tasks that delay the
+job completion. Instead of waiting and trying to predict stragglers,
+Dolly~\cite{ananthanarayanan2013effective} launches multiple clones of every
+task of a job and uses the result that finishes first. For cloud-based web
+services at Google, Dean et al.~\cite{dean2013tail} describe similar redundancy
+techniques that address the tail performance at scale, such as hedged requests,
+tied requests. In wide-area network, Vulimiri et al.~\cite{vulimiri2013low} show
+that redundancy reduces latency for a number of services, such as DNS queries,
+database queries, and packet forwarding.
 
-\section{Profiling with Efficiency}
+For offloading, mobile devices and servers run the same algorithm (with the same
+configurations): either by partition or replication.  For redundancy, an array
+of worker machines also run the same task. This fails to accommodate the
+heterogeneous swarm environment. The proposed adaptation in this thesis
+explicitly models performance across different devices. The learned profile can
+be used to assist offloading decisions.
+
+\section{Efficient Profiling}
 \label{sec:prof-with-effic}
 
-\para{Bayesian Optimization.} To optimize complex systems in a principled way,
-many frameworks employ Bayesian Optimizations to tune application behavior, such
-as CherryPick~\cite{alipourfard2017cherrypick}, FLASH~\cite{zhang2016flash}, and
-BOAT~\cite{dalibard2017boat}. These frameworks focus on single-objective
-optimization: minimizing job completion time or maximizing application
-accuracy. In contrast, \sysname{} addresses a multi-dimensional optimization
-between application accuracy and processing times. We demonstrated that BO
-outperforms greedy heuristic approach used in VideoStorm~\cite{zhang2017live}.
+Prior work also use profiling to guide adaptation. For SQL queries, BlinkDB
+creates error-latency profiles to guide sample selection to meet the query's
+response time or accuracy requirements. For large scale video processing,
+VideoStorm~\cite{zhang2017live} considers resource-quality profile and lag
+tolerance, and trades off between them.
+
+For an efficient profiling, VideoStorm uses coordinate search---or greedy search
+in their terms. Our compute adaptation framework makes two major contributions:
+$(1)$~our proposed BO outperforms coordinate search approach used in VideoStorm;
+$(2)$~we handle heterogeneous devices while VideoStorm considered homogeneous
+machines in clusters.
+
+BO, a technique for global optimization of black-box functions, has been applied
+to solve a wide range of problems. Snoek et al.~\cite{snoek2012practical}
+demonstrates its effectiveness in tuning parameters and model hyperparameters
+for ML tasks. CherryPick~\cite{alipourfard2017cherrypick} uses BO to minimize
+cloud usage cost by searching for the best cloud configurations: the number of
+VMs, the number of cores, CPU speed per core, average RAM per core, disk speed,
+etc. FLASH~\cite{zhang2016flash} proposes a two-layer Bayesian optimization
+framework to tune hyperparameters in data analytic
+pipelines. BOAT~\cite{dalibard2017boat} extends BO with by leveraging contextual
+information from developers and demonstrates the use in garbage collection and
+neural network. Google uses BO to optimize the recipe for chocolate chip
+cookies~\cite{solnik2017bayesian}. These use cases are single-objective
+optimization: minimizing time, cost or maximizing utility, tastiness. In this
+thesis, we face a multi-dimensional optimization between application accuracy
+and processing times.
 
 \section{Related Systems}
 \label{sec:related-systems}
 
-\para{Stream Processing Systems.} Early streaming
+\awstream{} has large debt to existing stream processing systems both for
+programming abstractions as well as handling back pressure. Early streaming
 databases~\cite{abadi2005design, chandrasekaran2003telegraphcq} have explored
 the use of dataflow models with specialized operators for stream
 processing. Recent research projects and open-source
@@ -202,18 +235,17 @@ Storm~\cite{toshniwal2014storm}, Spark Streaming~\cite{zaharia2013discretized}
 and Heron~\cite{sanjeev2015twitter} throttle data ingestion; Apache
 Flink~\cite{carbone2015apache} uses edge-by-edge back-pressure techniques
 similar to TCP flow control; Faucet~\cite{lattuada2016faucet} leaves the flow
-control logic up to developers.  While our work has a large debt to prior
-streaming work, \sysname{} targets at the wide area and explicitly explores the
-trade-off between data fidelity and freshness.
+control logic up to developers. In contrast, \awstream{} targets at the wide
+area and explicitly explores the trade-off between data fidelity and freshness.
 
-\para{Model Serving.} Frameworks such as Clipper~\cite{crankshaw2017clipper} and
-TensorFlow Serving~\cite{tensorflow2017serving} only focus on system-level
-techniques such as batching and hardware acceleration to improve
-throughput. While Clipper allows ensemble of models, the purpose is to improve
-accuracy at the cost of resources. Both frameworks have poor performance when
-under overload.
+Our compute resource adaptation work focuses on heavy-computation tasks, such as
+machine learning inference. Systems such as Clipper~\cite{crankshaw2017clipper}
+and TensorFlow Serving~\cite{tensorflow2017serving} are state-of-the-art in
+serving ML models and performing inference. They only focus on system-level
+techniques such as batching and hardware acceleration to improve throughput. And
+our adaptation, especially the profile can be used by these systems as
+application-aware improvements.
 
-\printbibliography
 \end{document}
 
 %%% Local Variables:
