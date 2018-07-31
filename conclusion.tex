@@ -29,19 +29,22 @@ Overall, a systematic and quantitative approach for adaptation.
 \section{Future Directions}
 \label{sec:future-directions}
 
-Reducing Developer Effort. While \awstream{} simplifies developing adaptive
-applications, there are still application-specific parts required for
-developers: wrapping appropriate \maybe{} calls, providing training data, and
-implementing accuracy functions. Because \awstream{}'s API is extensible, we
-plan to build libraries for common degradation operations and accuracy
-functions, similar to machine learning libraries.
+Future directions on programming abstraction. Further reduce developer
+effort. While \awstream{} simplifies developing adaptive applications, there are
+still application-specific parts required for developers: wrapping appropriate
+\maybe{} calls, providing training data, and implementing accuracy
+functions. Because \awstream{}'s API is extensible, we plan to build libraries
+for common degradation operations and accuracy functions, similar to machine
+learning libraries.
 
-For \awstream{}, adaptation more proactively if we can predict bandwidth
-changes. Recent research on adaptive video streaming explores model predictive
-control (MPC)~\cite{yin2015control, sun2016cs2p} and neural
-network~\cite{mao2017neural}. We plan to explore these techniques next.
+Future directions on profiling.
 
-Build server scheduler to use the profile for compute resources.
+Future directions on runtime adaptation. For \awstream{}, adaptation more
+proactively if we can predict bandwidth changes. Recent research on adaptive
+video streaming explores model predictive control (MPC)~\cite{yin2015control,
+  sun2016cs2p} and neural network~\cite{mao2017neural}. We plan to explore these
+techniques next. Build server scheduler to use the profile for compute
+resources.
 
 Discuss accessors, especially mutable accessors.
 
