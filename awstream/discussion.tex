@@ -14,13 +14,15 @@ can handle faults in existing systems, such as Spark
 Streaming~\cite{zaharia2013discretized}, it is difficult to make edge clients
 failure-oblivious.  We leave failure detection and recovery as a future work.
 
-\para{Profile Modeling.} \awstream{} currently performs an exhaustive search when
-profiling. While parallelism and sampling are effective, profiling complexity
-grows exponentially with the number of knobs. Inspired by recent success of
-using Bayesian Optimization~\cite{snoek2012practical, alipourfard2017cherrypick,
-  solnik2017bayesian} to model black-box functions, we are currently exploring
-multi-objective Bayesian Optimization~\cite{hernandez2016predictive} that can
-find \textit{near-optimal} configurations without exhaustive search.
+\para{Profile Modeling.} \awstream{} currently performs an exhaustive search
+when profiling. While parallelism and sampling are effective, profiling
+complexity grows exponentially with the number of knobs. Inspired by recent
+success of using Bayesian Optimization~\cite{snoek2012practical,
+  alipourfard2017cherrypick, solnik2017bayesian} to model black-box functions,
+we can use multi-objective Bayesian Optimization
+(BO)~\cite{hernandez2016predictive} to search for \textit{near-optimal}
+configurations without exhaustive search. We explored the use of BO in the next
+chapter for compute resource adaptation.
 
 % \para{Expressiveness}: Our \maybe{} APIs allow an easy integration with
 % existing stream processing systems. While it follows the operator model,
