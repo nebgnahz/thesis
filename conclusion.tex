@@ -5,39 +5,58 @@
 \chapter{Conclusion and Future Work}
 \label{cha:concl-future-work}
 
-\todo{rewrite.}
+This thesis claims that \textit{systematic adaptation and quantitative profiling
+  are the key to a resilient swarm}. In this thesis, I have studied swarm
+applications and demonstrated how to allow adaptation for network and compute
+resources. This chapter summarizes the contributions of this thesis and
+discusses valuable directions for future work.
 
-The swarm has huge potentials but also challenges: \textbf{constrained
-  resources} and \textbf{heterogeneous devices.}.
+\section{Conclusions and Contributions}
+\label{sec:contributions}
 
-Adaptation addresses these challenges. But it is non-trivial to come up with
-good adaptation strategies. The problem has a large design space. Manual
-policies are suboptimal. Accurate policies require extensive studies.
+\paraf{Reviewing the Emerging Swarm.} This thesis provides an overview of
+emerging swarm and the architecture design trends for swarm applications. We
+discuss issues with existing approaches that directly connect devices to the
+cloud. We also analyze the challenges swarm applications face, with a focus on
+constrained resources and heterogeneous environment.
 
-We propose to support adaptation in programming abstraction and quantitatively
-learns the Pareto-optimal profile.
+\para{Systematic and Quantitative Adaptation.} The core of this thesis is a
+systematic and quantitative approach for developing adaptive swarm
+applications. Instead of relying on manual policies, developers use well-defined
+programming abstractions to express adaptation options. We then use a
+data-driven profiling to automatically learn the profile---a set of
+Pareto-optimal configurations---that characterizes resource demands and
+application performance.
 
-Network Resource Adaptation. \awstream{} addresses scarce and variable WAN
-bandwidth. It is tradeoff between application accuracy and data size demand.
+\para{Design, Implementation, and Evaluation of \awstream{}.} Swarm applications
+that communicate across the wide area need to handle the scarce and variable WAN
+bandwidth. We present a complete design and implementation of the framework
+\awstream{} for network resource adaptation. We have developed several swarm
+applications: pedestrian detection, augmented reality, and monitoring log
+analysis. Our experiments show that all applications can achieve sub-second
+latency with nominal accuracy drops.
 
-Compute Resource Adaptation. Uses BO to address large parameter space and
-profile transfer for heterogeneous devices. Exploiting the tradeoff between
-application accuracy and processing times.
-
-Overall, a systematic and quantitative approach for adaptation.
+\para{Improving Profiling Efficiency.} In \awstream{}, we demonstrated how
+parallelism and sampling techniques can improve profiling efficiency. For
+network resource adaptation, we have improved the efficiency further to address
+two challenges: Bayesian Optimization to address the large parameter space;
+profile transfer to address device heterogeneity.
 
 \section{Future Directions}
 \label{sec:future-directions}
 
-Future directions on programming abstraction. Further reduce developer
-effort. While \awstream{} simplifies developing adaptive applications, there are
-still application-specific parts required for developers: wrapping appropriate
-\maybe{} calls, providing training data, and implementing accuracy
-functions. Because \awstream{}'s API is extensible, we plan to build libraries
-for common degradation operations and accuracy functions, similar to machine
-learning libraries.
+Future work for programming abstraction. Generalization. As the number of
+inter-connected devices continue to grow, we expect to see more diverse swarm
+applications. One future direction is to test and evaluate the adaptation
+techniques in new applications and further reduce developer efforts. Programming
+abstraction. Further reduce developer effort. While \awstream{} simplifies
+developing adaptive applications, there are still application-specific parts
+required for developers: wrapping appropriate \maybe{} calls, providing training
+data, and implementing accuracy functions. We plan to build libraries for common
+degradation operations and accuracy functions, similar to machine learning
+libraries.
 
-Future directions on profiling.
+For profiling.
 
 Future directions on runtime adaptation. For \awstream{}, adaptation more
 proactively if we can predict bandwidth changes. Recent research on adaptive
@@ -46,7 +65,14 @@ video streaming explores model predictive control (MPC)~\cite{yin2015control,
 techniques next. Build server scheduler to use the profile for compute
 resources.
 
-Discuss accessors, especially mutable accessors.
+From adapting to resources to recruiting new resources. Swarm applications
+should be able to dynamically recruit resources, such as sensors, actuators,
+data, and computing infrastructure. One promising work is the mutable accessors
+discussed by Brooks et al.~\cite{brooks2018component}. An mutable accessor is an
+abstract interface specification for candidate accessors. It reifies a concrete
+accessor downloaded from the Internet or retrieved through a discovery
+mechanism. This reification serves as recruiting resources for the swarm
+applications.
 
 \end{document}
 

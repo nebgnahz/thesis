@@ -46,11 +46,11 @@ swarm applications that do not adapt will suffer. Take network resources as an
 example, when there is not enough bandwidth, an application may incur large
 latency if it uses TCP that causes backlogged data, or devastated data quality
 if it uses UDP that has uncontrollable packet loss. These are extreme design
-points in the trade-off space between data fidelity and data freshness
-(\autoref{fig:intro}). In order to be resilient to resource availability and
-changes, swarm applications can adapt its behaviors to change the resource
-demand, just as video streaming dynamically adjusts its bitrate to the available
-bandwidth~\cite{michalos2012dynamic}.
+points in the trade-off space between data fidelity and data freshness (as we
+will show in \autoref{fig:intro}). In order to be resilient to resource
+availability and changes, swarm applications can adapt its behavior and change
+its resource demand, just as video streaming dynamically adjusts its bitrate to
+the available bandwidth~\cite{michalos2012dynamic}.
 
 While enabling adaptation is easy, it is challenging to come up with accurate
 adaptation policies that govern the application behavior in an optimal
@@ -58,10 +58,10 @@ way. Developers often quickly develop manual policies based on heuristics. While
 such manual policies are already a step forward compared to non-adaptive
 applications, they lack quantitative measurements to back up. Accurate
 adaptation policies often require extensive domain expertise or considerable
-effort. In addition, at a swarm scale, each application has its own trade-off
-space and it is not viable to study each individual application extensively.
+effort. In addition, each application has its own trade-off. At a swarm scale,
+it is not viable to study each individual application extensively.
 
-In this thesis, we propose to adapt swarm applications, in a systematic and
+In this thesis, we propose to adapt swarm applications in a systematic and
 quantitative approach. By ``systematic'', I mean programming abstractions that
 allow developers to embed adaptation options; by ``quantitative'', I am refering
 to a data-driven automatic profiling tool that learns the adaptation strategy.
@@ -101,10 +101,10 @@ the swarm,
 
 \end{itemize}
 
-A key approach to address the above challenges is to employ adaptation. If we
-can adapt the application behavior to match the available and varying resource,
-swarm applications would become resilient. However, to enable adaptation, we
-need to address the following challenges,
+A key approach to address the above challenges is to employ adaptation, i.e.,
+adapting the application behavior to match the available and varying
+resource. However, to support adaptation, we need to address the following
+issues,
 
 \begin{itemize}[topsep=5pt, itemsep=2pt, leftmargin=10pt]
 
@@ -117,14 +117,14 @@ need to address the following challenges,
 \item \textbf{Ad-hoc Development and Manual Efforts.} Existing approaches that
   allow adaptation require developers to write manual policies, often based on
   heuristics rather than quantitative analysis. These policies are not accurate,
-  prone to human errors, and lead to sub-optimal performance.
+  prone to human errors, and they lead to sub-optimal performance.
 
 \end{itemize}
 
 \section{Systematic and Quantitative Adaptation}
 \label{sec:adaptation}
 
-We propose to incorporate adaptation as a first-class programming abstraction
+We propose to incorporate adaptation as first-class programming abstractions
 (systematic) and automatically learn the adaptation strategy, the profile, with
 a data-driven approach (quantitative). In this way, swarm applications can use
 the profile to guide its adaptation at runtime. This approach has three stages,
