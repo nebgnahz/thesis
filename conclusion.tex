@@ -45,34 +45,30 @@ profile transfer to address device heterogeneity.
 \section{Future Directions}
 \label{sec:future-directions}
 
-Future work for programming abstraction. Generalization. As the number of
-inter-connected devices continue to grow, we expect to see more diverse swarm
-applications. One future direction is to test and evaluate the adaptation
-techniques in new applications and further reduce developer efforts. Programming
-abstraction. Further reduce developer effort. While \awstream{} simplifies
-developing adaptive applications, there are still application-specific parts
-required for developers: wrapping appropriate \maybe{} calls, providing training
-data, and implementing accuracy functions. We plan to build libraries for common
-degradation operations and accuracy functions, similar to machine learning
-libraries.
+In previous chapters, we have discussed some potential improvements to our
+existing work. In this section, we discuss future directions in a broader
+context.
 
-For profiling.
+The core challenge for the swarm comes from the scale of inter-connected
+devices. As the number continues to grow, we expect to see more diverse swarm
+applications. While we have used several applications in this thesis as case
+studies, we need more applications to evaluate how general the proposed APIs
+are, how effective the profiling techniques are, and how responsive the runtime
+system is.
 
-Future directions on runtime adaptation. For \awstream{}, adaptation more
-proactively if we can predict bandwidth changes. Recent research on adaptive
-video streaming explores model predictive control (MPC)~\cite{yin2015control,
-  sun2016cs2p} and neural network~\cite{mao2017neural}. We plan to explore these
-techniques next. Build server scheduler to use the profile for compute
-resources.
+With our framework, developers need to encode adaptation with our APIs, provide
+training data, and implement accuracy functions. There could be better tooling
+and library of reusable functions (such as F1 score for object detection) to
+further simplify developer effort, similar to machine learning libraries.
 
-From adapting to resources to recruiting new resources. Swarm applications
-should be able to dynamically recruit resources, such as sensors, actuators,
-data, and computing infrastructure. One promising work is the mutable accessors
-discussed by Brooks et al.~\cite{brooks2018component}. An mutable accessor is an
-abstract interface specification for candidate accessors. It reifies a concrete
-accessor downloaded from the Internet or retrieved through a discovery
-mechanism. This reification serves as recruiting resources for the swarm
-applications.
+Instead of adapting to resources, swarm applications should be able to
+dynamically recruit resources, such as sensors, actuators, data, and computing
+infrastructure. What are the necessary technologies to realize this recruitment?
+Discovery, management. One promising work is the mutable accessors discussed by
+Brooks et al.~\cite{brooks2018component}. An mutable accessor is an abstract
+interface specification for candidate accessors. It reifies a concrete accessor
+downloaded from the Internet or retrieved through a discovery mechanism. This
+reification serves as recruiting resources for the swarm applications.
 
 \end{document}
 
