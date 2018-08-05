@@ -2,45 +2,45 @@
 
 \begin{document}
 
-\chapter{Conclusion and Future Work}
+\chapter{Conclusion and Future Directions}
 \label{cha:concl-future-work}
 
 This thesis claims that systematic adaptation and quantitative profiling are the
-key to a resilient swarm. In this thesis, I have studied swarm applications and
-demonstrated how to allow adaptation for network and compute resources. This
-chapter summarizes our contributions and discusses valuable directions for
-future work.
+key to a resilient swarm. This chapter summarizes our work and discusses
+valuable directions for future work.
 
-\section{Conclusions and Contributions}
-\label{sec:contributions}
+\section{Thesis Summary}
+\label{sec:thesis-summary}
 
-\paraf{Reviewing the Emerging Swarm.} This thesis provides an overview of
-emerging swarm and the architecture design trends for swarm applications. We
-discuss issues with existing approaches that directly connect devices to the
-cloud. We also analyze the challenges swarm applications face, with a focus on
-constrained resources and heterogeneous environment.
+This thesis began with an overview of the emerging swarm. As the swarm grows at
+a staggering rate, it faces challenges the underlying communication and
+computation infrastructure: the scarce and variable WAN bandwidth and the
+heterogeneous compute environment. Existing approaches with manual policies or
+application-specific policies do not work for the swarm scale.
 
-\para{Systematic and Quantitative Adaptation.} The core of this thesis is a
-systematic and quantitative approach for developing adaptive swarm
-applications. Instead of relying on manual policies, developers use well-defined
-programming abstractions to express adaptation options. We then use a
-data-driven profiling to automatically learn the profile---a set of
-Pareto-optimal configurations---that characterizes resource demands and
-application performance.
+I propose to adapt swarm application in a systematic and quantitative way.  The
+proposed approach consists of three parts: well-defined programming
+abstractions, data-driven profiling, and runtime adaptation. Instead of
+specifying policies manually, developers use our APIs to express what adaptation
+options are available. From these options, a profiling tool automatically learns
+a Pareto-optimal profile that characterizes resource demands and application
+performance. At runtime, applications adapt their behaviors based on the learned
+profile.
 
-\para{Design, Implementation, and Evaluation of \awstream{}.} Swarm applications
-that communicate across the wide area need to handle the scarce and variable WAN
-bandwidth. We present a complete design and implementation of the framework
-\awstream{} for network resource adaptation. We have developed several swarm
-applications: pedestrian detection, augmented reality, and monitoring log
-analysis. Our experiments show that all applications can achieve sub-second
-latency with nominal accuracy drops.
+For network resources, such as the scarce and variable WAN bandwidth, swarm
+applications explore the trade-off between application accuracy and data
+sizes. Developers use \maybe{} APIs to encode adaptation options. Our profiling
+tool uses parallelism and sampling techniques to efficiently learn the
+Pareto-optimal profile. We implemented three applications and compared against
+several baselines. Our evaluation shows that \awstream{} significantly
+outperforms non-adaptive applications and applications with manual policies.
 
-\para{Improving Profiling Efficiency.} In \awstream{}, we demonstrated how
-parallelism and sampling techniques can improve profiling efficiency. For
-network resource adaptation, we have improved the efficiency further to address
-two challenges: Bayesian Optimization to address the large parameter space;
-profile transfer to address device heterogeneity.
+For compute resource, such as the heterogeneous devices across the swarm, the
+edge and the cloud, swarm applications explore the trade-off between application
+accuracy and processing times. We propose to use macro annotations to encode
+algorithm parameters. The large parameter space and heterogeneous environment
+require us to profile efficiently. We use Bayesian Optimization, and profile
+transfer.
 
 \section{Future Directions}
 \label{sec:future-directions}
