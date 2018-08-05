@@ -45,30 +45,45 @@ transfer.
 \section{Future Directions}
 \label{sec:future-directions}
 
-In previous chapters, we have discussed some potential improvements to our
-existing work. In this section, we discuss future directions in a broader
-context.
+In \autoref{sec:awstream-discussion} and \autoref{brt-discussion}, we have
+discussed potential improvements that are near term and specific to our current
+design and implementation. Before we concluded this thesis, we discuss future
+directions in a longer term and for a broader context.
 
-The core challenge for the swarm comes from the scale of inter-connected
-devices. As the number continues to grow, we expect to see more diverse swarm
-applications. While we have used several applications in this thesis as case
-studies, we need more applications to evaluate how general the proposed APIs
-are, how effective the profiling techniques are, and how responsive the runtime
-system is.
+\para{More Diverse Applications and Generalization.} The core challenge for the
+swarm comes from the scale of inter-connected devices. As the number of devices
+continues to grow, we expect to see more diverse swarm applications. While we
+have used several applications in this thesis as case studies, we need more
+applications to evaluate how general the proposed APIs are, how effective the
+profiling techniques are, and how responsive the runtime system is. Some
+enhancements may be easy to incorporate into our existing system. For example,
+because our APIs are extensible, we can build a library of reusable functions
+for adaptation options and accuracy measurements to reduce developer
+efforts. Other enhancements may require a redesign of APIs, profiling tools,
+and/or the runtime.
 
-With our framework, developers need to encode adaptation with our APIs, provide
-training data, and implement accuracy functions. There could be better tooling
-and library of reusable functions (such as F1 score for object detection) to
-further simplify developer effort, similar to machine learning libraries.
+\para{Adaptation and Resource Allocation.} Instead of adapting to resources,
+swarm applications can dynamically \emph{recruit} resources, such as sensors,
+actuators, data, and computing infrastructure. We have envisioned SwarmOS that
+controls and allocates resources for different swarm applications. However, some
+swarm resources are beyond the control of individual entities (such as WAN
+bandwidth that is); some swarm resources are not as elastic as the cloud (such
+as end devices that need to be purchased and installed). In these cases, swarm
+applications need to adapt to such resources. One interesting direction is to
+use a combination of adaptation and resource allocation. In
+\autoref{sec:resource-allocation}, we explored allocating available bandwidth
+among multiple applications and how different allocation schemes affect
+application behaviors. We believe this is an important future direction for the
+SwarmOS vision.
 
-Instead of adapting to resources, swarm applications should be able to
-dynamically recruit resources, such as sensors, actuators, data, and computing
-infrastructure. What are the necessary technologies to realize this recruitment?
-Discovery, management. One promising work is the mutable accessors discussed by
-Brooks et al.~\cite{brooks2018component}. An mutable accessor is an abstract
-interface specification for candidate accessors. It reifies a concrete accessor
-downloaded from the Internet or retrieved through a discovery mechanism. This
-reification serves as recruiting resources for the swarm applications.
+\para{Adaptation and Interoperability.} The success of the swarm relies on an
+open architecture. The propose adaptation techniques require collaborations
+across different platforms. It will be hard with stovepipe solutions. Brooks et
+al.~\cite{brooks2018component} proposes a component-based software architecture
+named ``Accessors'' that are proxies for services and things. Instantiate
+accessors on another host and an mutable accessor is an abstract interface
+specification for candidate accessors. It reifies a concrete accessor downloaded
+from the Internet or retrieved through a discovery mechanism.
 
 \end{document}
 
