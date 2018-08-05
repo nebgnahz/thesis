@@ -43,26 +43,27 @@ service requests.
 The success of the swarm relies on addressing the gap between the growing
 application demand and scarce/variable resources. Facing insufficient resources,
 swarm applications that do not adapt will suffer. Take network resources as an
-example, when there is not enough bandwidth, an application may incur large
-latency if it uses TCP that causes backlogged data, or devastated data quality
-if it uses UDP that has uncontrollable packet loss. These are extreme design
+example; when there is not enough bandwidth, an application may incur large
+latency that causes backlogged data if it uses TCP, or devastated data quality
+that has uncontrollable packet loss if it uses UDP. These are extreme design
 points in the trade-off space between data fidelity and data freshness (as we
 will show in \autoref{fig:intro}). In order to be resilient to resource
-availability and changes, swarm applications can adapt its behavior and change
-its resource demand, just as video streaming dynamically adjusts its bitrate to
-the available bandwidth~\cite{michalos2012dynamic}.
+availability and changes, swarm applications can adapt their behavior and change
+their resource demand, just as video streaming dynamically adjusts its bitrate
+to the available bandwidth~\cite{michalos2012dynamic}.
 
 While enabling adaptation is easy, it is challenging to come up with accurate
 adaptation policies that govern the application behavior in an optimal
 way. Developers often quickly develop manual policies based on heuristics. While
 such manual policies are already a step forward compared to non-adaptive
-applications, they lack quantitative measurements to back up. Accurate
-adaptation policies often require extensive domain expertise or considerable
-effort. In addition, each application has its own trade-off. At a swarm scale,
-it is not viable to study each individual application extensively.
+applications, they lack quantitative measurements to back up the
+decisions. Accurate adaptation policies often require extensive domain expertise
+or considerable effort. In addition, each application has its own trade-off. At
+a swarm scale, it is not viable to study each individual application
+extensively.
 
-In this thesis, we propose to adapt swarm applications in a systematic and
-quantitative approach. By ``systematic'', I mean programming abstractions that
+In this thesis, I propose to adapt swarm applications in a systematic and
+quantitative way. By ``systematic'', I mean programming abstractions that
 allow developers to embed adaptation options; by ``quantitative'', I am refering
 to a data-driven automatic profiling tool that learns the adaptation strategy.
 
@@ -75,7 +76,7 @@ to a data-driven automatic profiling tool that learns the adaptation strategy.
 
 In the remainder of this chapter, I first summarize the challenges with
 developing swarm applications and elaborate our systematic and quantitative
-adaptation. I then highlight our key results and layout the roadmap for the rest
+adaptation. I then highlight our key results and lay out the roadmap for the rest
 of the thesis.
 
 \section{Challenges with Developing Swarm Applications}
@@ -104,7 +105,7 @@ the swarm,
 A key approach to address the above challenges is to employ adaptation, i.e.,
 adapting the application behavior to match the available and varying
 resource. However, to support adaptation, we need to address the following
-issues,
+issues:
 
 \begin{itemize}[topsep=5pt, itemsep=2pt, leftmargin=10pt]
 
@@ -139,60 +140,81 @@ parameters in compute resource adaptation.
 
 \para{Data-driven Automatic Profiling.} Based on the available adaptation
 options specified by developers, we can build tools that automatically
-\emph{learns} Pareto-optimal adaptation policies. To handle the large design
+\emph{learn} Pareto-optimal adaptation policies. To handle the large design
 space, we use both system techniques and statistical techniques. In this thesis,
 we demonstrate how parallelism and sampling speed up profiling for stream
 processing in network resource adaptation and how Bayesian Optimization learns
-near-optimal sets with substantially few number of samples.
+near-optimal sets with substantially fewer number of samples.
 
 \para{Runtime Adaptation.} Once the profile is learned, it is used at
-\emph{runtime} to guide how application adaptation: matching application demand
-to available resources. For example, \awstream{} matches the streaming data rate
-to the estimated available bandwidth. By avoiding congestion with a
-Pareto-optimal configuration from the profile, \awstream{} achieves sub-second
-latency while maximizing the application accuracy.
+\emph{runtime} to guide application adaptation, matching application demand to
+available resources. For example, \awstream{} matches the streaming data rate to
+the estimated available bandwidth. By avoiding congestion with a Pareto-optimal
+configuration from the profile, \awstream{} achieves sub-second latency while
+maximizing the application accuracy.
 
-\section{Summary of Results}
-\label{sec:summary-results-1}
+\section{Summary of Results and Contributions}
+\label{sec:contributions}
 
-In this thesis, we demonstrate the systemic and quantitative approach towards
-adaptation for network resources and compute resources. In both cases, we
-describe our programming abstraction design and demonstrate that the data-driven
-approach generates accurate profiles. For network resources, we use parallelism
-and sampling techniques to speed up the profiling by up to 29$\times$ and
-8.7$\times$ respectively. For compute resources, we have significantly reduced
-the number of profiling points, by more than 50$\times$.
+In this thesis, we demonstrate a systemic and quantitative approach towards
+adaptation to network resources and compute resources. This thesis makes the
+following contributions:
 
-To demonstrate the effectiveness of the learned profile, we built \awstream{}
-for network resource adaptation and evaluate it with three real-world
-applications. Compared with non-adaptive applications, \awstream{} achieves a
+\paraf{Reviewing the Emerging Swarm.} This thesis provides an overview of
+emerging swarm and the architecture design trends for swarm applications. We
+discuss issues with existing approaches that directly connect devices to the
+cloud. We also analyze the challenges swarm applications face, with a focus on
+constrained resources and heterogeneous environment.
+
+\para{Systematic and Quantitative Adaptation.} The core of this thesis is a
+systematic and quantitative approach for developing adaptive swarm
+applications. Instead of relying on manual policies, developers use well-defined
+programming abstractions to express adaptation options. We then use a
+data-driven profiling to automatically learn the profile---a set of
+Pareto-optimal configurations---that characterizes resource demands and
+application performance.
+
+\para{Design, Implementation, and Evaluation of \awstream{}.} Swarm applications
+that communicate across the wide area need to handle the scarce and variable WAN
+bandwidth. We present a complete design and implementation of the framework
+\awstream{} for network resource adaptation. We have developed several swarm
+applications: pedestrian detection, augmented reality, and monitoring log
+analysis. Compared with non-adaptive applications, \awstream{} achieves a
 40--100$\times$ reduction in latency relative to applications using TCP, and a
 45--88\% improvement in application accuracy relative to applications using
 UDP. Compared with manual policies using a state-of-the-art system
 JetStream~\cite{rabkin2014aggregation}, \awstream{} achieves a 15-20$\times$
 reduction in latency and 1-5\% improvement in accuracy simultaneously.
 
+\para{Improving Profiling Efficiency.} In \awstream{}, we demonstrated how
+parallelism and sampling techniques can speed up the profiling by up to
+29$\times$ and 8.7$\times$ respectively. For network resource adaptation, we
+have improved the efficiency further to address two challenges: Bayesian
+Optimization to address the large parameter space; profile transfer to address
+device heterogeneity. We show that BO reduces the number of profiling points by
+more than 50$\times$.
+
 \section{Thesis Organization}
 \label{sec:thesis-organization}
 
 The remainder of this thesis is organized as follows:
 
-\begin{itemize}[topsep=5pt]
+\begin{itemize}[topsep=5pt, leftmargin=15pt]
 \item \autoref{cha:background} covers the background for swarm applications. I
   first summarize the landscape of the emerging swarm applications and show that
   they have fundamental differences from previous related concepts.  Many swarm
   applications are constructed using a cloud-centric approach. I then argue
-  against it by discussing the pitfalls including security, privacy,
+  against it by discussing the pitfalls, including security, privacy,
   scalability, latency, etc. A new tier of computing infrastructure, the edge,
   arises to accompany the cloud. While it reduces network latency and provides
-  more resource, the edge has its own challenges, such as increased
+  more resources, the edge has its own challenges, such as increased
   heterogeneity. The swarm landscape and the argument against the cloud are
   based on joint work with Nitesh Mor, John Kolb, Douglas S. Chan, Nikhil Goyal,
   Ken Lutz, Eric Allman, John Wawrzynek, Edward A. Lee, and John
   Kubiatowicz~\cite{zhang2015cloud}.
 \item In \autoref{cha:netw-reso-adapt}, I present adapting swarm applications to
   network resources. Many swarm applications that transport large streams of
-  data across the wide area faces challenges with the scarce and variable
+  data across a wide area faces challenges with the scarce and variable
   bandwidth. This chapter focus on \awstream{} that integrates application
   adaptation as a first-class programming abstraction and automatically learns
   an accurate profile that models accuracy and bandwidth trade-off. Using the
@@ -202,10 +224,10 @@ The remainder of this thesis is organized as follows:
   John Wawrzynek, and Edward A. Lee~\cite{zhang2018awstream}.
 \item In \autoref{cha:comp-reso-adapt}, I present adapting swarm applications to
   compute resources. Due to the heterogeneous capabilities of end devices and
-  variable network/serving latency, it is challenging to provide a consistent
+  variable network/serving latency, it is challenging to provide consistent
   bounded response times for swarm applications. I propose to build a
   performance model that characterizes accuracy and processing time trade-off to
-  guide the execution. This chapter focuses on efficient profiling: using
+  guide the execution. This chapter focuses on efficient profiling using
   Bayesian Optimization (BO) to address the large parameter space and profile
   transfer to address heterogeneous capabilities of different devices.
 \item \autoref{cha:related-work} surveys related research and industrial
@@ -214,11 +236,13 @@ The remainder of this thesis is organized as follows:
   identify important research directions for future work.
 \end{itemize}
 
-The research presented in this thesis is supported in part by Berkeley
-Ubiquitous SwarmLab~\cite{swarmlab} and the TerraSwarm Research
-Center~\cite{terraswarm}, one of six centers supported by the STARnet phase of
-the Focus Center Research Program (FCRP) a Semiconductor Research Corporation
-program sponsored by MARCO and DARPA.
+The research presented in this thesis is supported in part by
+\href{https://swarmlab.berkeley.edu/}{Berkeley Ubiquitous SwarmLab}; by the
+\href{https://terraswarm.org/}{TerraSwarm Research Center}, one of six centers
+supported by the STARnet phase of the Focus Center Research Program (FCRP) a
+Semiconductor Research Corporation program sponsored by MARCO and DARPA; by
+\href{https://www.icyphy.org/}{iCyPhy}, the Berkeley Industrial Cyberphysical
+Systems Research Center, supported by Denso, Ford, Siemens, and Toyota.
 
 \end{document}
 
