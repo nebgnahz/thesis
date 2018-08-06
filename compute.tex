@@ -13,27 +13,32 @@ algorithm as is. While applications can offload computation to other resources
 such as the edge or the cloud, swarm platforms have a large discrepancy of
 computing capabilities. In addition, the edge/cloud faces the challenge of
 unpredictable network delays and service overload. To meet the response time
-requirement, we propose to adapt the computation to each platform in specific
-contexts.
+requirement, we propose to adapt computation to each platform.
 
-Swarm applications can adapt, because to achieve the same task, there are often
-more than one options: different algorithms or different parameters for the same
-algorithm. These options result in different processing times and application
-accuracy. If we can build a performance model that characterizes the impact of
-each option, the application can choose the right algorithm/parameter adaptively
-depending on the available compute power and the deadline.
+The ability to adapt comes from the availability of many options to for the same
+task: different algorithms or different parameters for the same algorithm. These
+options result in different processing times and application accuracy. If we can
+build a performance model that characterizes the impact of each option, the
+application can choose the right algorithm/parameter adaptively depending on the
+available compute power and meet the deadline.
 
-Building this performance model for adaptation is more challenging than the
-profiling discussed in \autoref{cha:netw-reso-adapt}, because of two issues:
-$(i)$ a much larger parameter space means that exhaustive search, even with
-parallelism, is not feasible; $(ii)$ the profile is platform-dependent because
-processing times vary across devices.
+Building this performance model for compute resource adaptation is
+challenging. Unlike the profiling discussed in \autoref{cha:netw-reso-adapt},
+exhaustive profiling is not viable due to two issues: $(i)$ we are facing
+algorithms with more parameters that form a much larger combinatorial space;
+$(ii)$ because processing times vary across devices, we need to profile for each
+swarm device, even those that are not available at development time but will be
+used at deployment.
 
-This chapter is step further in refining our profiling techniques. Specifically,
-we address the issue with a large parameter space by employing Bayesian
-Optimization (BO), and we address the heterogeneous capabilities with profile
-transfer. This chapter empirically validates our approach using Viola-Jones face
-detector as the primary case study.
+This chapter is step further in refining our profiling techniques. First, we
+address the issue with a large parameter space by employing Bayesian
+Optimization (BO). We demonstrate that BO can reduce the number of samples we
+need by more than 50$\times$ fewer compared to an exhaustive approach. With the
+same search budget, BO finds better Pareto-optimal configurations than random
+search and coordinate search. Second, to profile for new devices, we propose to
+transfer an existing profile by updating the processing times of Pareto-optimal
+configurations. The profile transfer eliminates the need to get all training
+data, evaluate the algorithm for all data, and run BO engine.
 
 \input{brt/intro}
 \input{brt/motivation}

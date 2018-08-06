@@ -1,19 +1,19 @@
 \section{Chapter Summary}
 \label{sec:chap-summary}
 
-We have presented our study of enabling adaptation toward compute resources in
-the swarm space. Because end devices are limited in compute power, the
-edge/cloud suffer from variable network delays and service requests, it is
-essential to be able to adapt computation on different platform to meet response
-time deadlines.
+Swarm applications that rely on computation-heavy tasks face the challenge of
+heterogeneous compute capabilities and variable network/service load. In order
+to provide bounded response times, we propose to adapt computation based on a
+performance model that characterizes the trade-off between application accuracy
+and processing times.
 
-To allow the adaptation, we need a performance model that characterizes the
-trade-off between application accuracy and processing times. Performance
-modeling is challenging: for the large parameter space, previous approaches use
-random search or coordinate/greedy approach. and we propose Bayesian
-Optimization (BO) for profiling; (2) for heterogeneous computing capabilities
-and not available when profiling, we use profile transfer: refine existing
-Pareto-optimal points.
+Performance modeling for computation adaptation is challenging due to the large
+parameter space and heterogeneous device capabilities. This chapter presents two
+techniques that improve profiling efficiency: $(i)$ BO significantly reduces the
+number of samples needed from the large parameter space, by more than 50$\times$
+compared to an exhaustive profiling; $(ii)$ profile transfer eliminates the need
+of profiling for each new device as we only need to measure the processing times
+for Pareto-optimal configurations.
 
 %%% Local Variables:
 %%% mode: latex
