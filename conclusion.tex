@@ -35,19 +35,19 @@ latency relative to applications using TCP, and a 45--88\% improvement in
 application accuracy relative to applications using UDP. Compared with manual
 policies using a state-of-the-art system JetStream~\cite{rabkin2014aggregation},
 \awstream{} achieves a 15-20$\times$ reduction in latency and 1-5\% improvement
-in accuracy simultaneously. These promising results validate our adaptation
-approach automatically learning better policies and the use of adaptation at
-runtime.
+in accuracy simultaneously.
 
 For compute resources, swarm applications need to address the heterogeneous
 compute environment by exploring the trade-off between application accuracy and
 processing times. In \autoref{cha:comp-reso-adapt}, we have focused on improving
-profiling efficiency. We use Bayesian Optimization to avoid exhaustively
-exploring the large parameter space. BO significantly reduces the number of
-samples needed, by more than 50$\times$. We analyze the characteristics of the
-profile and observe that we only need to measure the processing times for
-Pareto-optimal configurations. By using profile transfer, we eliminate the need
-of profiling for each new device.
+profiling efficiency. First, we use Bayesian Optimization to avoid an exhaustive
+exploration of the large parameter space. BO significantly reduces the number of
+samples needed, by more than 50$\times$. With the same search budget, BO finds
+better Pareto-optimal configurations than previous proposed search
+methods. Second, to profile for new devices, we propose to transfer an existing
+profile by updating the processing times of Pareto-optimal configurations. The
+profile transfer eliminates the need for getting all training data, evaluating
+the algorithm for all data, and running a BO engine.
 
 In summary, this thesis presents a systematic and quantitative approach for
 adaptation.
