@@ -7,7 +7,7 @@
 
 This thesis claims that systematic adaptation and quantitative profiling are the
 key to a resilient swarm. This chapter summarizes our work, discusses future
-directions, and concludes.
+directions, and concludes this thesis.
 
 \section{Thesis Summary}
 \label{sec:thesis-summary-1}
@@ -29,16 +29,25 @@ methodology to network resources and compute resources.
 For network resources, swarm applications need to address the scarce and
 variable WAN bandwidth by exploring the trade-off between application accuracy
 and data size demand. In \autoref{cha:netw-reso-adapt}, we have presented our
-design, implementation, and evaluation of \awstream{}. We demonstrate that with
-adaptation that reduces bandwidth demand, swarm applications can achieve
-sub-second latency with nominal accuracy drop.
+design, implementation, and evaluation of \awstream{}. Compared with
+non-adaptive applications, \awstream{} achieves a 40--100$\times$ reduction in
+latency relative to applications using TCP, and a 45--88\% improvement in
+application accuracy relative to applications using UDP. Compared with manual
+policies using a state-of-the-art system JetStream~\cite{rabkin2014aggregation},
+\awstream{} achieves a 15-20$\times$ reduction in latency and 1-5\% improvement
+in accuracy simultaneously. These promising results validate our adaptation
+approach automatically learning better policies and the use of adaptation at
+runtime.
 
 For compute resources, swarm applications need to address the heterogeneous
 compute environment by exploring the trade-off between application accuracy and
 processing times. In \autoref{cha:comp-reso-adapt}, we have focused on improving
-profiling efficiency. We demonstrate that Bayesian Optimization significantly
-reduces the number of samples needed from the large parameter space and profile
-transfer eliminates the need for profiling for each new device.
+profiling efficiency. We use Bayesian Optimization to avoid exhaustively
+exploring the large parameter space. BO significantly reduces the number of
+samples needed, by more than 50$\times$. We analyze the characteristics of the
+profile and observe that we only need to measure the processing times for
+Pareto-optimal configurations. By using profile transfer, we eliminate the need
+of profiling for each new device.
 
 In summary, this thesis presents a systematic and quantitative approach for
 adaptation.
