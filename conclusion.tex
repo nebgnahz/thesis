@@ -6,11 +6,11 @@
 \label{cha:concl-future-work}
 
 This thesis claims that systematic adaptation and quantitative profiling are the
-key to a resilient swarm. This chapter summarizes our work and discusses
-valuable directions for future work.
+key to a resilient swarm. This chapter summarizes our work, discusses future
+directions, and concludes.
 
 \section{Thesis Summary}
-\label{sec:thesis-summary}
+\label{sec:thesis-summary-1}
 
 This thesis began with an overview of the emerging swarm. As the swarm grows at
 a staggering rate, it faces challenges from the underlying communication and
@@ -28,17 +28,17 @@ methodology to network resources and compute resources.
 
 For network resources, swarm applications need to address the scarce and
 variable WAN bandwidth by exploring the trade-off between application accuracy
-and data size demand. In this chapter, we have presented our design,
-implementation, and evaluation of \awstream{}. We demonstrate that with
+and data size demand. In \autoref{cha:netw-reso-adapt}, we have presented our
+design, implementation, and evaluation of \awstream{}. We demonstrate that with
 adaptation that reduces bandwidth demand, swarm applications can achieve
 sub-second latency with nominal accuracy drop.
 
-For compute resource, swarm applications need to address the heterogeneous
+For compute resources, swarm applications need to address the heterogeneous
 compute environment by exploring the trade-off between application accuracy and
-processing times. In this chapter, we have focused on improving profiling
-efficiency. We demonstrate that BO significantly reduces the number of samples
-needed from the large parameter space and profile transfer eliminates the need
-of profiling for each new device.
+processing times. In \autoref{cha:comp-reso-adapt}, we have focused on improving
+profiling efficiency. We demonstrate that Bayesian Optimization significantly
+reduces the number of samples needed from the large parameter space and profile
+transfer eliminates the need for profiling for each new device.
 
 In summary, this thesis presents a systematic and quantitative approach for
 adaptation.
@@ -54,7 +54,7 @@ focuses on future directions that are in a longer term and for a broader
 context.
 
 \para{More Diverse Applications and Generalization.} The core challenge for the
-swarm comes from the scale of inter-connected devices. As the number of devices
+swarm comes from the scale of interconnected devices. As the number of devices
 continues to grow, we expect to see more diverse swarm applications. While we
 have used several applications in this thesis as case studies, we need more
 applications to evaluate how general the proposed APIs are, how effective the
@@ -84,12 +84,21 @@ limited in what can be changed: applications only change the algorithms and
 parameters that a developer has specified as adaptation options. An extreme case
 for adaptation is self-modifying code, which is notoriously difficult to
 understand and manage. A slightly more flexible yet still disciplined approach
-is mutable accessors discussed by Brooks et al.~\cite{brooks2018component}. An
+is mutable accessors as discussed by Brooks et al.~\cite{brooks2018component}. A
 mutable accessor is an abstract interface specification for candidate
 accessors. It reifies a concrete accessor downloaded from the Internet or
 retrieved through a discovery mechanism. In summary, along the spectrum of
 adaptation, we expect future work will extend our profiling methodology to
-applications that change its structure and mutate its implementation.
+applications that change their structure and mutate their implementation.
+
+\section{Reflections and Concluding Remarks}
+\label{sec:conclusions}
+
+We now discuss a few broad lessons learned over the course of this research.
+
+The hype of the swarm.
+
+The broader impact of adaptation.
 
 \end{document}
 

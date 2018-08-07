@@ -24,8 +24,8 @@ Smart devices are everywhere: \href{http://ilumi.co/}{light bulb},
 \href{http://www.samsung.com/us/appliances/refrigerators/RF28HMELBSR/AA}{refrigerator}.\footnote{Courtesy
   of Prof.\,Randy Katz.} Capable of computation and communication, they monitor
 and interact with the physical world.  The growth of the number of devices is
-staggering: analysts predicted 26 billion devices by 2020 and trillion by
-2022~\cite{middleton2013forecast}.
+staggering: analysts predicted 26 billion devices by 2020, an almost 30-fold
+increase from 0.9 billion in 2009~\cite{middleton2013forecast}.
 
 We refer to the collection of sensors and actuators installed in our environment
 as the ``swarm'', a term coined by Jan Rabaey in a keynote talk at ASPDAC
@@ -92,11 +92,11 @@ etc. As a result, these sensors sample at a low frequency, often millihertz,
 i.e., slower than 1 Hz. For example, in a campus-wide building instrumentation
 that aims to reduce energy usage~\cite{krioukov2012building}, there are 2,151
 \href{http://www.keti.re.kr/}{KETI Motes}: 463 \ce{CO2} sensors, 466 humidity
-sensors, 26 illumination sensors, 440 light sensors, 290 PIR (passive infrared)
-sensor, and 466 temperature sensors. Despite the large scale, they are
-configured to report data only every five seconds, yielding low bandwidth
-traffic. For the air quality monitoring mentioned
-above~\cite{cheng2014aircloud}, the sensors only sample once a minute.
+sensors, 460 light sensors, 290 PIR (passive infrared) sensors, and 466
+temperature sensors. Despite the large scale, they are configured to report data
+only every five seconds, yielding low bandwidth traffic. For the air quality
+monitoring mentioned above~\cite{cheng2014aircloud}, the sensors only sample
+once a minute.
 
 On the other hand, we are seeing high-frequency, high-precision sensors being
 deployed at scale as technology evolves and applications' requirements
@@ -161,14 +161,15 @@ three categories below.
 
 \subsubsection{Microcontrollers}
 
-Examples include Arduino~\cite{arduino}, mbed~\cite{mbed}, and
-Spark~\cite{spark}. This emerging category continues to expand as new open
-platforms appear on crowdfunding websites~\cite{kickstarter}.  With an
-ecosystems featuring great support and libraries (e.g., Adafruit Online
-Tutorials~\cite{adafruit}), people can easily add new sensors/actuators and
-develop applications. These platforms have unleashed the creativity of millions
-in building smart and interactive devices, spawning the \textit{Maker
-  Movement}~\cite{dougherty2012maker}.
+Examples include \href{http://www.arduino.cc/}{Arduino}~\cite{arduino},
+\href{https://www.mbed.com/}{mbed}~\cite{mbed}, and
+\href{https://www.spark.io/}{Spark}~\cite{spark}. This emerging category
+continues to expand as new open platforms appear on crowdfunding
+websites~\cite{kickstarter}.  With an ecosystems featuring great support and
+libraries (e.g., Adafruit Online Tutorials~\cite{adafruit}), people can easily
+add new sensors/actuators and develop applications. These platforms have
+unleashed the creativity of millions in building smart and interactive devices,
+spawning the \textit{Maker Movement}~\cite{dougherty2012maker}.
 
 \subsubsection{Smartphones}
 
@@ -176,22 +177,25 @@ As a key enabler for mobile computing, smartphones have become ubiquitous. They
 are equipped with an impressive set of sensors, including accelerometer,
 gyroscope, proximity sensor, camera, microphone, etc. The processors and
 displays on smartphones keep upgrading. In addition to use smartphones alone,
-many companies, such as Fitbit~\cite{fitbit} and Automatic~\cite{automatic}, use
-smartphones as gateways to connect low-power devices to the Internet via
-Bluetooth. Creative use of smartphones is also a hot topic in research,
-including reusing discarded smartphones~\cite{challen2014mote}, writing new
-operating systems~\cite{janos}, and developing novel
-applications~\cite{hong2014smartphone}.
+many companies, such as \href{https://www.fitbit.com/}{Fitbit}~\cite{fitbit} and
+\href{https://www.automatic.com/}{Automatic}~\cite{automatic}, use smartphones
+as gateways to connect low-power devices to the Internet via Bluetooth. Creative
+use of smartphones is also a hot topic in research, including reusing discarded
+smartphones~\cite{challen2014mote}, writing new operating systems~\cite{janos},
+and developing novel applications~\cite{hong2014smartphone}.
 
 \subsubsection{Mini PCs}
 
 Ranging from powerful Intel Next Unit of Computing (NUC) to inexpensive
 Raspberry Pi and BeagleBone Black, these devices typically run various versions
-of Linux to simplify application deployment. Many companies~\cite{ninja,
-  smartthings, wink} adopt these mini PCs with all kinds of networking
-capabilities---802.15.4, Bluetooth, WiFi, Ethernet---as their gateway devices.
-In contrast to using smartphones as gateways, mini PCs serve as nearby
-always-available infrastructure---the ``immobiles.''~\cite{swarmbox}.
+of Linux to simplify application deployment. Many companies, such as
+\href{https://ninjablocks.com/}{Ninja Blocks}~\cite{ninja},
+\href{https://www.smartthings.com/}{SmartThings}~\cite{smartthings}, and
+\href{https://www.wink.com/}{Wink}~\cite{wink}, adopt these mini PCs with all
+kinds of networking capabilities---802.15.4, Bluetooth, WiFi, Ethernet---as
+their gateway devices.  In contrast to using smartphones as gateways, mini PCs
+serve as nearby always-available infrastructure---the
+``immobiles''~\cite{swarmbox}.
 
 \begin{table}
   \centering
@@ -366,17 +370,17 @@ their presence~\cite{weiser1993ubiquitous}.
 Ubicomp is more than just technology. It is a paradigm shift that challenges how
 human interact with the environment with unnoticeable and invisible
 computing. As a result, ubicomp raises many human-centered challenges, such as
-interaction techniques for usability. For example, in a smart building that have
-many appliances with computing powers and controls, it becomes hard to even
+interaction techniques for usability. For example, in a smart building that has
+many appliances with computing power and controls, it becomes hard to even
 select and control them. Instead of browsing a list, users would prefer voice
 commands~\cite{alexa} or direct manipulation---``What you see is what you can
 control''~\cite{zhang2014hobs, chen2018snaplink}.
 
 The swarm and IoT have largely evolved out of ubiquitous computing, with a focus
-on the scale and interconnectivity. An standalone environment rich of computing
-resources for human use is still considered as ubiquitous computing. In
-contrast, the swarm often bridges disparate components and covers the
-interaction between devices and environment.
+on the scale and interconnectivity. A standalone environment rich in computing
+resources for human use is still considered ubiquitous computing. In contrast,
+the swarm often bridges disparate components and covers the interaction between
+devices and environment.
 
 %%% Local Variables:
 %%% mode: latex
