@@ -16,7 +16,7 @@ constrained resources, efficient profiling, and other software systems.
 \label{sec:appr-adapt}
 
 The idea of using approximation to trade application performance (such as
-accuracy) for system performance (such as response times) has been explore in a
+accuracy) for system performance (such as response times) has been explored in a
 number of contexts.  Hellerstein et al.~\cite{hellerstein1997online} describes
 an online aggregation interface that provides approximate answers which are
 constantly refined as during execution. BlinkDB~\cite{agarwal2013blinkdb}
@@ -59,15 +59,15 @@ are often pull-based: client keeps checking the index file for changes. And
 clients have to wait for the next chunk (typically 2-10 seconds). In addition,
 as we have shown in \autoref{sec:runtime-adaptation}, their adaptation is a poor
 match for analytics that rely on image details (e.g.,~6\% accuracy for PD). In
-contrast we propose to \emph{learn} the adaptation strategy for each application
-(also not limited to video analytics).
+contrast, we propose to \emph{learn} the adaptation strategy for each
+application (also not limited to video analytics).
 
 The use of adaptation is not to provide hard Quality of Service (QoS)
 guarantees. In \awstream{}, we maximize application accuracy and minimizes
 bandwidth requirement: a multi-dimensional optimization. And when the available
 bandwidth meets application requirement, we achieve low latency streaming.  In
 addition, \awstream{} adopts an end-host application-layer approach ready today
-for WAN, while many network QoS work~\cite{ferrari1990scheme,
+for WAN, while a large portion of network QoS work~\cite{ferrari1990scheme,
   shenker1994integrated, shenker1995fundamental} in the 1990s focuses on
 network-layer solutions that are not widely deployable. Our proposed APIs are
 extensible. As a result, for other application-layer
@@ -223,7 +223,7 @@ and processing times.
 \label{sec:related-systems}
 
 \awstream{} has large debt to existing stream processing systems both for
-programming abstractions as well as handling back pressure. Early streaming
+programming abstractions and handling back pressure. Early streaming
 databases~\cite{abadi2005design, chandrasekaran2003telegraphcq} have explored
 the use of dataflow models with specialized operators for stream
 processing. Recent research projects and open-source

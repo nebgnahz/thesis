@@ -47,7 +47,7 @@ For tunable parameters, we need to be able to specify at least three parts:
 \texttt{min}, \texttt{max}, and \texttt{step}. We extend an algorithm's
 parameter by augmenting it with macros annotations. In Rust, this can be
 implemented with procedural macros as a syntax extension. \autoref{fig:vj} shows
-these annotation in blue: we use \texttt{\#[derive(Adapt)]} to mark that this
+these annotations in blue: we use \texttt{\#[derive(Adapt)]} to mark that this
 \texttt{struct} is a tunable parameter and use \texttt{\#[adapt(...)]} to mark
 its field.
 
@@ -161,7 +161,7 @@ illustrates the process of finding the maximum point for 1-dimension Alpine N. 2
 function~\cite{clerc1999swarm}. The solid line labeled $y$ is the target
 black-box function. The red dots represent samples that have been evaluated. BO
 reconstructs a function that best fits these observed samples: the dashed line
-$\hat{y}$ (yhat) along with the confidence region (in grey shade).  BO then uses
+$\hat{y}$ (yhat) along with the confidence region (in gray shade).  BO then uses
 an acquisition criteria to determine how to sample the next point.  In this
 example, it uses expected improvement (EI, in long-dashed line) that balances
 high objective (exploitation) and high uncertainty
