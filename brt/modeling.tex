@@ -80,7 +80,7 @@ impl Algorithm for VJ {
     }
 }
 \end{lstlisting}
-  \caption{Viola-Jone face detector parameters \texttt{VJParameters} annotated
+  \caption{Viola-Jones face detector parameters \texttt{VJParameters} annotated
     with adaptation. \texttt{VJ} implements the \texttt{Algorithm} trait.}
   \label{fig:vj}
 \end{figure}
@@ -88,7 +88,7 @@ impl Algorithm for VJ {
 \subsection{Profiling Formalism}
 \label{sec:profiling-formalism}
 
-The goal of profiling is to build a profile that charactersizes the tradeoff
+The goal of profiling is to build a profile that characterizes the trade-off
 between application accuracy and processing times such that for a running
 application, it can choose the right algorithm/parameter to meet the
 deadline. As discussed in \autoref{sec:perf-model-chall}, we are only interested
@@ -183,7 +183,7 @@ times. It is trivial to maximize application accuracy or minimize processing
 times alone. Previous approaches often transform multiple objectives into a
 single objective using scalarization techniques: using weighted sum to combine
 different objectives. These approaches are expected to be
-suboptimal~\cite{knowles2006parego}. Recent research progress has made the
+sub-optimal~\cite{knowles2006parego}. Recent research progress has made the
 transformation unnecessary. We can directly consider the Pareto-optimal set and
 evaluate the improvements with different acquisition criteria: $(i)$ additive
 epsilon~\cite{binoisgpareto}, $(ii)$ hypervolume~\cite{binoisgpareto}; $(iii)$

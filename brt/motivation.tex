@@ -102,7 +102,7 @@ increases. With 1k load, 99.9 percentile latency increases from \SI{3.5}{\ms} to
   \label{fig:variation}
 \end{figure}
 
-\subsection{Accuracy-Time Tradeoff}
+\subsection{Accuracy-Time Trade-off}
 \label{sec:comp-perf-model}
 
 \begin{figure}[t]
@@ -171,7 +171,7 @@ configurations\footnote{\texttt{min\_size} ranges from 0 to 190, with a step
   \texttt{min\_neighbors} ranges from 0 to 19, with a step size of 1.} using
 FDDB dataset~\cite{jain2010fddb}. In the figure, each cross dot represents the
 processing time and application accuracy for one configuration. As we can see,
-there is a tradeoff space: the processing times vary across almost 3 orders of
+there is a trade-off space: the processing times vary across almost 3 orders of
 magnitude; the accuracy can be as low as 0\% and as high as 80.2\%.
 
 % scale factor: 1.01..0.05..1.46 (10)
@@ -181,7 +181,7 @@ magnitude; the accuracy can be as low as 0\% and as high as 80.2\%.
 \subsection{Performance Modeling and Challenges}
 \label{sec:perf-model-chall}
 
-We need to build the performance model to exploit the tradeoff between accuracy
+We need to build the performance model to exploit the trade-off between accuracy
 and processing times. Because each algorithm is fundamentally different from
 another one, we must exhaustively evaluate all available algorithms. For the
 same algorithm with different parameters, exhaustive search can be prohibitively
