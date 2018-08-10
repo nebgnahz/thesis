@@ -63,17 +63,17 @@ contrast, we propose to \emph{learn} the adaptation strategy for each
 application (also not limited to video analytics).
 
 The use of adaptation is not to provide hard Quality of Service (QoS)
-guarantees. In \awstream{}, we maximize application accuracy and minimizes
+guarantees. In \awstream{}, we maximize application accuracy and minimize
 bandwidth requirement: a multi-dimensional optimization. And when the available
 bandwidth meets application requirement, we achieve low latency streaming.  In
 addition, \awstream{} adopts an end-host application-layer approach ready today
 for WAN, while a large portion of network QoS work~\cite{ferrari1990scheme,
   shenker1994integrated, shenker1995fundamental} in the 1990s focuses on
-network-layer solutions that are not widely deployable. Our proposed APIs are
-extensible. As a result, for other application-layer
-approaches~\cite{vandalore2001survey}, \awstream{}'s API can incorporate their
-techniques, such as encoding the number of layers as a knob to realize the
-layered approach in Rejaie et al.~\cite{rejaie2000layered}.
+network-layer solutions that are not widely deployable. For other
+application-layer approaches~\cite{vandalore2001survey}, we can apply our
+systematic adaptation approach by incorporating their techniques, such as
+encoding the number of layers as a knob to realize the layered approach in
+Rejaie et al.~\cite{rejaie2000layered}.
 
 % \para{SLO-awareness.} MittOS~\cite{hao2017mittos} advocates the return of
 % \texttt{EBUSY} for IO operations to bound IO requests.
@@ -106,10 +106,10 @@ layered approach in Rejaie et al.~\cite{rejaie2000layered}.
 \label{sec:taming-constr-reso}
 
 In this thesis, we have addressed different types of constrained resources:
-network resources, i.e. scarce and variable WAN bandwidth; compute resources,
-i.e. heterogeneous swarm devices. We also studied the impact of variability,
-both network delays and service overload, in heavy-computation tasks. We discuss
-related work into these three categories..
+$(i)$ network resources, i.e., scarce and variable WAN bandwidth; $(ii)$ compute
+resources, i.e., heterogeneous swarm devices. We also have studied the impact of
+variability, both network delays and service overload, in heavy-computation
+tasks. We discuss related work that addresses constrained resources.
 
 \para{Scarce and Variable WAN Bandwidth}. Geo-distributed systems need to cope
 with high latency and limited bandwidth in the wide area. While some systems
@@ -117,7 +117,7 @@ assume the network can prioritize a small amount of critical data under
 congestion~\cite{cho2012surviving}, most systems reduce data sizes in the first
 place to avoid congestion (e.g.,~LBFS~\cite{muthitacharoen2001low}). Over the
 past few years, we have seen a plethora of geo-distributed analytical frameworks
-that incorporate heterogeneous wide-area bandwidth into query optimization to
+that incorporate heterogeneous wide-area bandwidth into application execution to
 minimize data movement, as follows.
 
 \begin{itemize}[topsep=5pt, leftmargin=20pt, itemsep=2pt]
@@ -135,20 +135,20 @@ minimize data movement, as follows.
   centers, automatically optimizing workflow execution plans and replicating
   data only necessary.
 
-\item Clarinet~\cite{viswanathan2016clarinet} incorporate bandwidth information
+\item Clarinet~\cite{viswanathan2016clarinet} incorporates bandwidth information
   into its query optimizer to reduce data transfer.
 
-% \item SWAG~\cite{hung2015scheduling} coordinates compute task scheduling across
-%   DCs.
+  % \item SWAG~\cite{hung2015scheduling} coordinates compute task scheduling
+  %   across DCs.
 
 \end{itemize}
 
 While effective in speeding up analytics, these systems focus on batch tasks
-such as MapReduce jobs or SQL queries. Such tasks are often executed
-infrequently and without real time constrain. In contrast, many swarm
-applications processes streams of sensor data continuously in real time.
+such as MapReduce jobs or SQL queries. Such tasks are executed infrequently and
+without real time constrain. In contrast, many swarm applications process
+streams of sensor data continuously in real time.
 
-\para{Offloading Augments Mobile Devices.} To improve application performance
+\para{Offloading to Augment Mobile Devices.} To improve application performance
 and extend battery life for mobile devices, research has explored offloading
 heavy-computation tasks to remote servers. Satyanarayanan used the word ``cyber
 foraging'' to refer to dynamically augmenting the computing resources of a
@@ -164,29 +164,29 @@ is a step further that partitions applications without developer annotation. In
 both MAUI and CloneCloud, the code either runs on a mobile device or on a
 server. Tango~\cite{gordon2015accelerating} explores the use of replication: the
 application executes on both the mobile device and the server. It allows either
-to lead the execution and uses flip-flop replication to allow leadership to
-float between replicas.
+mobile devices or the server to lead the execution and uses flip-flop
+replication to allow leadership to float between replicas.
 
-\para{Redundancy Tackles Latency Variability.} The idea of initiating redundant
-operations across diverse resources and using the first result which completes
-has been explored in many contexts. For mobile computing, we have mentioned
-Tango~\cite{gordon2015accelerating} that replicates execution on both mobile
-devices and the server. Cloud computing often has straggler tasks that delay the
-job completion. Instead of waiting and trying to predict stragglers,
+\para{Redundancy to Tackle Latency Variability.} The idea of initiating
+redundant operations across diverse resources and using the first result which
+completes has been explored in many contexts. For mobile computing, we have
+mentioned Tango~\cite{gordon2015accelerating} that replicates execution on both
+mobile devices and the server. Cloud computing often has straggler tasks that
+delay the job completion. Instead of waiting and trying to predict stragglers,
 Dolly~\cite{ananthanarayanan2013effective} launches multiple clones of every
 task of a job and uses the result that finishes first. For cloud-based web
 services at Google, Dean et al.~\cite{dean2013tail} describe similar redundancy
-techniques that address the tail performance at scale, such as hedged requests,
-tied requests. In wide-area network, Vulimiri et al.~\cite{vulimiri2013low} show
-that redundancy reduces latency for a number of services, such as DNS queries,
-database queries, and packet forwarding.
+techniques that address the tail performance at scale, such as hedged requests
+and tied requests. In wide-area network, Vulimiri et al.~\cite{vulimiri2013low}
+show that redundancy reduces latency for a number of services, such as DNS
+queries, database queries, and packet forwarding.
 
 For offloading, mobile devices and servers run the same algorithm (with the same
 configurations): either by partition or replication.  For redundancy, an array
 of worker machines also run the same task. This fails to accommodate the
 heterogeneous swarm environment. The proposed adaptation in this thesis
 explicitly models performance across different devices. The learned profile can
-be used to assist offloading decisions.
+be used to assist offloading and replication.
 
 \section{Efficient Profiling}
 \label{sec:prof-with-effic}
@@ -198,14 +198,14 @@ VideoStorm~\cite{zhang2017live} considers resource-quality profile and lag
 tolerance, and trades off between them.
 
 For an efficient profiling, VideoStorm uses coordinate search---or greedy search
-in their terms. Our compute adaptation framework makes two major contributions:
-$(1)$~our proposed BO outperforms coordinate search approach used in VideoStorm;
-$(2)$~we handle heterogeneous devices while VideoStorm considered homogeneous
-machines in clusters.
+in their terms. This thesis makes two major contributions: $(1)$~our proposed BO
+outperforms coordinate search approach used in VideoStorm; $(2)$~we handle
+heterogeneous devices while VideoStorm considered homogeneous machines in
+clusters.
 
 BO, a technique for global optimization of black-box functions, has been applied
 to solve a wide range of problems. Snoek et al.~\cite{snoek2012practical}
-demonstrates its effectiveness in tuning parameters and model hyperparameters
+demonstrates its effectiveness in tuning parameters and modeling hyperparameters
 for ML tasks. CherryPick~\cite{alipourfard2017cherrypick} uses BO to minimize
 cloud usage cost by searching for the best cloud configurations: the number of
 VMs, the number of cores, CPU speed per core, average RAM per core, disk speed,
@@ -242,7 +242,7 @@ machine learning inference. Systems such as Clipper~\cite{crankshaw2017clipper}
 and TensorFlow Serving~\cite{tensorflow2017serving} are state-of-the-art in
 serving ML models and performing inference. They only focus on system-level
 techniques such as batching and hardware acceleration to improve throughput. And
-our adaptation, especially the profile can be used by these systems as
+our adaptation, especially the profile, can be used by these systems as
 application-aware improvements.
 
 \end{document}

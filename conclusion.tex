@@ -76,7 +76,7 @@ require a redesign of APIs, profiling tools, and/or the runtime.
 
 \para{Adaptation and Resource Allocation.} In addition to adapting to resources,
 swarm applications should be able to dynamically \emph{recruit} resources, such
-as sensors, actuators, data, and computing infrastructure. We have envisioned
+as sensors, actuators, data, and computing infrastructure. We have envisioned a
 SwarmOS that controls and allocates resources for different swarm
 applications. However, some swarm resources are beyond the control of individual
 entities (such as WAN bandwidth); some swarm resources are not as elastic as the
@@ -96,9 +96,9 @@ understand and manage. A slightly more flexible yet still disciplined approach
 is mutable accessors as discussed by Brooks et al.~\cite{brooks2018component}. A
 mutable accessor is an abstract interface specification for candidate
 accessors. It reifies a concrete accessor downloaded from the Internet or
-retrieved through a discovery mechanism. In summary, along the spectrum of
-adaptation, we expect future work will extend our profiling methodology to
-applications that change their structure and mutate their implementation.
+retrieved through a discovery mechanism. Along the spectrum of adaptation, we
+expect future work to extend our profiling methodology to applications that
+change their structure and mutate their implementation.
 
 \section{Reflections and Concluding Remarks}
 \label{sec:conclusions}
@@ -145,9 +145,8 @@ amounts of data, e.g., millihertz sensors. Some swarm applications are delay
 tolerant, e.g., sensor data collection. In these cases, it is fine to develop
 applications as is. In addition, I would remark that our approach generalizes
 beyond swarm applications. While this thesis centers around swarm applications,
-which are an emerging category, we expect to apply this methodology in other
-contexts where applications also need to cope with scarce and variable
-resources.
+an emerging category, we expect to apply this methodology in other contexts
+where applications need to cope with scarce and variable resources.
 
 \end{document}
 
