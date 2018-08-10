@@ -175,7 +175,7 @@ BO recently has been used beyond ML scope.
 CherryPick~\cite{alipourfard2017cherrypick} uses BO to find the near-optimal
 cloud configurations for big data analytics, i.e., minimizing the cost of
 execution. Google uses BO to optimize chocolate chip cookies
-recipes~\cite{solnik2017bayesian}, i.e., maximizes the tastiness.
+recipe~\cite{solnik2017bayesian}, i.e., maximizes the tastiness.
 
 Our problem is more complex as we are solving multi-objective optimizations
 (MOO). Specifically, it has two objectives: application accuracy and processing
@@ -214,7 +214,7 @@ budget.
 \autoref{fig:bo} shows the evaluation results using Viola-Jones face detector
 and FDDB dataset. With similar search budgets, the Pareto-optimal set BO finds
 is better than the baseline approaches. We can see that coordinate search is
-relatively dense in some area as it moves slowly from one point to its
+relatively dense in some areas as it moves slowly from one point to its
 neighbors. Random search has a better coverage of the space, but to find a
 better Pareto front, it needs more samples.
 
@@ -234,7 +234,7 @@ better Pareto front, it needs more samples.
 The profile we learned is specific to the devices. While it seems that we need
 to profile for every device, the profiling problem can be simplified. The
 insight lies in the properties of our objectives. $A(c)$ doesn't change across
-devices. We assume $T(c)$ is monotonic across devices, that is, a slower devices
+devices. We assume $T(c)$ is monotonic across devices, that is, a slower device
 remains slower for different configurations. Mathematically, if $T_1$ and $T_2$
 are the mappings from configurations to processing times on two devices, the
 monotonic property means that if $T_1(c') < T_1(c)$, then $T_2(c') < T_2(c)$.
@@ -247,12 +247,12 @@ the dimension of processing times.
 
 This simplifies our performance modeling on a new device. We only need to
 measure processing times of the Pareto-optimal set. And measuring processing
-times is significantly easier than measuring accuracy. One do not need to gather
-all the training data, run the algorithm, compare it with the ground-truth, and
+times is significantly easier than measuring accuracy. We do not need to gather
+all the training data, run the algorithm, compare it with the ground-truth, or
 calculate the accuracy. The transfer can be further simplified if we use a
 linear transformation to approximate the relationship between processing times
 on two platforms. In this way, we only need to measure processing times from two
-configurations.
+configurations and extrapolate the rest.
 
 We empirically validate profile transfer on three devices with Viola-Jones face
 detector (\autoref{fig:transfer}). We use the profile learned on a reference

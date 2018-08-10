@@ -57,7 +57,7 @@ We make the observation that for a particular task, there are many options:
 different algorithms or tunable parameters for the same algorithm. These options
 result in different processing times and application accuracy. If we can adapt
 the computation by choosing an option that matches the capability of the device
-or satisfy the deadline requirement, we can achieve bounded response times.
+or satisfies the deadline requirement, we can achieve bounded response times.
 
 The idea of adapting to machines is illustrated in \autoref{fig:dr}. It builds
 on top of redundancy but addresses, or rather leverages, the heterogeneity of
@@ -95,11 +95,11 @@ the devices, the profile is different across devices. It is infeasible to
 profile all hardware platforms because of the staggering number of devices and
 their availability, or rather lack of, at development time.
 
-In this chapter, we first describe our programming abstraction based on macro
-annotations. Developers only need small modifications to their existing code to
-express adaptation options for different algorithms and parameters. We then
-discuss techniques to build the performance model efficiently. Our profiling
-makes the following contribution,
+In this chapter, we focus on improving profiling efficiency. We first describe
+our programming abstraction based on macro annotations. Developers only need to
+make small modifications to their existing code to express adaptation options
+for different algorithms and parameters. We then discuss techniques to build the
+performance model efficiently. Our profiling makes the following contributions,
 
 \begin{enumerate}[noitemsep, topsep=0pt]
 \item To address the large parameter space, we use Bayesian Optimization (BO)

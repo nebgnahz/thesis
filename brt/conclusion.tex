@@ -17,9 +17,9 @@ improving the profiling efficiency with two techniques:
   models black-box function and iteratively proposes new sample points that are
   more likely to be in the Pareto-optimal set. Using Viola-Jones face detector
   as a case study, we demonstrate that BO reduces the number of samples needed
-  by more than 50$\times$, compared to exhaustive search. Compared with previous
-  proposed approaches, BO finds better Pareto-optimal configurations with the
-  same search budget.
+  by more than 50$\times$, compared to exhaustive search. Compared with other
+  proposed approaches (random search and coordinate search), BO finds better
+  Pareto-optimal configurations with the same search budget.
 \item We use profile transfer to address heterogeneous device capabilities. New
   devices update an existing profile by only measuring the processing times of
   Pareto-optimal configurations. The profile transfer eliminates the need to get
@@ -29,7 +29,7 @@ improving the profiling efficiency with two techniques:
 
 The profile can guide an application to select an operating point that meets a
 response deadline. An advanced use of the profile is to guide a model serving
-system to make scheduling decisions: for example, the server can degrade the
+system to make scheduling decisions. For example, the server can degrade the
 accuracy for a subset of requests to improve its overall throughput. In this
 thesis, we have focused on profiling, and the use of the profile at runtime is
 left as a future work.
