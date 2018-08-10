@@ -35,28 +35,28 @@ management. However, transmitting data from sensors to the cloud requires
 traversing the wide-area network (WAN), which has scarce and variable
 bandwidth. Edge infrastructure---the fog~\cite{bonomi2012fog, bar2013fog},
 cloudlet~\cite{ha2014towards, satyanarayanan2009case, chen2018application}, and
-swarmbox---can accompany the cloud as it reduces communication distances and
+swarmboxes---can accompany the cloud as it reduces communication distances and
 provides extra resources. However, edge devices are extremely heterogeneous:
 some have limited processing capabilities while others can be overloaded by
 service requests.
 
 The success of the swarm relies on addressing the gap between the growing
-application demand and scarce/variable resources. Facing insufficient resources,
-swarm applications that do not adapt will suffer. Take network resources as an
-example; when there is not enough bandwidth, an application may incur large
-latency that causes backlogged data if it uses TCP, or devastated data quality
-that has uncontrollable packet loss if it uses UDP. These are extreme design
-points in the trade-off space between data fidelity and data freshness (as we
-will show in \autoref{fig:intro}). In order to be resilient to resource
-availability and changes, swarm applications can adapt their behavior and change
-their resource demand, just as video streaming dynamically adjusts its bitrate
-to the available bandwidth~\cite{michalos2012dynamic}.
+application demand and resources that are scarce and variable. Facing
+insufficient resources, swarm applications that do not adapt will suffer. Take
+network resources as an example; when there is not enough bandwidth, an
+application may incur large latency from backlogged data if it uses TCP, or
+devastated data quality from uncontrollable packet loss if it uses UDP. These
+are extreme design points in the trade-off space between data fidelity and data
+freshness (as we will show in \autoref{fig:intro}). In order to be resilient to
+resource availability and changes, swarm applications can adapt their behavior
+and change their resource demands, just as video streaming dynamically adjusts
+its bitrate to the available bandwidth~\cite{michalos2012dynamic}.
 
 While enabling adaptation is easy, it is challenging to come up with accurate
 adaptation policies that govern the application behavior in an optimal
-way. Developers often quickly develop manual policies based on heuristics. While
-such manual policies are already a step forward compared to non-adaptive
-applications, they lack quantitative measurements to back up the
+way. Developers often quickly come up with manual policies based on
+heuristics. While such manual policies are already a step forward compared to
+non-adaptive applications, they lack quantitative measurements to back up the
 decisions. Accurate adaptation policies often require extensive domain expertise
 or considerable effort. In addition, each application has its own trade-off. At
 a swarm scale, it is not viable to study each individual application
@@ -83,7 +83,7 @@ of the thesis.
 \label{sec:chall-with-exist}
 
 We identify the following challenges that we need to address for a prosperity of
-the swarm,
+the swarm:
 
 \begin{itemize}[topsep=5pt, itemsep=2pt, leftmargin=10pt]
 
@@ -96,7 +96,7 @@ the swarm,
 
 \item \textbf{Heterogeneous Devices.} The swarm has a wide spectrum of devices
   with heterogeneous computing capabilities, ranging from powerful computing
-  units with specialized resources (such as GPU/TPU) to low-power
+  units with specialized resources (such as GPU and TPU) to low-power
   microcontrollers. Applications that work on one platform will end up with a
   completely different performance on another platform.
 
@@ -117,8 +117,8 @@ issues:
 
 \item \textbf{Ad-hoc Development and Manual Efforts.} Existing approaches that
   allow adaptation require developers writing manual policies, often based on
-  heuristics rather than quantitative analysis. These policies are not accurate,
-  prone to human errors, and they lead to sub-optimal performance.
+  heuristics rather than quantitative analysis. These policies are not accurate;
+  they are prone to human errors; and they lead to sub-optimal performance.
 
 \end{itemize}
 
@@ -128,7 +128,7 @@ issues:
 We propose to incorporate adaptation as first-class programming abstractions
 (systematic) and automatically learn the adaptation strategy, the profile, with
 a data-driven approach (quantitative). In this way, swarm applications can use
-the profile to guide its adaptation at runtime. This approach has three stages,
+the profile to guide its adaptation at runtime. This approach has three stages:
 
 \para{Programming Abstractions.} We propose to introduce programming
 abstractions that are declarative instead of procedural. Developers do not need
@@ -149,9 +149,9 @@ near-optimal sets with substantially fewer number of samples.
 \para{Runtime Adaptation.} Once the profile is learned, it is used at
 \emph{runtime} to guide application adaptation, matching application demand to
 available resources. For example, \awstream{} matches the streaming data rate to
-the estimated available bandwidth. By avoiding congestion with a Pareto-optimal
-configuration from the profile, \awstream{} achieves sub-second latency while
-maximizing the application accuracy.
+the estimated available bandwidth. By avoiding congestion and using a
+Pareto-optimal configuration from the profile, \awstream{} achieves sub-second
+latency while maximizing the application accuracy.
 
 \section{Summary of Results and Contributions}
 \label{sec:contributions}
@@ -179,7 +179,7 @@ that communicate across the wide area need to handle the scarce and variable WAN
 bandwidth. We present a complete design and implementation of the framework
 \awstream{} for network resource adaptation. We have developed several swarm
 applications: pedestrian detection, augmented reality, and monitoring log
-analysis. Compared with non-adaptive applications, \awstream{} achieves a
+analysis. Compared with non-adaptive approaches, \awstream{} achieves a
 40--100$\times$ reduction in latency relative to applications using TCP, and a
 45--88\% improvement in application accuracy relative to applications using
 UDP. Compared with manual policies using a state-of-the-art system
@@ -214,17 +214,17 @@ The remainder of this thesis is organized as follows:
   Kubiatowicz~\cite{zhang2015cloud}.
 \item In \autoref{cha:netw-reso-adapt}, I present adapting swarm applications to
   network resources. Many swarm applications that transport large streams of
-  data across a wide area faces challenges with the scarce and variable
-  bandwidth. This chapter focus on \awstream{} that integrates application
+  data across a wide area faces challenges from the scarce and variable
+  bandwidth. This chapter focuses on \awstream{} that integrates application
   adaptation as a first-class programming abstraction and automatically learns
   an accurate profile that models accuracy and bandwidth trade-off. Using the
   profile to guide application adaptation at runtime, we demonstrate that
-  \awstream{} achieves sub-second latency with only nominal accuracy drop
+  \awstream{} achieves sub-second latency with nominal accuracy drop
   (2-6\%).  The chapter is based on joint work with Xin Jin, Sylvia Ratnasamy,
   John Wawrzynek, and Edward A. Lee~\cite{zhang2018awstream}.
 \item In \autoref{cha:comp-reso-adapt}, I present adapting swarm applications to
   compute resources. Due to the heterogeneous capabilities of end devices and
-  variable network/serving latency, it is challenging to provide consistent
+  variable network/serving delays, it is challenging to provide consistent
   bounded response times for swarm applications. I propose to build a
   performance model that characterizes accuracy and processing time trade-off to
   guide the execution. This chapter focuses on efficient profiling using

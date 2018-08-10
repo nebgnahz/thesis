@@ -38,7 +38,7 @@ Metcalfe's Law.\footnote{The effect of a telecommunications network is
   i.e., $n^2$.}
 
 At Berkeley, the Qualcomm Ubiquitous Swarm Lab~\cite{swarmlab} and Terraswarm
-Research Center~\cite{terraswarm} were launched to address the huge potentials
+Research Center~\cite{terraswarm} were launched to address the huge potential
 and challenges for swarm applications in December 2011 and January 2013,
 respectively. Outside of Berkeley, this trend is also gaining attention,
 although the names are different: Internet of Things
@@ -62,14 +62,14 @@ it~\cite{lee2016iot},
 
 With billions of devices interconnected, the swarm makes a large number of
 applications possible. A previous survey by Atzori et
-al.~\cite{atzori2010internet} groups applications based on their domains: 1)
-transportation and logistics; 2) health care; 3) smart environment (home,
-office, plant); 4) personal and social. We characterize the applications based
-on the usage pattern. In this way, it is easier to analyze application
-requirements and understand implications for the underlying system support. We
-group swarm applications into two general categories.\footnote{Note that these
-  two categories are not exclusive to each other. Some applications may fall
-  into both.}
+al.~\cite{atzori2010internet} groups applications based on their domains: $(i)$
+transportation and logistics; $(ii)$ health care; $(iii)$ smart environment
+(home, office, plant); $(iv)$ personal and social. We characterize the
+applications based on the usage pattern. In this way, it is easier to analyze
+application requirements and understand implications for the underlying system
+support. We group swarm applications into two general categories.\footnote{Note
+  that these two categories are not exclusive to each other. Some applications
+  may fall into both.}
 
 \subsubsection{Ambient Data Collection and Analytics}
 \label{sec:ambi-data-coll}
@@ -83,16 +83,16 @@ our environment, these applications often have a direct impact on our everyday
 life and can help solve societal-scale problems. For example, in metropolitan
 cities of developing countries, such as Beijing, the air quality has
 deteriorated significantly. Air quality monitoring with fine granularity can
-advise people with appropriate actions such as wearing masks or stay at
+advise people with appropriate actions such as wearing masks or staying at
 home~\cite{cheng2014aircloud}.
 
 Many environmental sensors are collecting data about physical properties that
 are intrinsically slow-changing, such as the occupancy, temperature, humidity,
 etc. As a result, these sensors sample at a low frequency, often millihertz,
 i.e., slower than 1 Hz. For example, in a campus-wide building instrumentation
-that aims to reduce energy usage~\cite{krioukov2012building}, there are 2,151
-\href{http://www.keti.re.kr/}{KETI Motes}: 463 \ce{CO2} sensors, 466 humidity
-sensors, 460 light sensors, 290 PIR (passive infrared) sensors, and 466
+that aims to reduce energy usage~\cite{krioukov2012building}, there are 2,145
+sensors on \href{http://www.keti.re.kr/}{KETI Motes}: 463 \ce{CO2} sensors, 466
+humidity sensors, 460 light sensors, 290 PIR (passive infrared) sensors, and 466
 temperature sensors. Despite the large scale, they are configured to report data
 only every five seconds, yielding low bandwidth traffic. For the air quality
 monitoring mentioned above~\cite{cheng2014aircloud}, the sensors only sample
@@ -150,7 +150,7 @@ development is often to speed up some execution, rather than providing
 guaranteed and repeatable timing. When it comes to the network, the Internet
 provides ``best-effort'' service and has little quality of service (QoS)
 guarantees~\cite{shenker1995fundamental}. The situation can become worse as
-swarm applications become more complex and generate large amount of data.
+swarm applications become more complex and generate large amounts of data.
 
 \subsection{Heterogeneous Swarm Platforms}
 \label{sec:swarm-platforms}
@@ -243,8 +243,8 @@ sensor network (WSN), cyber-physical systems (CPS), and ubiquitous computing
 (Ubicomp). These concepts all reflect a vision of how technology can affect our
 lives if they become deeply connected to the physical world: through large scale
 sensing (WSN), sense-compute-actuate (CPS), and pervasive computing
-(Ubicomp). In this section, we will show the difference and argue that the swarm
-has its fundamental differences and new challenges to address.
+(Ubicomp). In this section, we will discuss these concepts and argue that the
+swarm has its fundamental differences and new challenges to address.
 
 \subsubsection{Swarm and WSN}
 \label{sec:swarm-wsn}
@@ -281,7 +281,7 @@ deployments as follows,
 We then compared the swarm with WSNs and show that while the swarm finds its
 origin in the WSN concept, the swarm represents a much broader vision,
 potentially connecting trillions of sensory and actuating devices that are
-heterogeneous and worldwide into a single platform abstraction.
+heterogeneous and worldwide into a single platform.
 
 \para{WSN is application-specific; the swarm can re-purpose itself}. Most WSNs
 focus on specific use cases. Because energy is usually the primary concern in
@@ -295,17 +295,17 @@ comfortable transportation and communication during the best of times, and
 secure, quick, and adaptable emergency response during the worst of times. The
 swarm is more efficient through sharing of resources; it is more resilient
 through dynamic recruiting; and it is more capable by enabling novel
-applications beyond developers' imagination. At the same time, the open
+applications beyond developers' imagination. Albeit at the same time, the open
 architecture can lead to bigger security and privacy risks.
 
 \para{WSN nodes are significantly less heterogeneous than swarm devices}. WSNs
 typically are comprised of sensor nodes and gateway nodes. Sensors nodes are
-often the same batch of hardware and form a star, tree or mesh network after
+often the same batch of hardware and form a star, tree, or mesh network after
 deployment. Gateway nodes are more powerful in processing capability, battery
 life, and transmission range, acting as data aggregation point and bridge to
 other networks. In comparison, each swarm node can have different types of
 sensors and actuators. Their processing and networking capabilities will depend
-on many factors, including tasks, prices, manufactures and hardware
+on many factors, including tasks, prices, manufactures, and hardware
 availability.
 
 \para{WSNs are mostly stand-alone while the swarm interacts with the cloud and
@@ -342,7 +342,7 @@ steps. The challenge is to bridging the inherent sequential cyber world with the
 concurrent physical world.
 
 The swarm can be viewed as a network of CPSs: leveraging Internet technology to
-connect and unprecedented number of devices, yielding a ``swarm'' of
+connect an unprecedented number of devices, yielding a ``swarm'' of
 heterogeneous sensors and actuators that can interact with the physical
 environment. As a result, the swarm also needs to address timing and concurrency
 issues related with physical processes.

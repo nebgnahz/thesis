@@ -64,14 +64,14 @@ the server; the server performs video analytics.
 \vspace{0.5em}
 
 \para{Why HLS/DASH is a poor match for video analytics?} It is hard to achieve
-ultra low latency using HLS/DASH: (1) HLS/DASH is pull-based: the client keeps
+ultra low latency using HLS/DASH. (1) HLS/DASH is pull-based. The client keeps
 requesting for new chunks; (2) HLS/DASH uses chunking: shorter chunks enable a
 lower latency, but induce a larger number of requests, and the chunk has to be
 made ready before the client can start fetching. There are proposals to reduce
 the latency, such as server push~\cite{wei2014low}, but they are still work in
 progress. For some applications, the accuracy can also be poor if these videos
-are limited to tuning resolution and encoding quality only, as demonstrated by
-in our PD evaluation.
+are limited to tuning resolution and encoding quality only, as demonstrated in
+our PD evaluation.
 
 %%% Local Variables:
 %%% mode: latex
